@@ -1,0 +1,39 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav" mode="side" opened fixedInViewport
+                 [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    >
+        <mat-toolbar>
+            <a href="#" class="logo"> Menu
+                <img src="https://via.placeholder.com/50">
+            </a>
+        </mat-toolbar>
+        <mat-nav-list class="nav-list">
+            <a mat-list-item href="#">Notifications
+                <mat-icon>notifications</mat-icon>
+            </a>
+            <a mat-list-item href="#">Saved
+                <mat-icon>bookmark</mat-icon>
+            </a>
+            <a mat-list-item href="#">Profile
+                <mat-icon>account_circle</mat-icon>
+            </a>
+            <a mat-list-item href="#">Log out
+                <mat-icon>exit_to_app</mat-icon>
+            </a>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <!--        <mat-toolbar color="primary">-->
+        <!--            <button-->
+        <!--                type="button"-->
+        <!--                aria-label="Toggle sidenav"-->
+        <!--                mat-icon-button-->
+        <!--                (click)="drawer.toggle()"-->
+        <!--                *ngIf="isHandset$ | async">-->
+        <!--                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>-->
+        <!--            </button>-->
+        <!--            <span>licenta</span>-->
+        <!--        </mat-toolbar>-->
+        <!-- Add Content Here -->
+    </mat-sidenav-content>
+</mat-sidenav-container>
