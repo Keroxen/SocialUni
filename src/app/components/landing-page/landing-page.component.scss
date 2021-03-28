@@ -27,7 +27,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75%;
+    //height: 75%;
+    width: 70%;
+    margin: 0 auto;
 }
 
 mat-form-field {
@@ -37,7 +39,7 @@ mat-form-field {
 .form-btn-wrapper {
     display: flex;
     flex-direction: column;
-    height: 120px;
+    //height: 120px;
     justify-content: space-between;
     align-items: center;
 
