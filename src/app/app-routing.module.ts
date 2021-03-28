@@ -6,7 +6,7 @@ import {ProfileComponent} from './components/profile/profile.component';
 const routes: Routes = [
     {path: '', redirectTo: '/landing-page', pathMatch: 'full'},
     {path: 'landing-page', component: LandingPageComponent},
-    {path: 'profile', component: ProfileComponent}
+    {path: 'profile', component: ProfileComponent},
 ];
 
 @NgModule({

@@ -15,13 +15,15 @@ import {LandingPageComponent} from './components/landing-page/landing-page.compo
 import {ProfileComponent} from './components/profile/profile.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {ReactiveFormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
     declarations: [
         AppComponent,
         MainNavComponent,
         LandingPageComponent,
-        ProfileComponent
+        ProfileComponent,
     ],
     imports: [
         BrowserModule,
@@ -34,7 +36,9 @@ import {MatInputModule} from '@angular/material/input';
         MatIconModule,
         MatListModule,
         MatFormFieldModule,
-        MatInputModule
+        MatInputModule,
+        ReactiveFormsModule,
+        HttpClientModule
     ],
     providers: [],
     bootstrap: [AppComponent]

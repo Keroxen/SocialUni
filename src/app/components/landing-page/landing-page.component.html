@@ -7,23 +7,35 @@
         <div class="landing-right">
             <img src="https://via.placeholder.com/50" alt="logo">
             <div class="form-wrapper">
-                <form>
+                <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+                    <mat-form-field appearance="outline">
+                        <mat-label>First name</mat-label>
+                        <input matInput placeholder="First name" formControlName="firstName">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last name</mat-label>
+                        <input matInput placeholder="Last name" formControlName="lastName">
+                    </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Email</mat-label>
-                        <input matInput placeholder="Email">
-                        <!--                        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--                        <mat-hint>Hint</mat-hint>-->
+                        <input matInput placeholder="Email" formControlName="email">
                     </mat-form-field>
                     <mat-form-field appearance="outline">
                         <mat-label>Password</mat-label>
-                        <input matInput placeholder="Password">
-                        <!--                        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
-                        <!--                        <mat-hint>Hint</mat-hint>-->
+                        <input matInput placeholder="Password" formControlName="password" type="password">
                     </mat-form-field>
+                    <!--                    <mat-form-field appearance="fill">-->
+                    <!--                        <mat-label></mat-label>-->
+                    <!--                        &lt;!&ndash;                        <mat-select>&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;                            <mat-option *ngFor="let  of " [value]=".value">&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;                                {{.viewValue}}&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;                            </mat-option>&ndash;&gt;-->
+                    <!--                        &lt;!&ndash;                        </mat-select>&ndash;&gt;-->
+                    <!--                    </mat-form-field>-->
                     <div class="form-btn-wrapper">
-                        <button type="button" mat-raised-button>Log in</button>
+                        <button type="submit" mat-raised-button>Log in</button>
                         <p>OR</p>
-                        <button type="button" mat-raised-button color="accent">Sign up</button>
+                        <button type="submit" mat-raised-button color="accent">Sign up</button>
                     </div>
                 </form>
             </div>
