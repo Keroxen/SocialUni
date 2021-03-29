@@ -17,6 +17,9 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +27,8 @@ import {HttpClientModule} from '@angular/common/http';
         MainNavComponent,
         LandingPageComponent,
         ProfileComponent,
+        AuthDialogComponent,
+        HomeComponent,
     ],
     imports: [
         BrowserModule,
@@ -38,7 +43,8 @@ import {HttpClientModule} from '@angular/common/http';
         MatFormFieldModule,
         MatInputModule,
         ReactiveFormsModule,
-        HttpClientModule
+        HttpClientModule,
+        MatDialogModule
     ],
     providers: [],
     bootstrap: [AppComponent]

@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="form-wrapper">
+        <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
+            <mat-form-field appearance="outline" *ngIf="authMode === 'signup'">
+                <mat-label>First name</mat-label>
+                <input matInput placeholder="First name" formControlName="firstName">
+            </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="authMode === 'signup'">
+                <mat-label>Last name</mat-label>
+                <input matInput placeholder="Last name" formControlName="lastName">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput placeholder="Password" formControlName="password" type="password">
+            </mat-form-field>
+            <!--        TODO: university-->
+            <!--                    <mat-form-field appearance="fill">-->
+            <!--                        <mat-label></mat-label>-->
+            <!--                        &lt;!&ndash;                        <mat-select>&ndash;&gt;-->
+            <!--                        &lt;!&ndash;                            <mat-option *ngFor="let  of " [value]=".value">&ndash;&gt;-->
+            <!--                        &lt;!&ndash;                                {{.viewValue}}&ndash;&gt;-->
+            <!--                        &lt;!&ndash;                            </mat-option>&ndash;&gt;-->
+            <!--                        &lt;!&ndash;                        </mat-select>&ndash;&gt;-->
+            <!--                    </mat-form-field>-->
+
+        </form>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-button
+            mat-dialog-close
+            (click)="onSubmit()"
+            [ngClass]="{'login-btn': authMode === 'login', 'signup-btn': authMode === 'signup'}"
+            type="submit" mat-raised-button>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</button>
+    <!--    <button mat-button [mat-dialog-close]="true">Install</button>-->
+</mat-dialog-actions>

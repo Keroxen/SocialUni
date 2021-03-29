@@ -1,16 +1,18 @@
-import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, throwError} from 'rxjs';
-import {User} from '../shared/user.model';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {AuthResponseData} from '../shared/auth.model';
-import {catchError, tap} from 'rxjs/operators';
-import set = Reflect.set;
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { User } from '../shared/user.model';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthResponseData } from '../shared/auth.model';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
     user = new BehaviorSubject<User | null>(null);
     private tokenExpirationTimer: any;
+
+    private authMode: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
+    public authMode$: Observable<string | null> = this.authMode.asObservable();
 
     constructor(private http: HttpClient, private router: Router) {
     }
@@ -29,7 +31,7 @@ export class AuthService {
 
     login(email: string, password: string): Observable<AuthResponseData> {
         return this.http.post<AuthResponseData>(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AAIzaSyDXN5g_Z4BAczJ9Jb-pZ8b4mRdfYB0AU_0',
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDXN5g_Z4BAczJ9Jb-pZ8b4mRdfYB0AU_0',
             {
                 email,
                 password,
@@ -67,6 +69,10 @@ export class AuthService {
         }
     }
 
+    updateAuthMode(authMode: string | null) {
+        this.authMode.next(authMode);
+    }
+
     private handleError(errorRes: HttpErrorResponse) {
         let errorMessage = 'An unknown error occurred!';
         if (!errorRes.error || !errorRes.error.error) {
@@ -91,7 +97,7 @@ export class AuthService {
 
     logout(): void {
         this.user.next(null);
-        // this.router.navigate(['/auth']);
+        this.router.navigate(['/landing-page']);
         localStorage.removeItem('userData');
         if (this.tokenExpirationTimer) {
             clearTimeout(this.tokenExpirationTimer);

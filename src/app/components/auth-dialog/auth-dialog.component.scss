@@ -1,0 +1,39 @@
+.mat-dialog-title {
+    text-align: center;
+    font-size: 34px;
+}
+
+.mat-dialog-container {
+    border-radius: 20px;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    //height: 75%;
+    width: 70%;
+    margin: 0 auto;
+}
+
+mat-form-field {
+    width: 100% !important;
+}
+
+.login-btn, .signup-btn {
+    width: 70%;
+    //background: rgb(29, 161, 242);
+    background: #1A91DA;
+    //border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 35px;
+    color: white;
+    font-weight: bold;
+    min-height: 48px;
+    font-size: 15px;
+    max-width: 300px;
+}
+
+.signup-btn {
+    background: #232323;
+}
+
