@@ -1,78 +1,59 @@
-.landing-left {
-    //background: url(src/assets/images/landing2.jpg);
-    width: 60%;
-    position: absolute;
-    left: 0;
-    height: 100%;
-
-}
-
-.landing-right {
-    height: 100%;
-    //background: #1C1F23;
-
-    img {
-        margin: 30px 0 0 30px;
+.landing {
+    &-left {
+        //background: url(src/assets/images/landing2.jpg);
+        width: 50%;
+        position: absolute;
+        left: 0;
+        height: 100%;
     }
-}
 
-.landing-right-absolute {
-    width: 40%;
-    position: absolute;
-    right: 0;
-    height: 100%;
-}
-
-.form-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    //height: 75%;
-    width: 70%;
-    margin: 0 auto;
-}
-
-mat-form-field {
-    width: 100% !important;
-}
-
-.form-btn-wrapper {
-    display: flex;
-    flex-direction: column;
-    //height: 120px;
-    justify-content: space-between;
-    align-items: center;
-
-    button {
-        width: 100%;
-        //background: rgb(29, 161, 242);
-        background: #1A91DA;
-        //border: 1px solid rgba(0, 0, 0, 0);
-        border-radius: 35px;
-        color: white;
-        font-weight: bold;
-        min-height: 48px;
-        font-size: 15px;
-
-        &:last-child {
-            background: #232323;
+    &-right {
+        height: 100%;
+        //background: #1C1F23;
+        img {
+            margin: 30px 0 0 30px;
         }
     }
 
-    p {
-        margin: 10px;
+    &-right-absolute {
+        width: 50%;
+        position: absolute;
+        right: 0;
+        height: 100%;
+    }
+
+    &-btn-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        button {
+            width: 70%;
+            //background: rgb(29, 161, 242);
+            background: #1A91DA;
+            //border: 1px solid rgba(0, 0, 0, 0);
+            border-radius: 35px;
+            color: white;
+            font-weight: bold;
+            min-height: 48px;
+            font-size: 15px;
+            max-width: 300px;
+
+            &:last-child {
+                background: #232323;
+                margin-top: 30px;
+            }
+        }
+
+        p {
+            margin: 10px;
+        }
     }
 }
 
-//.mat-form-field-appearance-outline .mat-form-field-outline {
-//    background: red !important;
-//}
-//
-//.mat-form-field-outline:active {
-//    //color: $my-app-accent !important;
-//    background: purple !important;
-//}
-//
-//.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
-//    color: #1A91DA !important;
-//}
+.welcome-messages-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 30px 0;
+}
