@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "alin-licenta-c406d"
+  },
+  "targets": {
+    "alin-licenta-c406d": {
+      "hosting": {
+        "licenta": [
+          "alin-licenta-c406d"
+        ]
+      }
+    }
   }
 }

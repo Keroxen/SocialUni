@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { User } from '../shared/user.model';
+import { User } from '@models/user.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthResponseData } from '../shared/auth.model';
+import { AuthResponseData } from '@models/auth.model';
+import { University } from '@models/university.model';
 import { catchError, tap } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { FirestoreUser } from '@models/firestoreUser.model';
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
@@ -14,7 +17,9 @@ export class AuthService {
     private authMode: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
     public authMode$: Observable<string | null> = this.authMode.asObservable();
 
-    constructor(private http: HttpClient, private router: Router) {
+    private universitiesCollection: AngularFirestoreCollection<University> | undefined;
+
+    constructor(private http: HttpClient, private router: Router, private afs: AngularFirestore) {
     }
 
     signup(email: string, password: string): Observable<AuthResponseData> {
@@ -69,7 +74,7 @@ export class AuthService {
         }
     }
 
-    updateAuthMode(authMode: string | null) {
+    updateAuthMode(authMode: string | null): void {
         this.authMode.next(authMode);
     }
 
@@ -110,5 +115,21 @@ export class AuthService {
         this.tokenExpirationTimer = setTimeout(() => {
             this.logout();
         }, expirationDuration);
+    }
+
+    getUniversities(): Observable<University[]> {
+        this.universitiesCollection = this.afs.collection<University>('universities');
+        return this.universitiesCollection.valueChanges();
+    }
+
+    saveUser(firstName: string, lastName: string, dob: string, email: string, university: string, accessCode: string): void {
+        this.afs.collection('users').doc().set({
+            firstName,
+            lastName,
+            dob,
+            email,
+            university,
+            accessCode
+        });
     }
 }

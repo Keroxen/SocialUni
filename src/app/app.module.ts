@@ -1,25 +1,33 @@
-import {NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LayoutModule } from '@angular/cdk/layout';
 
-import {AppRoutingModule} from './app-routing.module';
-import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MainNavComponent} from './components/main-nav/main-nav.component';
-import {LayoutModule} from '@angular/cdk/layout';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatIconModule} from '@angular/material/icon';
-import {MatListModule} from '@angular/material/list';
-import {LandingPageComponent} from './components/landing-page/landing-page.component';
-import {ProfileComponent} from './components/profile/profile.component';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
-import { AuthDialogComponent } from './components/auth-dialog/auth-dialog.component';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
+
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HomeComponent } from './components/home/home.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
+import { MainNavComponent } from '@components/main-nav/main-nav.component';
+import { LandingPageComponent } from '@components/landing-page/landing-page.component';
+import { ProfileComponent } from '@components/profile/profile.component';
+import { AuthDialogComponent } from '@components/auth-dialog/auth-dialog.component';
+import { HomeComponent } from '@components/home/home.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
     declarations: [
@@ -44,7 +52,12 @@ import { HomeComponent } from './components/home/home.component';
         MatInputModule,
         ReactiveFormsModule,
         HttpClientModule,
-        MatDialogModule
+        MatDialogModule,
+        MatAutocompleteModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFirestoreModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     providers: [],
     bootstrap: [AppComponent]
