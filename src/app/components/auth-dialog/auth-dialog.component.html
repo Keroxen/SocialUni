@@ -1,41 +1,70 @@
 <h2 mat-dialog-title>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</h2>
 <mat-dialog-content class="mat-typography">
-    <div class="form-wrapper">
-        <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline" *ngIf="authMode === 'signup'">
+    <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSignup()" *ngIf="authMode === 'signup'">
+        <div class="left-side">
+            <mat-form-field appearance="outline">
                 <mat-label>First name</mat-label>
-                <input matInput placeholder="First name" formControlName="firstName">
-            </mat-form-field>
-            <mat-form-field appearance="outline" *ngIf="authMode === 'signup'">
-                <mat-label>Last name</mat-label>
-                <input matInput placeholder="Last name" formControlName="lastName">
+                <input matInput placeholder="First name" formControlName="firstName" autocomplete="given-name">
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
-                <input matInput placeholder="Email" formControlName="email">
+                <mat-label>Last name</mat-label>
+                <input matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Date of birth</mat-label>
+                <input matInput [max]="today" [matDatepicker]="picker" formControlName="dob" autocomplete="bday">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Email address</mat-label>
+                <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
             </mat-form-field>
             <mat-form-field appearance="outline">
                 <mat-label>Password</mat-label>
-                <input matInput placeholder="Password" formControlName="password" type="password">
+                <input matInput placeholder="Password" formControlName="password" type="password"
+                       autocomplete="new-password">
             </mat-form-field>
-            <!--        TODO: university-->
-            <!--                    <mat-form-field appearance="fill">-->
-            <!--                        <mat-label></mat-label>-->
-            <!--                        &lt;!&ndash;                        <mat-select>&ndash;&gt;-->
-            <!--                        &lt;!&ndash;                            <mat-option *ngFor="let  of " [value]=".value">&ndash;&gt;-->
-            <!--                        &lt;!&ndash;                                {{.viewValue}}&ndash;&gt;-->
-            <!--                        &lt;!&ndash;                            </mat-option>&ndash;&gt;-->
-            <!--                        &lt;!&ndash;                        </mat-select>&ndash;&gt;-->
-            <!--                    </mat-form-field>-->
+        </div>
+        <div class="right-side">
+            <mat-form-field appearance="fill">
+                <mat-label>University</mat-label>
+                <input type="text"
+                       placeholder="Type to search..."
+                       matInput
+                       formControlName="university"
+                       [matAutocomplete]="auto"
+                       autocomplete="disabled">
+                <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let university of filteredUniversities | async" [value]="university.name">
+                        {{university.name}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+                <mat-label>Access code</mat-label>
+                <input matInput formControlName="accessCode" type="text" class="access-code"
+                       autocomplete="one-time-code">
+            </mat-form-field>
+        </div>
+    </form>
 
-        </form>
-    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="authMode === 'login'" class="login-form">
+        <mat-form-field appearance="outline">
+            <mat-label>Email address</mat-label>
+            <input matInput placeholder="Email" formControlName="email" type="email" email>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput placeholder="Password" formControlName="password" type="password"
+                   autocomplete="current-password">
+        </mat-form-field>
+    </form>
+
 </mat-dialog-content>
 <mat-dialog-actions align="center">
     <button mat-button
-            mat-dialog-close
-            (click)="onSubmit()"
+            (click)="authMode === 'login' ? onLogin() : onSignup()"
             [ngClass]="{'login-btn': authMode === 'login', 'signup-btn': authMode === 'signup'}"
             type="submit" mat-raised-button>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</button>
-    <!--    <button mat-button [mat-dialog-close]="true">Install</button>-->
 </mat-dialog-actions>

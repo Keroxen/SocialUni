@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '@services/auth.service';
 import { Observable, Subscription } from 'rxjs';
-import { FormControl, FormGroup } from '@angular/forms';
-import { AuthResponseData } from '../../shared/auth.model';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AuthResponseData } from '@models/auth.model';
 import { Router } from '@angular/router';
+import { map, startWith } from 'rxjs/operators';
+import { University } from '@models/university.model';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-auth-dialog',
@@ -12,49 +15,78 @@ import { Router } from '@angular/router';
 })
 export class AuthDialogComponent implements OnInit, OnDestroy {
 
-    constructor(private authService: AuthService, private router: Router) {
+    constructor(private authService: AuthService, private router: Router, private dialogRef: MatDialogRef<AuthDialogComponent>) {
     }
 
     authModeSubscription: Subscription | undefined;
     authMode: string | null = '';
     error = null;
+    today: Date | undefined;
 
-    authForm = new FormGroup({
-        firstName: new FormControl(''),
-        lastName: new FormControl(''),
-        email: new FormControl(''),
-        password: new FormControl(''),
-        // university: new FormControl(''),
+    signupForm = new FormGroup({
+        firstName: new FormControl('', Validators.required),
+        lastName: new FormControl('', Validators.required),
+        dob: new FormControl('', Validators.required),
+        email: new FormControl('', Validators.required),
+        password: new FormControl('', Validators.required),
+        university: new FormControl('', Validators.required),
+        accessCode: new FormControl('', Validators.required),
     });
+
+    loginForm = new FormGroup({
+        email: new FormControl('', Validators.required),
+        password: new FormControl('', Validators.required)
+    });
+
+    filteredUniversities: Observable<University[]> | undefined;
+    universities: University[] | undefined;
+    universitiesSubscription: Subscription | undefined;
 
     ngOnInit(): void {
         this.authModeSubscription = this.authService.authMode$.subscribe(data => {
-            // console.log(data);
             this.authMode = data;
         });
+        if (this.authMode === 'signup') {
+            this.universitiesSubscription = this.authService.getUniversities().subscribe(data => {
+                this.universities = data;
+                // console.log(this.universities);
+                this.filteredUniversities = this.signupForm.get('university')?.valueChanges
+                    .pipe(
+                        startWith(''),
+                        map(value => this._filter(value))
+                    );
+            });
+            this.today = new Date();
+        }
     }
 
-    onSubmit(): void {
-        console.log(this.authForm.value);
-        if (!this.authForm.valid) {
+    private _filter(value: string): University[] {
+        if (this.universities) {
+            const filterValue = value.toLowerCase();
+            return this.universities.filter(option => option.name.toLowerCase().includes(filterValue));
+        } else {
+            return [];
+        }
+    }
+
+    onSignup(): void {
+        if (!this.signupForm.valid) {
             return;
         }
-        const email = this.authForm.value.email;
-        const password = this.authForm.value.password;
-        console.log(this.authForm.valid);
+
+        console.log(this.signupForm.valid);
+
         let authObs: Observable<AuthResponseData>;
 
-        if (this.authMode === 'login') {
-            authObs = this.authService.login(email, password);
-            authObs.subscribe(resData => {
-                console.log(resData);
-                this.router.navigate(['/home']);
-            }, errorMessage => {
-                console.log(errorMessage);
-                this.error = errorMessage;
-            });
+        const firstName = this.signupForm.value.firstName;
+        const lastName = this.signupForm.value.lastName;
+        const dob = this.signupForm.value.dob;
+        const email = this.signupForm.value.email;
+        const password = this.signupForm.value.password;
+        const university = this.signupForm.value.university;
+        const accessCode = this.signupForm.value.accessCode;
 
-        } else if (this.authMode === 'signup') {
+        if (accessCode === '1234') {
             authObs = this.authService.signup(email, password);
             authObs.subscribe(resData => {
                 console.log(resData);
@@ -63,14 +95,38 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
                 console.log(errorMessage);
                 this.error = errorMessage;
             });
+            this.dialogRef.close();
+            this.signupForm.reset();
+            this.authService.saveUser(firstName, lastName, dob, email, university, accessCode);
+        } else {
+            console.log('invalid code');
+        }
+    }
+
+    onLogin(): void {
+        if (!this.loginForm.valid) {
+            return;
         }
 
-        this.authForm.reset();
+        let authObs: Observable<AuthResponseData>;
+
+        const email = this.loginForm.value.email;
+        const password = this.loginForm.value.password;
+
+        authObs = this.authService.login(email, password);
+        authObs.subscribe(resData => {
+            console.log(resData);
+            this.router.navigate(['/home']);
+        }, errorMessage => {
+            console.log(errorMessage);
+            this.error = errorMessage;
+        });
+        this.dialogRef.close();
+        this.loginForm.reset();
     }
 
     ngOnDestroy(): void {
-        if (this.authModeSubscription) {
-            this.authModeSubscription.unsubscribe();
-        }
+        this.authModeSubscription?.unsubscribe();
+        this.universitiesSubscription?.unsubscribe();
     }
 }

@@ -1,39 +1,70 @@
+@font-face {
+    font-family: 'password';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+}
+
 .mat-dialog-title {
     text-align: center;
     font-size: 34px;
 }
 
-.mat-dialog-container {
-    border-radius: 20px;
-}
-
-.form-wrapper {
+.signup-form {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    margin-top: 15px;
+
+    mat-form-field {
+        width: 100% !important;
+    }
+
+    .left-side, .right-side {
+        display: inline-flex;
+        flex-direction: column;
+    }
+
+    .left-side {
+        width: 47%;
+    }
+
+    .right-side {
+        width: 50%;
+    }
+
+    .access-code {
+        font-family: 'password', serif;
+    }
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    //height: 75%;
-    width: 70%;
-    margin: 0 auto;
+    margin-top: 30px;
+    margin-bottom: 50px;
+
+    mat-form-field {
+        width: 60%;
+    }
 }
 
-mat-form-field {
-    width: 100% !important;
-}
+.mat-dialog-actions {
+    .login-btn, .signup-btn {
+        width: 70%;
+        //background: rgb(29, 161, 242);
+        background: #1A91DA;
+        //border: 1px solid rgba(0, 0, 0, 0);
+        border-radius: 35px;
+        color: white;
+        font-weight: bold;
+        min-height: 48px;
+        font-size: 15px;
+        max-width: 300px;
+    }
 
-.login-btn, .signup-btn {
-    width: 70%;
-    //background: rgb(29, 161, 242);
-    background: #1A91DA;
-    //border: 1px solid rgba(0, 0, 0, 0);
-    border-radius: 35px;
-    color: white;
-    font-weight: bold;
-    min-height: 48px;
-    font-size: 15px;
-    max-width: 300px;
-}
-
-.signup-btn {
-    background: #232323;
+    .signup-btn {
+        background: #232323;
+    }
 }
 

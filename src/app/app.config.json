@@ -1,0 +1,20 @@
+{
+    "firebaseConfigEnvironmentProductionFalse": {
+        "apiKey": "AIzaSyDXN5g_Z4BAczJ9Jb-pZ8b4mRdfYB0AU_0",
+        "authDomain": "alin-licenta-c406d.firebaseapp.com",
+        "projectId": "alin-licenta-c406d",
+        "storageBucket": "alin-licenta-c406d.appspot.com",
+        "messagingSenderId": "38878269773",
+        "appId": "1:38878269773:web:13b42f2fa3def002222704",
+        "measurementId": "G-ZYNHXEB5GM"
+    },
+    "firebaseConfigEnvironmentProductionTrue": {
+        "apiKey": "AIzaSyDXN5g_Z4BAczJ9Jb-pZ8b4mRdfYB0AU_0",
+        "authDomain": "alin-licenta-c406d.firebaseapp.com",
+        "projectId": "alin-licenta-c406d",
+        "storageBucket": "alin-licenta-c406d.appspot.com",
+        "messagingSenderId": "38878269773",
+        "appId": "1:38878269773:web:13b42f2fa3def002222704",
+        "measurementId": "G-ZYNHXEB5GM"
+    }
+}
