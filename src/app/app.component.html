@@ -1,1 +1,2 @@
-<router-outlet></router-outlet>
+<app-main-nav *ngIf="this.authService.user.value != null"></app-main-nav>
+<app-landing-page *ngIf="this.authService.user.value == null"></app-landing-page>

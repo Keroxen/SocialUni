@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { AuthService } from '@services/auth.service';
 
 @Component({
     selector: 'app-root',
@@ -9,10 +9,10 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit {
     title = 'licenta';
 
-    constructor(private authService: AuthService) {
+    constructor(public authService: AuthService) {
     }
 
     ngOnInit(): void {
-        // this.authService.autoLogin();
+        this.authService.autoLogin();
     }
 }
