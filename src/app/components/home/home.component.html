@@ -1,1 +1,7 @@
-<p>home works!</p>
+<div class="home">
+    <app-new-post></app-new-post>
+    <!--    TODO fetch posts-->
+    <div *ngFor="let post of latestPosts">
+        {{post.content}}
+    </div>
+</div>
