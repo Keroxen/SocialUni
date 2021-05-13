@@ -1,0 +1,16 @@
+<div class="new-post">
+    <div class="new-post-container">
+        <div class="profile-img-wrapper">
+            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+        </div>
+        <div class="new-post-wrapper">
+            <form [formGroup]="newPostForm" class="new-post-form">
+                <mat-form-field class="new-post-field">
+                    <mat-label>Share something interesting</mat-label>
+                    <input matInput type="text" formControlName="newPostText">
+                </mat-form-field>
+            </form>
+            <button class="new-post-submit-btn" (click)="onNewPost()">Post</button>
+        </div>
+    </div>
+</div>

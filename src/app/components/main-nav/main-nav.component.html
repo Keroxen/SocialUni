@@ -1,20 +1,20 @@
 <mat-sidenav-container class="sidenav-container">
-    <mat-sidenav #drawer class="sidenav" mode="side" opened fixedInViewport
+    <mat-sidenav #drawer class="sidenav" mode="side" [opened]="!(isHandset$ | async)" fixedInViewport
                  [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     >
         <mat-toolbar>
-            <a href="#" class="logo"> Menu
-                <img src="https://via.placeholder.com/50">
+            <a (click)="goTo(navigationPathEnum.Home);closeDrawer ? drawer.close() : drawer.open()" class="logo"> Name
+                <img src="https://via.placeholder.com/50" alt="Logo">
             </a>
         </mat-toolbar>
         <mat-nav-list class="nav-list">
-            <a mat-list-item href="#">Notifications
+            <a mat-list-item (click)="goTo(navigationPathEnum.Notifications); closeDrawer ? drawer.close() : drawer.open()">Notifications
                 <mat-icon>notifications</mat-icon>
             </a>
-            <a mat-list-item href="#">Saved
+            <a mat-list-item (click)="goTo(navigationPathEnum.Saved); closeDrawer ? drawer.close() : drawer.open()">Saved
                 <mat-icon>bookmark</mat-icon>
             </a>
-            <a mat-list-item routerLink="/profile">Profile
+            <a mat-list-item (click)="goTo(navigationPathEnum.Profile); closeDrawer ? drawer.close() : drawer.open()">Profile
                 <mat-icon>account_circle</mat-icon>
             </a>
             <a mat-list-item (click)="onLogout()">Log out
@@ -22,20 +22,16 @@
             </a>
         </mat-nav-list>
     </mat-sidenav>
-
-<!--    <mat-sidenav-content>-->
-        <!--        <mat-toolbar color="primary">-->
-        <!--            <button-->
-        <!--                type="button"-->
-        <!--                aria-label="Toggle sidenav"-->
-        <!--                mat-icon-button-->
-        <!--                (click)="drawer.toggle()"-->
-        <!--                *ngIf="isHandset$ | async">-->
-        <!--                <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>-->
-        <!--            </button>-->
-        <!--            <span>licenta</span>-->
-        <!--        </mat-toolbar>-->
-        <!-- Add Content Here -->
-<!--    </mat-sidenav-content>-->
+    <mat-toolbar color="primary" *ngIf="isHandset$ | async">
+        <button
+            type="button"
+            aria-label="Toggle sidenav"
+            mat-icon-button
+            (click)="drawer.toggle()"
+        >
+            <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+        </button>
+        <span>licenta</span>
+    </mat-toolbar>
     <router-outlet></router-outlet>
 </mat-sidenav-container>

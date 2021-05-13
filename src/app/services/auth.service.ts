@@ -6,10 +6,9 @@ import { Router } from '@angular/router';
 import { AuthResponseData } from '@models/auth.model';
 import { University } from '@models/university.model';
 import { catchError, tap } from 'rxjs/operators';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { FirestoreUser } from '@models/firestoreUser.model';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-@Injectable({providedIn: 'root'})
+@Injectable()
 export class AuthService {
     user = new BehaviorSubject<User | null>(null);
     private tokenExpirationTimer: any;

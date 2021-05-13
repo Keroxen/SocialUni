@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
+import { AuthGuard } from '@shared/auth.guard';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -28,6 +29,9 @@ import { ProfileComponent } from '@components/profile/profile.component';
 import { AuthDialogComponent } from '@components/auth-dialog/auth-dialog.component';
 import { HomeComponent } from '@components/home/home.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AuthService } from '@services/auth.service';
+import { DataService } from '@services/data.service';
+import { NewPostComponent } from '@components/new-post/new-post.component';
 
 @NgModule({
     declarations: [
@@ -37,6 +41,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         ProfileComponent,
         AuthDialogComponent,
         HomeComponent,
+        NewPostComponent,
     ],
     imports: [
         BrowserModule,
@@ -59,7 +64,7 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatDatepickerModule,
         MatNativeDateModule
     ],
-    providers: [],
+    providers: [AuthGuard, AuthService, DataService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

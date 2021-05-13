@@ -52,7 +52,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" *ngIf="authMode === 'login'" class="login-form">
         <mat-form-field appearance="outline">
             <mat-label>Email address</mat-label>
-            <input matInput placeholder="Email" formControlName="email" type="email" email>
+            <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
         </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
