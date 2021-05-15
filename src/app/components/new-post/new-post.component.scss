@@ -1,9 +1,13 @@
+@use "src/assets/styles/globalVars";
+
 .new-post {
     width: 550px;
     height: 180px;
     background: white;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
     padding: 15px;
+    border-radius: 30px;
+    margin-bottom: 60px;
 
     &-container {
         display: flex;
@@ -34,13 +38,13 @@
     }
 
     &-field {
-        background: #ececec;
+        background: globalVars.$gray-1;
         border-radius: 20px;
         padding: 10px;
     }
 
     &-submit-btn {
-        background-color: rgb(29, 161, 242);
+        background-color: globalVars.$primary-color;
         height: 40px;
         align-self: flex-end;
         color: rgb(255, 255, 255);

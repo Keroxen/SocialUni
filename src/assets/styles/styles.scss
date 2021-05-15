@@ -1,12 +1,33 @@
+@use "src/assets/styles/globalVars";
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url("../fonts/Montserrat-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'password';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+}
+
 html, body {
     height: 100%;
 }
 
-body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+// [Start] Fonts
+* {
+    font-family: globalVars.$font-family !important;
 }
 
+.material-icons {
+    font-family: 'Material Icons' !important;
+}
+
+// [End] Fonts
+
+// [Start] Navbar
 .mat-list-item-content {
     justify-content: flex-end;
     flex-direction: row-reverse !important;
@@ -17,7 +38,9 @@ body {
     border-radius: 30px !important;
     width: 1000px !important;
 }
-// styles when invalid
+// [End] Navbar
+
+// [Start] Mat-form-field
 // mat-form-field - label color when invalid
 .mat-form-field.mat-form-field-invalid .mat-form-field-label {
     color: red;
@@ -33,3 +56,5 @@ body {
 .mat-warn .mat-input-element {
     caret-color: red;
 }
+
+// [End] Mat-form-field
