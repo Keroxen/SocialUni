@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import firebase from 'firebase';
 
 @Component({
     selector: 'app-new-post',
@@ -23,10 +24,15 @@ export class NewPostComponent implements OnInit {
     onNewPost(): void {
         console.log(this.newPostForm.get('newPostText')?.value);
         const data = this.newPostForm.get('newPostText')?.value;
-        this.afs.collection('posts').doc().set({
-            content: data,
-        });
-        this.newPostForm.reset();
+        if (data) {
+            this.afs.collection('posts').add({
+                content: data,
+                created: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            this.newPostForm.reset();
+        } else {
+            console.log('empty post');
+        }
     }
 
 }

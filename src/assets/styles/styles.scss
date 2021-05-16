@@ -12,13 +12,14 @@
     src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
 }
 
-html, body {
-    height: 100%;
+body {
+    margin: 0;
 }
 
 // [Start] Fonts
 * {
     font-family: globalVars.$font-family !important;
+    box-sizing: border-box;
 }
 
 .material-icons {
@@ -38,6 +39,7 @@ html, body {
     border-radius: 30px !important;
     width: 1000px !important;
 }
+
 // [End] Navbar
 
 // [Start] Mat-form-field
@@ -58,3 +60,17 @@ html, body {
 }
 
 // [End] Mat-form-field
+
+// [Start] Profile image in cards
+.profile-img-wrapper {
+    margin-right: 24px;
+    display: inline-flex;
+
+    .profile-img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+    }
+}
+
+// [End] Profile image in cards

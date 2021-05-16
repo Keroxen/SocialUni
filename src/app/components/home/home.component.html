@@ -1,7 +1,48 @@
 <div class="home">
-    <app-new-post></app-new-post>
-    <!--    TODO fetch posts-->
-    <div *ngFor="let post of latestPosts">
-        {{post.content}}
+    <div class="left">
+        <app-new-post></app-new-post>
+
+        <div class="post-card-item" *ngFor="let post of latestPosts">
+            <div class="image-and-details-wrapper">
+                <div class="profile-img-wrapper">
+                    <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                </div>
+                <div class="post-details">
+                    <div class="post-author">author name here</div>
+                    <div class="post-datetime">
+                        {{post.created.toDate() | date: 'dd MMM y, h:mm a'}}
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-content-text">
+                    {{post.content}}
+                </div>
+                <div class="reactions-comments-wrapper">
+                    <div class="reactions-wrapper">
+                        <div class="likes-section">
+                            <div class="number-of-likes">
+                                {{numberOfLikes}}
+                            </div>
+                            <mat-icon class="like-btn">thumb_up</mat-icon>
+                        </div>
+                        <div class="dislikes-section">
+                            <div class="number-of-dislikes">
+                                {{numberOfDislikes}}
+                            </div>
+                            <mat-icon class="dislike-btn">thumb_down</mat-icon>
+                        </div>
+                    </div>
+                    <div class="comments-section">
+                        <div class="comments-btn">
+                            Comments
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        searchbar here
     </div>
 </div>

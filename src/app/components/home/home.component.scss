@@ -1,3 +1,90 @@
 .home {
-  padding: 30px;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 0.4fr;
+
+    .post-card-item {
+        width: 550px;
+        height: 400px;
+        background: white;
+        box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
+        padding: 20px 25px;
+        border-radius: 30px;
+        margin-bottom: 15px;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+
+        .image-and-details-wrapper {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .post {
+            &-details {
+                display: flex;
+                flex-direction: column;
+            }
+
+            &-author {
+                font-size: 15px;
+                font-weight: bold;
+            }
+
+            &-datetime {
+                font-size: 11px;
+            }
+
+            &-content {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+
+                &-text {
+
+                }
+
+                .reactions-comments-wrapper {
+                    display: flex;
+                    justify-content: space-between;
+                    justify-self: flex-end;
+                    margin-top: auto;
+
+                    .reactions-wrapper {
+                        display: flex;
+
+                        .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
+                            display: flex;
+                        }
+
+                        .likes-section {
+                            margin-right: 1rem;
+                        }
+
+                        .likes-section, .dislikes-section {
+                            align-items: center;
+                        }
+
+                        .number-of-likes, .number-of-dislikes {
+                            margin-right: 0.5rem;
+                        }
+
+                        .like-btn, .dislike-btn {
+                            cursor: pointer;
+                        }
+                    }
+
+                    .comments {
+                        &-section {
+                            display: inline-flex;
+                        }
+
+                        &-btn {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
