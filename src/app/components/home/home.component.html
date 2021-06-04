@@ -1,7 +1,110 @@
 <div class="home">
-    <app-new-post></app-new-post>
-    <!--    TODO fetch posts-->
-    <div *ngFor="let post of latestPosts">
-        {{post.content}}
+    <div class="left">
+        <app-new-post></app-new-post>
+
+        <div class="post-card-item" *ngFor="let post of latestPosts$">
+            <div class="image-and-details-wrapper">
+                <div class="profile-img-wrapper">
+                    <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                </div>
+                <div class="post-details">
+                    <div class="post-author">author name here</div>
+                    <div class="post-datetime">
+                        {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                    </div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-content-text">
+                    {{post.content}}
+                </div>
+                <div class="reactions-comments-wrapper">
+                    <div class="reactions-wrapper">
+                        <div class="likes-section">
+                            <div class="number-of-likes">
+                                {{numberOfLikes}}
+                            </div>
+                            <mat-icon class="like-btn">thumb_up</mat-icon>
+                        </div>
+                        <div class="dislikes-section">
+                            <div class="number-of-dislikes">
+                                {{numberOfDislikes}}
+                            </div>
+                            <mat-icon class="dislike-btn">thumb_down</mat-icon>
+                        </div>
+                    </div>
+                    <div class="comments-btn" (click)="showHideComments(post)">
+                        <mat-icon> comment</mat-icon>
+                        Comments
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="post.areCommentsVisible" class="post-comments">
+                <div class="new-comment-container">
+                    <div class="image-and-details-wrapper">
+                        <div class="profile-img-wrapper">
+                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                        </div>
+                    </div>
+                    <form [formGroup]="newCommentForm" class="new-post-form full-width">
+                        <mat-form-field class="new-comment-field" appearance="fill">
+                            <mat-label>Say something nice about this post...</mat-label>
+                            <textarea cdkTextareaAutosize
+                                      cdkAutosizeMinRows="1"
+                                      cdkAutosizeMaxRows="30"
+                                      [maxLength]="3000"
+                                      matInput
+                                      rows="3"
+                                      formControlName="newComment">
+                            </textarea>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="comment-container">
+                    <div class="image-and-details-wrapper">
+                        <div class="profile-img-wrapper">
+                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                        </div>
+                        <div class="post-details">
+                            <div class="post-author">author name here</div>
+                            <div class="post-datetime">
+                                {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-text">
+                        this is a comment
+                    </div>
+                </div>
+
+                <div class="comment-container">
+                    <div class="image-and-details-wrapper">
+                        <div class="profile-img-wrapper">
+                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                        </div>
+                        <div class="post-details">
+                            <div class="post-author">author name here</div>
+                            <div class="post-datetime">
+                                {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comment-text">
+                        this is another commentthis is another commentthis is another commentthis is another commentthis
+                        is another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another commentthis is another commentthis is
+                        another commentthis is another commentthis is another comment
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right">
+        searchbar here
     </div>
 </div>

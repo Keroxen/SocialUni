@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import firebase from 'firebase';
 
 @Component({
     selector: 'app-new-post',
@@ -10,8 +11,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class NewPostComponent implements OnInit {
 
     newPostForm = new FormGroup({
-        newPostText: new FormControl(null)
+        newPostText: new FormControl('')
     });
+
+    charactersLimit = 130;
+    charactersLeft = this.charactersLimit;
 
     constructor(private afs: AngularFirestore) {
     }
@@ -20,13 +24,24 @@ export class NewPostComponent implements OnInit {
 
     }
 
+    checkTextLength(): void {
+        const currentLength = this.newPostForm.get('newPostText')?.value?.length;
+        this.charactersLeft = this.charactersLimit - currentLength;
+    }
+
     onNewPost(): void {
         console.log(this.newPostForm.get('newPostText')?.value);
-        const data = this.newPostForm.get('newPostText')?.value;
-        this.afs.collection('posts').doc().set({
-            content: data,
-        });
-        this.newPostForm.reset();
+        const postContent = this.newPostForm.get('newPostText')?.value;
+        if (postContent && postContent.trim()) {
+            this.afs.collection('posts').add({
+                content: postContent,
+                created: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            this.newPostForm.reset();
+            this.charactersLeft = this.charactersLimit;
+        } else {
+            console.log('empty post');
+        }
     }
 
 }

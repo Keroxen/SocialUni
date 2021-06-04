@@ -12,13 +12,14 @@
     src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
 }
 
-html, body {
-    height: 100%;
+body {
+    margin: 0;
 }
 
 // [Start] Fonts
 * {
     font-family: globalVars.$font-family !important;
+    box-sizing: border-box;
 }
 
 .material-icons {
@@ -38,6 +39,7 @@ html, body {
     border-radius: 30px !important;
     width: 1000px !important;
 }
+
 // [End] Navbar
 
 // [Start] Mat-form-field
@@ -57,4 +59,61 @@ html, body {
     caret-color: red;
 }
 
+.mat-form-field-appearance-fill {
+    .mat-form-field-underline {
+        display: none;
+    }
+
+    .mat-form-field-flex {
+        border-radius: 20px !important;
+    }
+}
+
+.mat-form-field .mat-form-field-label-wrapper label {
+    line-height: 1rem;
+}
+
+.new-comment-field {
+    .mat-form-field-infix {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.mat-form-field.mat-focused {
+    .mat-form-field-label {
+        color: globalVars.$primary-color;
+    }
+}
+
 // [End] Mat-form-field
+
+// [Start] Profile image in cards
+.profile-img-wrapper {
+    margin-right: 20px;
+    display: inline-flex;
+
+    .profile-img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+    }
+}
+
+// [End] Profile image in cards
+
+//[Start] Others
+.full-width {
+    width: 100%;
+}
+
+.characters-left {
+    display: inline-flex;
+    font-size: 9px;
+}
+
+.no-characters-left {
+    color: globalVars.$color-invalid;
+}
+
+//[End] Others
