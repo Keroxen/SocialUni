@@ -3,14 +3,27 @@
         <div class="profile-img-wrapper">
             <img class="profile-img" src="assets/images/placeholder-profile.jpg">
         </div>
-        <div class="new-post-wrapper">
+        <div class="new-post-form-wrapper">
             <form [formGroup]="newPostForm" class="new-post-form">
-                <mat-form-field class="new-post-field">
-                    <mat-label>Share something interesting</mat-label>
-                    <input matInput type="text" formControlName="newPostText">
+                <mat-form-field class="new-post-field" appearance="fill" floatLabel="auto">
+                    <mat-label>Share something interesting...</mat-label>
+                    <textarea cdkTextareaAutosize
+                              cdkAutosizeMinRows="1"
+                              cdkAutosizeMaxRows="5"
+                              (ngModelChange)="checkTextLength()"
+                              [maxLength]="charactersLimit"
+                              matInput
+                              rows="3"
+                              formControlName="newPostText">
+                    </textarea>
                 </mat-form-field>
             </form>
-            <button class="new-post-submit-btn" (click)="onNewPost()">Post</button>
+            <div class="characters-left" [ngClass]="{'no-characters-left': charactersLeft === 0}">
+                {{charactersLeft}} {{charactersLeft === 1 ? 'character remaining' : 'characters remaining'}}
+            </div>
         </div>
+    </div>
+    <div class="new-post-submit-wrapper">
+        <button class="new-post-submit-btn" (click)="onNewPost()">Post</button>
     </div>
 </div>

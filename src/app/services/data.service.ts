@@ -11,7 +11,7 @@ export class DataService {
     }
 
     getPosts(): Observable<Post[]> {
-        this.postsCollection = this.afs.collection<Post>('posts');
+        this.postsCollection = this.afs.collection<Post>('posts', posts => posts.orderBy('created', 'desc'));
         return this.postsCollection.valueChanges();
     }
 }
