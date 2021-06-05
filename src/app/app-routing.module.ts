@@ -3,13 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingPageComponent } from '@components/landing-page/landing-page.component';
 import { ProfileComponent } from '@components/profile/profile.component';
 import { HomeComponent } from '@components/home/home.component';
-import { AuthGuard } from '@shared/auth.guard';
+// import { AuthGuard } from '@shared/auth.guard';
 
 const routes: Routes = [
     {path: '', redirectTo: '/landing-page', pathMatch: 'full'},
     {path: 'landing-page', component: LandingPageComponent},
-    {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-    {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+    {path: 'profile', component: ProfileComponent},
+    {path: 'home', component: HomeComponent},
 ];
 
 @NgModule({

@@ -62,7 +62,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
     private _filter(value: string): University[] {
         if (this.universities) {
-            const filterValue = value.toLowerCase();
+            const filterValue = value?.toLowerCase();
             return this.universities.filter(option => option.name.toLowerCase().includes(filterValue));
         } else {
             return [];
@@ -76,7 +76,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
         console.log(this.signupForm.valid);
 
-        let authObs: Observable<AuthResponseData>;
+        // let authObs: Observable<AuthResponseData>;
 
         const firstName = this.signupForm.value.firstName;
         const lastName = this.signupForm.value.lastName;
@@ -87,14 +87,15 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         const accessCode = this.signupForm.value.accessCode;
 
         if (accessCode === '1234') {
-            authObs = this.authService.signup(email, password);
-            authObs.subscribe(resData => {
-                console.log(resData);
-                this.router.navigate(['/home']);
-            }, errorMessage => {
-                console.log(errorMessage);
-                this.error = errorMessage;
-            });
+            this.authService.signUp2(email, password);
+            // authObs = this.authService.signup(email, password);
+            // authObs.subscribe(resData => {
+            //     console.log(resData);
+            //     this.router.navigate(['/home']);
+            // }, errorMessage => {
+            //     console.log(errorMessage);
+            //     this.error = errorMessage;
+            // });
             this.dialogRef.close();
             this.signupForm.reset();
             this.authService.saveUser(firstName, lastName, dob, email, university, accessCode);
@@ -108,19 +109,20 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        let authObs: Observable<AuthResponseData>;
+        // let authObs: Observable<AuthResponseData>;
 
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
 
-        authObs = this.authService.login(email, password);
-        authObs.subscribe(resData => {
-            console.log(resData);
-            this.router.navigate(['/home']);
-        }, errorMessage => {
-            console.log(errorMessage);
-            this.error = errorMessage;
-        });
+        this.authService.logIn2(email, password);
+        // authObs = this.authService.login(email, password);
+        // authObs.subscribe(resData => {
+        //     console.log(resData);
+        //     this.router.navigate(['/home']);
+        // }, errorMessage => {
+        //     console.log(errorMessage);
+        //     this.error = errorMessage;
+        // });
         this.dialogRef.close();
         this.loginForm.reset();
     }

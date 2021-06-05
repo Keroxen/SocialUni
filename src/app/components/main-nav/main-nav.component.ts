@@ -26,7 +26,8 @@ export class MainNavComponent implements OnInit {
     }
 
     onLogout(): void {
-        this.authService.logout();
+        // this.authService.logout();
+        this.authService.logOut2();
     }
 
     goTo(url: string): void {
