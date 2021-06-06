@@ -5,15 +5,16 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthResponseData } from '@models/auth.model';
 import { University } from '@models/university.model';
-import { catchError, tap } from 'rxjs/operators';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { catchError, map, tap } from 'rxjs/operators';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { UserData } from '@models/userData.model';
 
 @Injectable()
 export class AuthService {
     user = new BehaviorSubject<User | null>(null);
     private tokenExpirationTimer: any;
-
+    currentUid: string | undefined;
     private authMode: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
     public authMode$: Observable<string | null> = this.authMode.asObservable();
 
@@ -23,15 +24,28 @@ export class AuthService {
         this.afAuth.authState.subscribe(user => {
             if (user) {
                 console.log(user);
+                this.currentUid = user.uid;
+                console.log('this.currentUid ', this.currentUid);
                 localStorage.setItem('user', JSON.stringify(user));
                 JSON.parse(localStorage.getItem('user') as string);
             }
         });
     }
 
-    signUp2(email: string, password: string) {
-        this.afAuth.createUserWithEmailAndPassword(email, password).then(status => {
-            console.log('success', status);
+    signUp2(email: string, password: string, firstName: string, lastName: string, dob: string, university: string, accessCode: string) {
+        this.afAuth.createUserWithEmailAndPassword(email, password).then(newUser => {
+            console.log('success', newUser);
+            const newUserRef: AngularFirestoreDocument<UserData> = this.afs.doc(`users/${newUser.user?.uid}`);
+            // this.afs.collection<UserData>('users').doc().set({
+            newUserRef.set({
+                firstName,
+                lastName,
+                dob,
+                email,
+                university,
+                accessCode,
+                imageURL: ''
+            });
             this.router.navigateByUrl('/home');
         }).catch(error => {
             console.log('error', error);
@@ -160,14 +174,47 @@ export class AuthService {
         return this.universitiesCollection.valueChanges();
     }
 
-    saveUser(firstName: string, lastName: string, dob: string, email: string, university: string, accessCode: string): void {
-        this.afs.collection('users').doc().set({
-            firstName,
-            lastName,
-            dob,
-            email,
-            university,
-            accessCode
-        });
-    }
+    // get currentUid() {
+    //     return this.afAuth.authState.
+    // }
+
+    // saveUser(firstName: string, lastName: string, dob: string, email: string, university: string, accessCode: string): void {
+    //     this.afs.collection('users').doc().set({
+    //         uid:
+    //         firstName,
+    //         lastName,
+    //         dob,
+    //         email,
+    //         university,
+    //         accessCode
+    //     });
+    // }
+
+    // getUserData() {
+    //     // this.afs.collection<UserData>('users').doc(this.currentUid).ref.get().then(doc => {
+    //     //     console.log(doc.data());
+    //     //     console.log(doc);
+    //     // });
+    //
+    //     // return this.afs.collection<UserData>('users').doc(this.currentUid).snapshotChanges().pipe(
+    //     //     map(actions => {
+    //     //         console.log("here",actions.payload.data);
+    //     //     })
+    //     // );
+    //     console.log('here');
+    //     console.log('here id',this.currentUid);
+    //
+    //     this.afs.collection('users').doc(this.currentUid).snapshotChanges().pipe(map(changes => {
+    //         const data = changes.payload.data;
+    //         const id = changes.payload.id;
+    //         // return { id, ...data };
+    //         console.log('here3');
+    //
+    //         console.log(data);
+    //         console.log(changes);
+    //     }));
+    //
+    //     // let document = this.afs.doc(this.currentUid).get().toPromise()
+    //     // return document.data
+    // }
 }

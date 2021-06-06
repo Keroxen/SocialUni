@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase';
+
+import { AuthService } from '@services/auth.service';
+import { UserData } from '@models/userData.model';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-new-post',
@@ -9,6 +15,7 @@ import firebase from 'firebase';
     styleUrls: ['./new-post.component.scss']
 })
 export class NewPostComponent implements OnInit {
+    destroy$: Subject<boolean> = new Subject<boolean>();
 
     newPostForm = new FormGroup({
         newPostText: new FormControl('')
@@ -16,8 +23,17 @@ export class NewPostComponent implements OnInit {
 
     charactersLimit = 130;
     charactersLeft = this.charactersLimit;
+    currentUid: string | undefined;
+    userDetails: unknown;
+    userFirstName: string | undefined;
+    userLastName: string | undefined;
+    userImageURL: string | undefined;
 
-    constructor(private afs: AngularFirestore) {
+    constructor(private afs: AngularFirestore, private authService: AuthService, private afAuth: AngularFireAuth) {
+        this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
+            this.currentUid = user?.uid;
+            this.getUserData();
+        });
     }
 
     ngOnInit(): void {
@@ -35,7 +51,10 @@ export class NewPostComponent implements OnInit {
         if (postContent && postContent.trim()) {
             this.afs.collection('posts').add({
                 content: postContent,
-                created: firebase.firestore.FieldValue.serverTimestamp()
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                userFirstName: this.userFirstName,
+                userLastName: this.userLastName,
+                userImageURL: this.userImageURL,
             });
             this.newPostForm.reset();
             this.charactersLeft = this.charactersLimit;
@@ -44,4 +63,14 @@ export class NewPostComponent implements OnInit {
         }
     }
 
+    getUserData() {
+        this.afs.collection<UserData>('users').doc(this.currentUid).ref.get().then(doc => {
+            // this.userDetails = doc.data();
+            this.userFirstName = doc.data()?.firstName;
+            this.userLastName = doc.data()?.lastName;
+            this.userImageURL = doc.data()?.imageURL;
+            // console.log(doc.data());
+            console.log(this.userDetails);
+        });
+    }
 }

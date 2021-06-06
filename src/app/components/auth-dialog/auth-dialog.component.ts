@@ -87,7 +87,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         const accessCode = this.signupForm.value.accessCode;
 
         if (accessCode === '1234') {
-            this.authService.signUp2(email, password);
+            this.authService.signUp2(email, password, firstName, lastName, dob, university, accessCode);
             // authObs = this.authService.signup(email, password);
             // authObs.subscribe(resData => {
             //     console.log(resData);
@@ -98,7 +98,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
             // });
             this.dialogRef.close();
             this.signupForm.reset();
-            this.authService.saveUser(firstName, lastName, dob, email, university, accessCode);
+            // this.authService.saveUser(firstName, lastName, dob, email, university, accessCode);
         } else {
             console.log('invalid code');
         }
