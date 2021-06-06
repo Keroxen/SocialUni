@@ -3,6 +3,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Router } from '@angular/router';
+
 import { AuthService } from '@services/auth.service';
 import { NavigationPaths } from '@models/nav-enum.model';
 
@@ -26,15 +27,14 @@ export class MainNavComponent implements OnInit {
     }
 
     onLogout(): void {
-        // this.authService.logout();
-        this.authService.logOut2();
+        this.authService.logOut();
     }
 
     goTo(url: string): void {
         this.router.navigateByUrl(url);
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.isHandset$.subscribe(value => {
             this.closeDrawer = value;
         });

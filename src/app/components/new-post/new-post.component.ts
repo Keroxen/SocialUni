@@ -1,20 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase';
 
-import { AuthService } from '@services/auth.service';
 import { UserData } from '@models/userData.model';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Post } from '@models/post.model';
 
 @Component({
     selector: 'app-new-post',
     templateUrl: './new-post.component.html',
     styleUrls: ['./new-post.component.scss']
 })
-export class NewPostComponent implements OnInit {
+export class NewPostComponent implements OnInit, OnDestroy {
     destroy$: Subject<boolean> = new Subject<boolean>();
 
     newPostForm = new FormGroup({
@@ -24,12 +24,11 @@ export class NewPostComponent implements OnInit {
     charactersLimit = 130;
     charactersLeft = this.charactersLimit;
     currentUid: string | undefined;
-    userDetails: unknown;
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
 
-    constructor(private afs: AngularFirestore, private authService: AuthService, private afAuth: AngularFireAuth) {
+    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.getUserData();
@@ -47,9 +46,10 @@ export class NewPostComponent implements OnInit {
 
     onNewPost(): void {
         console.log(this.newPostForm.get('newPostText')?.value);
+
         const postContent = this.newPostForm.get('newPostText')?.value;
         if (postContent && postContent.trim()) {
-            this.afs.collection('posts').add({
+            this.afs.collection<Post>('posts').add({
                 content: postContent,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
                 userFirstName: this.userFirstName,
@@ -63,14 +63,16 @@ export class NewPostComponent implements OnInit {
         }
     }
 
-    getUserData() {
+    getUserData(): void {
         this.afs.collection<UserData>('users').doc(this.currentUid).ref.get().then(doc => {
-            // this.userDetails = doc.data();
             this.userFirstName = doc.data()?.firstName;
             this.userLastName = doc.data()?.lastName;
             this.userImageURL = doc.data()?.imageURL;
-            // console.log(doc.data());
-            console.log(this.userDetails);
         });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next(true);
+        this.destroy$.complete();
     }
 }
