@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { AuthService } from '@services/auth.service';
+import { NavigationPaths } from '@models/nav-enum.model';
 
 @Component({
     selector: 'app-root',
@@ -8,11 +11,14 @@ import { AuthService } from '@services/auth.service';
 })
 export class AppComponent implements OnInit {
     title = 'licenta';
+    public navigationPathEnum = NavigationPaths;
 
-    constructor(public authService: AuthService) {
+    constructor(private router: Router, public authService: AuthService) {
     }
 
     ngOnInit(): void {
-        this.authService.autoLogin();
+        if (this.authService.isLoggedIn) {
+            this.router.navigateByUrl(this.navigationPathEnum.Home);
+        }
     }
 }

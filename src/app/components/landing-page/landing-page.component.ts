@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
 import { AuthDialogComponent } from '../auth-dialog/auth-dialog.component';
 import { AuthService } from '@services/auth.service';
 
@@ -17,11 +18,8 @@ export class LandingPageComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    openDialog(authMode: string) {
-        const dialogRef = this.dialog.open(AuthDialogComponent);
+    openDialog(authMode: string): void {
+        this.dialog.open(AuthDialogComponent);
         this.authService.updateAuthMode(authMode);
-        dialogRef.afterClosed().subscribe(result => {
-            // console.log(result);
-        });
     }
 }

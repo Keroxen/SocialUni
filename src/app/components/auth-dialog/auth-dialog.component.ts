@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '@services/auth.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthResponseData } from '@models/auth.model';
 import { Router } from '@angular/router';
-import { map, startWith } from 'rxjs/operators';
-import { University } from '@models/university.model';
+import { map, startWith, takeUntil } from 'rxjs/operators';
 import { MatDialogRef } from '@angular/material/dialog';
+
+import { AuthService } from '@services/auth.service';
+import { University } from '@models/university.model';
 
 @Component({
     selector: 'app-auth-dialog',
@@ -14,13 +14,8 @@ import { MatDialogRef } from '@angular/material/dialog';
     styleUrls: ['./auth-dialog.component.scss']
 })
 export class AuthDialogComponent implements OnInit, OnDestroy {
-
-    constructor(private authService: AuthService, private router: Router, private dialogRef: MatDialogRef<AuthDialogComponent>) {
-    }
-
-    authModeSubscription: Subscription | undefined;
+    destroy$: Subject<boolean> = new Subject<boolean>();
     authMode: string | null = '';
-    error = null;
     today: Date | undefined;
 
     signupForm = new FormGroup({
@@ -40,14 +35,17 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
     filteredUniversities: Observable<University[]> | undefined;
     universities: University[] | undefined;
-    universitiesSubscription: Subscription | undefined;
+
+    constructor(private authService: AuthService, private router: Router, private dialogRef: MatDialogRef<AuthDialogComponent>) {
+    }
+
 
     ngOnInit(): void {
-        this.authModeSubscription = this.authService.authMode$.subscribe(data => {
+        this.authService.authMode$.pipe(takeUntil(this.destroy$)).subscribe(data => {
             this.authMode = data;
         });
         if (this.authMode === 'signup') {
-            this.universitiesSubscription = this.authService.getUniversities().subscribe(data => {
+            this.authService.getUniversities().pipe(takeUntil(this.destroy$)).subscribe(data => {
                 this.universities = data;
                 // console.log(this.universities);
                 this.filteredUniversities = this.signupForm.get('university')?.valueChanges
@@ -62,7 +60,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
     private _filter(value: string): University[] {
         if (this.universities) {
-            const filterValue = value.toLowerCase();
+            const filterValue = value?.toLowerCase();
             return this.universities.filter(option => option.name.toLowerCase().includes(filterValue));
         } else {
             return [];
@@ -76,8 +74,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
         console.log(this.signupForm.valid);
 
-        let authObs: Observable<AuthResponseData>;
-
         const firstName = this.signupForm.value.firstName;
         const lastName = this.signupForm.value.lastName;
         const dob = this.signupForm.value.dob;
@@ -87,17 +83,8 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         const accessCode = this.signupForm.value.accessCode;
 
         if (accessCode === '1234') {
-            authObs = this.authService.signup(email, password);
-            authObs.subscribe(resData => {
-                console.log(resData);
-                this.router.navigate(['/home']);
-            }, errorMessage => {
-                console.log(errorMessage);
-                this.error = errorMessage;
-            });
+            this.authService.signUp(email, password, firstName, lastName, dob, university, accessCode);
             this.dialogRef.close();
-            this.signupForm.reset();
-            this.authService.saveUser(firstName, lastName, dob, email, university, accessCode);
         } else {
             console.log('invalid code');
         }
@@ -108,25 +95,15 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        let authObs: Observable<AuthResponseData>;
-
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
 
-        authObs = this.authService.login(email, password);
-        authObs.subscribe(resData => {
-            console.log(resData);
-            this.router.navigate(['/home']);
-        }, errorMessage => {
-            console.log(errorMessage);
-            this.error = errorMessage;
-        });
+        this.authService.logIn(email, password);
         this.dialogRef.close();
-        this.loginForm.reset();
     }
 
     ngOnDestroy(): void {
-        this.authModeSubscription?.unsubscribe();
-        this.universitiesSubscription?.unsubscribe();
+        this.destroy$.next(true);
+        this.destroy$.complete();
     }
 }

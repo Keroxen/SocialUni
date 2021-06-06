@@ -5,10 +5,10 @@
         <div class="post-card-item" *ngFor="let post of latestPosts$">
             <div class="image-and-details-wrapper">
                 <div class="profile-img-wrapper">
-                    <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                    <img class="profile-img" src="assets/images/placeholder-profile.jpg" alt="Profile Image">
                 </div>
                 <div class="post-details">
-                    <div class="post-author">author name here</div>
+                    <div class="post-author">{{post.userFirstName}} {{post.userLastName}}</div>
                     <div class="post-datetime">
                         {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
                     </div>

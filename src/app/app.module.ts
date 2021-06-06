@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
-import { AuthGuard } from '@shared/auth.guard';
+// import { AuthGuard } from '@shared/auth.guard';
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -64,7 +64,7 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
         MatDatepickerModule,
         MatNativeDateModule
     ],
-    providers: [AuthGuard, AuthService, DataService],
+    providers: [AuthService, DataService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
