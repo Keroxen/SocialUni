@@ -30,7 +30,7 @@
     }
 
     .access-code {
-        font-family: globalVars.$password-font-family;
+        font-family: globalVars.$password-font-family !important;
     }
 }
 

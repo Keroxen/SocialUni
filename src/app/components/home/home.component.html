@@ -2,10 +2,10 @@
     <div class="left">
         <app-new-post></app-new-post>
 
-        <div class="post-card-item" *ngFor="let post of latestPosts$">
+        <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper">
                 <div class="profile-img-wrapper">
-                    <img class="profile-img" src="assets/images/placeholder-profile.jpg" alt="Profile Image">
+                    <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
                 </div>
                 <div class="post-details">
                     <div class="post-author">{{post.userFirstName}} {{post.userLastName}}</div>
@@ -43,10 +43,11 @@
                 <div class="new-comment-container">
                     <div class="image-and-details-wrapper">
                         <div class="profile-img-wrapper">
-                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                            <img class="profile-img" [src]="userImageURL">
                         </div>
                     </div>
-                    <form [formGroup]="newCommentForm" class="new-post-form full-width">
+                    <form [formGroup]="newCommentForm" class="new-post-form full-width"
+                          (keyup.enter)="onSubmitComment(post.id)">
                         <mat-form-field class="new-comment-field" appearance="fill">
                             <mat-label>Say something nice about this post...</mat-label>
                             <textarea cdkTextareaAutosize
@@ -57,48 +58,25 @@
                                       rows="3"
                                       formControlName="newComment">
                             </textarea>
+                            <button class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
+                            </button>
                         </mat-form-field>
                     </form>
                 </div>
-                <div class="comment-container">
+                <div class="comment-container" *ngFor="let comment of post.comments">
                     <div class="image-and-details-wrapper">
                         <div class="profile-img-wrapper">
-                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                            <img class="profile-img" [src]="comment.userImageURL" alt="Profile Image">
                         </div>
                         <div class="post-details">
-                            <div class="post-author">author name here</div>
+                            <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}</div>
                             <div class="post-datetime">
-                                {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                                {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}
                             </div>
                         </div>
                     </div>
                     <div class="comment-text">
-                        this is a comment
-                    </div>
-                </div>
-
-                <div class="comment-container">
-                    <div class="image-and-details-wrapper">
-                        <div class="profile-img-wrapper">
-                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
-                        </div>
-                        <div class="post-details">
-                            <div class="post-author">author name here</div>
-                            <div class="post-datetime">
-                                {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comment-text">
-                        this is another commentthis is another commentthis is another commentthis is another commentthis
-                        is another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another commentthis is another commentthis is
-                        another commentthis is another commentthis is another comment
+                        {{comment.content}}
                     </div>
                 </div>
             </div>

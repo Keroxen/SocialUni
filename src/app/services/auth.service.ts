@@ -7,6 +7,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { University } from '@models/university.model';
 import { UserData } from '@models/userData.model';
 import { NavigationPaths } from '@models/nav-enum.model';
+import * as appConfig from '@config/app.config.json';
 
 @Injectable()
 export class AuthService {
@@ -39,7 +40,7 @@ export class AuthService {
                 email,
                 university,
                 accessCode,
-                imageURL: ''
+                imageURL: appConfig.defaultUserImageURl
             });
             this.router.navigateByUrl(this.navigationPathEnum.Home);
         }).catch(error => {
