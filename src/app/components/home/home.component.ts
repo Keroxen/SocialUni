@@ -19,7 +19,7 @@ import { AuthService } from '@services/auth.service';
 export class HomeComponent implements OnInit, OnDestroy {
     currentUid: string | undefined;
 
-    latestPosts$: Observable<Post[]> | any;
+    latestPosts: Observable<Post[]> | any;
 
     destroy$: Subject<boolean> = new Subject<boolean>();
     numberOfLikes = 123;
@@ -49,7 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dataService.getPosts().pipe(take(1)).subscribe(data => {
             console.log(data);
-            this.latestPosts$ = data;
+            this.latestPosts = data;
         });
     }
 
@@ -59,7 +59,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     showHideComments(post: Post): void {
-        post.areCommentsVisible = !post.areCommentsVisible;
+        if (!post.areCommentsVisible) {
+            post.areCommentsVisible = true;
+            this.dataService.getPostComments(post.id).subscribe(comments => {
+                post.comments = comments;
+            });
+        } else {
+            post.areCommentsVisible = false;
+        }
     }
 
     onSubmitComment(postId: string): void {
