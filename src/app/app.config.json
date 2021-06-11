@@ -16,5 +16,7 @@
         "messagingSenderId": "38878269773",
         "appId": "1:38878269773:web:13b42f2fa3def002222704",
         "measurementId": "G-ZYNHXEB5GM"
-    }
+    },
+
+    "defaultUserImageURl": "https://firebasestorage.googleapis.com/v0/b/alin-licenta-c406d.appspot.com/o/userImages%2Fdefault-user-image.png?alt=media&token=c8ff7d2f-17bd-4eaa-88a1-06e63518f997"
 }
