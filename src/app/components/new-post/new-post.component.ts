@@ -8,6 +8,7 @@ import firebase from 'firebase';
 
 import { UserData } from '@models/userData.model';
 import { Post } from '@models/post.model';
+import { DataService } from '@services/data.service';
 
 @Component({
     selector: 'app-new-post',
@@ -28,10 +29,14 @@ export class NewPostComponent implements OnInit, OnDestroy {
     userLastName: string | undefined;
     userImageURL: string | undefined;
 
-    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
+    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
-            this.getUserData();
+            this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
+                this.userFirstName = doc.data()?.firstName;
+                this.userLastName = doc.data()?.lastName;
+                this.userImageURL = doc.data()?.imageURL;
+            });
         });
     }
 
@@ -63,13 +68,6 @@ export class NewPostComponent implements OnInit, OnDestroy {
         }
     }
 
-    getUserData(): void {
-        this.afs.collection<UserData>('users').doc(this.currentUid).ref.get().then(doc => {
-            this.userFirstName = doc.data()?.firstName;
-            this.userLastName = doc.data()?.lastName;
-            this.userImageURL = doc.data()?.imageURL;
-        });
-    }
 
     ngOnDestroy(): void {
         this.destroy$.next(true);

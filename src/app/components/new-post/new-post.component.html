@@ -1,7 +1,7 @@
 <div class="new-post">
     <div class="new-post-container">
         <div class="profile-img-wrapper">
-            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+            <img class="profile-img" [src]="userImageURL" alt="Profile image">
         </div>
         <div class="new-post-form-wrapper">
             <form [formGroup]="newPostForm" class="new-post-form">
@@ -24,6 +24,6 @@
         </div>
     </div>
     <div class="new-post-submit-wrapper">
-        <button class="new-post-submit-btn" (click)="onNewPost()">Post</button>
+        <button class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post</button>
     </div>
 </div>
