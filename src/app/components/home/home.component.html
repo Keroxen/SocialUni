@@ -43,7 +43,7 @@
                 <div class="new-comment-container">
                     <div class="image-and-details-wrapper">
                         <div class="profile-img-wrapper">
-                            <img class="profile-img" src="assets/images/placeholder-profile.jpg">
+                            <img class="profile-img" [src]="userImageURL">
                         </div>
                     </div>
                     <form [formGroup]="newCommentForm" class="new-post-form full-width"
