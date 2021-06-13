@@ -16,6 +16,7 @@
         min-height: 100px;
         display: flex;
         flex-direction: column;
+        word-break: break-all;
 
         .image-and-details-wrapper {
             display: flex;
