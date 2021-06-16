@@ -1,0 +1,38 @@
+@use "src/assets/styles/globalVars";
+
+.profile {
+    height: 100vh;
+    padding: 60px;
+    display: grid;
+    grid-template-columns: 1fr 0.8fr;
+
+    .profile-btn {
+        width: fit-content;
+        height: 40px;
+        display: flex;
+        padding: 0 12px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        margin-bottom: 2rem;
+    }
+
+    &-left {
+    }
+
+    &-right {
+        .profile {
+            &-btn {
+                background-color: globalVars.$secondary-color;
+            }
+        }
+    }
+
+
+    &-form {
+        display: flex;
+        flex-direction: column;
+        width: 70%;
+    }
+    
+}
