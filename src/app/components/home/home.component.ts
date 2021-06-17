@@ -43,13 +43,12 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.userFirstName = doc.data()?.firstName;
                 this.userLastName = doc.data()?.lastName;
                 this.userImageURL = doc.data()?.imageURL;
+                console.log(this.userImageURL)
             });
         });
     }
 
     ngOnInit(): void {
-        // TODO it needs more testing...
-
         // this.loaded = true;
         // this.dataService.getPosts()
         //     .subscribe(data => {
@@ -61,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             .snapshotChanges().pipe(map(actions => actions.map(a => {
                     const id = a.payload.doc.id;
                     const data = a.payload.doc.data() as Post;
-                    console.log(a.type);
+                    // console.log(a.type);
                     return {id, ...data};
                     // this.latestPosts.push(a);
                     // }

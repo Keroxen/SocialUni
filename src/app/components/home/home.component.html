@@ -22,13 +22,13 @@
                     <div class="reactions-wrapper">
                         <div class="likes-section">
                             <div class="number-of-likes">
-                                {{post.numberOfLikes}}
+                                {{post.numberOfLikes === 0 ? '' : post.numberOfLikes}}
                             </div>
                             <mat-icon class="like-btn" (click)="onReactionClick(post.id, 'likes')">thumb_up</mat-icon>
                         </div>
                         <div class="dislikes-section">
                             <div class="number-of-dislikes">
-                                {{post.numberOfDislikes}}
+                                {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
                             </div>
                             <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislikes')">thumb_down</mat-icon>
                         </div>

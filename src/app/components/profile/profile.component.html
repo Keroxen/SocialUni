@@ -13,12 +13,6 @@
                 <input matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>Date of birth</mat-label>
-                <input matInput [max]="today" [matDatepicker]="picker" formControlName="dob" autocomplete="bday">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
                 <mat-label>Email address</mat-label>
                 <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
             </mat-form-field>
@@ -44,6 +38,12 @@
         </form>
     </div>
     <div class="profile-right">
-
+        <div class="profile-big-img-wrapper">
+            <img class="profile-big-img" [src]=userImageURL alt="Profile Image">
+            <input type="file" class="image-upload" (change)="previewImage($event)" accept="image/*">
+            <div class="profile-btn btn-primary change-photo-btn" (click)="uploadImage()">
+                Save your new photo
+            </div>
+        </div>
     </div>
 </div>

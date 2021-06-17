@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@services/auth.service';
-import { DataService } from '@services/data.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { University } from '@models/university.model';
 import { finalize, map, startWith, takeUntil } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
+
+import { DataService } from '@services/data.service';
+import { AuthService } from '@services/auth.service';
+import { University } from '@models/university.model';
 
 @Component({
     selector: 'app-profile',
@@ -18,7 +20,6 @@ export class ProfileComponent implements OnInit {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
-    userDob: string | number | Date | undefined;
     userEmail: string | undefined;
     userUniversity: string | undefined;
     userAccessCode: string | undefined;
@@ -31,14 +32,16 @@ export class ProfileComponent implements OnInit {
     profileForm = new FormGroup({
         firstName: new FormControl(''),
         lastName: new FormControl(''),
-        dob: new FormControl(''),
         email: new FormControl(''),
         university: new FormControl(''),
         accessCode: new FormControl(''),
     });
 
+    basePath = '/profileImages';
+    uploadedImageName: string | undefined;
+    uploadedFile: any;
 
-    constructor(private authService: AuthService, private dataService: DataService, private storage: AngularFireStorage) {
+    constructor(private authService: AuthService, private dataService: DataService, private storage: AngularFireStorage, private afs: AngularFirestore) {
     }
 
     ngOnInit(): void {
@@ -46,8 +49,6 @@ export class ProfileComponent implements OnInit {
             this.userFirstName = doc.data()?.firstName;
             this.userLastName = doc.data()?.lastName;
             this.userImageURL = doc.data()?.imageURL;
-            this.userDob = doc.data()?.dob;
-            // console.log(new Date(this.userDob).toLocaleDateString());
             this.userEmail = doc.data()?.email;
             this.userUniversity = doc.data()?.university;
             this.userAccessCode = doc.data()?.accessCode;
@@ -61,7 +62,6 @@ export class ProfileComponent implements OnInit {
         this.profileForm.setValue({
             firstName: this.userFirstName,
             lastName: this.userLastName,
-            dob: this.userDob,
             email: this.userEmail,
             university: this.userUniversity,
             accessCode: this.userAccessCode
@@ -92,4 +92,40 @@ export class ProfileComponent implements OnInit {
         }
     }
 
+    previewImage(event: any): void {
+        this.uploadedImageName = event.target.files[0].name;
+        this.uploadedFile = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.userImageURL = reader.result as string;
+        };
+        reader.readAsDataURL(this.uploadedFile);
+    }
+
+    uploadImage(): void {
+        console.log(this.uploadedImageName);
+        if (this.uploadedImageName !== undefined) {
+            // const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.')) + Math.floor(Math.random() * 1000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+            const filePath = `${this.basePath}/${this.uploadedImageName}`;
+            const fileRef = this.storage.ref(filePath);
+            const metadata = {
+                cacheControl: 'public, max-age=4000'
+            };
+            const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
+
+            console.log(this.uploadedFile);
+            upload.snapshotChanges().pipe(finalize(() => {
+                fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
+                    console.log(url);
+                    this.userImageURL = url;
+                    this.afs.collection('users').doc(this.authService.currentUid).set({
+                        imageURL: url,
+                    }, {merge: true});
+                });
+            })).pipe(takeUntil(this.destroy$)).subscribe();
+
+        }
+
+
+    }
 }

@@ -25,6 +25,27 @@
             &-btn {
                 background-color: globalVars.$secondary-color;
             }
+
+            &-big-img-wrapper {
+                display: flex;
+                flex-direction: column;
+                width: fit-content;
+                align-items: center;
+                margin-top: 72px;
+
+                .change-photo-btn {
+
+                }
+            }
+
+            &-big-img {
+                border-radius: 6px;
+                display: block;
+                max-width: 90%;
+                max-height: 500px;
+                width: auto;
+                height: auto;
+            }
         }
     }
 
@@ -34,5 +55,21 @@
         flex-direction: column;
         width: 70%;
     }
-    
+
+    .image-upload {
+        color: white;
+        font-weight: bold;
+        width: fit-content;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+        background-color: globalVars.$secondary-color;
+        padding: 9px 12px 0;
+        margin-top: 2rem;
+        max-width: 300px;
+    }
+
 }
