@@ -20,8 +20,8 @@ import { LikeDislike } from '@models/likeDislike.model';
 export class HomeComponent implements OnInit, OnDestroy {
     currentUid: string | undefined;
     destroy$: Subject<boolean> = new Subject<boolean>();
-
     latestPosts: Observable<Post[]> | any;
+    postsCollection = this.afs.collection<Post>('posts');
 
     newCommentForm = new FormGroup({
         newComment: new FormControl('')
@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.log(postId);
         const newComment = this.newCommentForm.get('newComment')?.value;
         if (newComment && newComment.trim()) {
-            this.afs.collection<Post>('posts').doc(postId).collection<Comment>('comments').add({
+            this.postsCollection.doc(postId).collection<Comment>('comments').add({
                 content: newComment,
                 uid: this.currentUid,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -89,9 +89,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onReactionClick(postID: string, type: string): void {
-        const reactionTypeCollection = this.afs.collection<Post>('posts').doc(postID).collection<LikeDislike>(type,
+        const reactionTypeCollection = this.postsCollection.doc(postID).collection<LikeDislike>(type,
             likes => likes.where('uid', '==', this.currentUid));
-        const reactionCounter = this.afs.collection<Post>('posts').doc(postID);
+        const reactionCounter = this.postsCollection.doc(postID);
 
         reactionTypeCollection.get().toPromise().then(querySnapshot => {
             console.log(querySnapshot.docs);
@@ -127,6 +127,10 @@ export class HomeComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    onDeletePost(postID: string): void {
+        this.postsCollection.doc(postID).delete();
     }
 
 }

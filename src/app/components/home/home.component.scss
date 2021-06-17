@@ -18,9 +18,14 @@
         flex-direction: column;
         word-break: break-all;
 
-        .image-and-details-wrapper {
+        .image-and-details {
             display: flex;
-            margin-bottom: 1rem;
+
+            &-wrapper {
+                display: flex;
+                margin-bottom: 1rem;
+                justify-content: space-between;
+            }
         }
 
         .post {

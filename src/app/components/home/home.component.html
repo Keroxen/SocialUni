@@ -3,15 +3,28 @@
         <app-new-post></app-new-post>
 
         <div class="post-card-item" *ngFor="let post of latestPosts">
-            <div class="image-and-details-wrapper" >
-                <div class="profile-img-wrapper">
-                    <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
-                </div>
-                <div class="post-details">
-                    <div class="post-author">{{post.userFirstName}} {{post.userLastName}}</div>
-                    <div class="post-datetime">
-                        {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+            <div class="image-and-details-wrapper">
+                <div class="image-and-details">
+                    <div class="profile-img-wrapper">
+                        <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
                     </div>
+                    <div class="post-details">
+                        <div class="post-author">{{post.userFirstName}} {{post.userLastName}}</div>
+                        <div class="post-datetime">
+                            {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="post-menu" *ngIf="post.uid === currentUid">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="onDeletePost(post.id)">
+                            <mat-icon class="delete-icon">delete</mat-icon>
+                            <span>Delete</span>
+                        </button>
+                    </mat-menu>
                 </div>
             </div>
             <div class="post-content">
@@ -30,7 +43,8 @@
                             <div class="number-of-dislikes">
                                 {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
                             </div>
-                            <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislikes')">thumb_down</mat-icon>
+                            <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislikes')">thumb_down
+                            </mat-icon>
                         </div>
                     </div>
                     <div class="comments-btn" (click)="showHideComments(post)">
