@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { finalize, map, startWith, takeUntil } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -30,11 +30,11 @@ export class ProfileComponent implements OnInit {
     isEditingMode = false;
 
     profileForm = new FormGroup({
-        firstName: new FormControl(''),
-        lastName: new FormControl(''),
-        email: new FormControl(''),
-        university: new FormControl(''),
-        accessCode: new FormControl(''),
+        firstName: new FormControl('', Validators.required),
+        lastName: new FormControl('', Validators.required),
+        email: new FormControl('', Validators.required),
+        university: new FormControl('', Validators.required),
+        accessCode: new FormControl('', Validators.required),
     });
 
     basePath = '/profileImages';
@@ -92,6 +92,51 @@ export class ProfileComponent implements OnInit {
         }
     }
 
+    savePersonalDetails(): void {
+        if (this.profileForm.valid) {
+            const firstName = this.profileForm.value.firstName;
+            const lastName = this.profileForm.value.lastName;
+            const email = this.profileForm.value.email;
+            const university = this.profileForm.value.university;
+            const accessCode = this.profileForm.value.accessCode;
+
+            this.afs.collection('users').doc(this.authService.currentUid).update({
+                firstName,
+                lastName,
+                email,
+                university,
+                accessCode,
+            });
+            this.isEditingMode = false;
+
+            const postsBatch = this.afs.firestore.batch();
+            const commentsBatch = this.afs.firestore.batch();
+
+            this.afs.collection('posts', posts => posts.where('uid', '==', this.authService.currentUid))
+                .get().toPromise().then(response => {
+                response.docs.forEach(doc => {
+                    postsBatch.update(doc.ref,
+                        {
+                            userFirstName: firstName,
+                            userLastName: lastName
+                        });
+                });
+                postsBatch.commit();
+            });
+            this.afs.collectionGroup('comments', comments => comments.where('uid', '==', this.authService.currentUid))
+                .get().toPromise().then(response => {
+                response.docs.forEach(doc => {
+                    commentsBatch.update(doc.ref, {
+                        userFirstName: firstName,
+                        userLastName: lastName
+                    });
+                });
+                commentsBatch.commit();
+            });
+        }
+
+    }
+
     previewImage(event: any): void {
         this.uploadedImageName = event.target.files[0].name;
         this.uploadedFile = event.target.files[0];
@@ -104,17 +149,18 @@ export class ProfileComponent implements OnInit {
 
     uploadImage(): void {
         if (this.uploadedImageName !== undefined) {
-            // const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.')) + Math.floor(Math.random() * 1000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
-            const filePath = `${this.basePath}/${this.uploadedImageName}`;
+            const selectedFileName = this.uploadedImageName;
+            const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
+                + Math.floor(Math.random() * 10000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+            const filePath = `${this.basePath}/${selectedFileForUpload}`;
             const fileRef = this.storage.ref(filePath);
             const metadata = {
                 cacheControl: 'public, max-age=4000'
             };
             const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
+
             const postsBatch = this.afs.firestore.batch();
             const commentsBatch = this.afs.firestore.batch();
-
-            console.log(this.uploadedFile);
             upload.snapshotChanges().pipe(finalize(() => {
                 fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
                     console.log(url);
@@ -134,7 +180,6 @@ export class ProfileComponent implements OnInit {
                         .get().toPromise().then(response => {
                         response.docs.forEach(doc => {
                             commentsBatch.update(doc.ref, {userImageURL: url});
-                            console.log(doc);
                         });
                         commentsBatch.commit();
                     });

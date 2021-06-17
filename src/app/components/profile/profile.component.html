@@ -1,6 +1,6 @@
 <div class="profile">
     <div class="profile-left">
-        <button class="profile-btn btn-primary" (click)="toggleProfileEditing()">
+        <button class="profile-btn btn-primary" (click)="isEditingMode ? savePersonalDetails() : toggleProfileEditing()">
             {{isEditingMode ? 'Save your personal details' : 'Edit your personal details'}}
         </button>
         <form class="profile-form" [formGroup]="profileForm" [ngClass]="{'no-events' : !isEditingMode}">
@@ -41,9 +41,9 @@
         <div class="profile-big-img-wrapper">
             <img class="profile-big-img" [src]=userImageURL alt="Profile Image">
             <input type="file" class="image-upload" (change)="previewImage($event)" accept="image/*">
-            <div class="profile-btn btn-primary change-photo-btn" (click)="uploadImage()">
+            <button class="profile-btn btn-primary change-photo-btn" (click)="uploadImage()">
                 Save your new photo
-            </div>
+            </button>
         </div>
     </div>
 </div>
