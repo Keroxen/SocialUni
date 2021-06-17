@@ -24,7 +24,7 @@ export class DataService {
     }
 
     getPostComments(postID: string | undefined): Observable<Comment[]> {
-        this.commentsCollection = this.afs.collection<Post>('posts').doc(postID).collection('comments');
+        this.commentsCollection = this.afs.collection<Post>('posts').doc(postID).collection('comments', comments => comments.orderBy('created', 'desc'));
         return this.commentsCollection.valueChanges();
     }
 

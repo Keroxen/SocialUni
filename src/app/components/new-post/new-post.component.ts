@@ -6,7 +6,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase';
 
-import { UserData } from '@models/userData.model';
 import { Post } from '@models/post.model';
 import { DataService } from '@services/data.service';
 
@@ -57,6 +56,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
             this.afs.collection<Post>('posts').add({
                 content: postContent,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
+                uid: this.currentUid,
                 userFirstName: this.userFirstName,
                 userLastName: this.userLastName,
                 userImageURL: this.userImageURL,
@@ -67,7 +67,6 @@ export class NewPostComponent implements OnInit, OnDestroy {
             console.log('empty post');
         }
     }
-
 
     ngOnDestroy(): void {
         this.destroy$.next(true);

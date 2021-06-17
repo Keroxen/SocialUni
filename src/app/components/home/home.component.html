@@ -2,7 +2,7 @@
     <div class="left">
         <app-new-post></app-new-post>
 
-        <div class="post-card-item" *ngFor="let post of latestPosts | async">
+        <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper" >
                 <div class="profile-img-wrapper">
                     <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
@@ -22,13 +22,13 @@
                     <div class="reactions-wrapper">
                         <div class="likes-section">
                             <div class="number-of-likes">
-                                {{post.numberOfLikes}}
+                                {{post.numberOfLikes === 0 ? '' : post.numberOfLikes}}
                             </div>
                             <mat-icon class="like-btn" (click)="onReactionClick(post.id, 'likes')">thumb_up</mat-icon>
                         </div>
                         <div class="dislikes-section">
                             <div class="number-of-dislikes">
-                                {{post.numberOfDislikes}}
+                                {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
                             </div>
                             <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislikes')">thumb_down</mat-icon>
                         </div>

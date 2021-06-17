@@ -26,6 +26,10 @@ body {
     font-family: 'Material Icons' !important;
 }
 
+.access-code {
+    font-family: globalVars.$password-font-family !important;
+}
+
 // [End] Fonts
 
 // [Start] Navbar
@@ -63,11 +67,12 @@ body {
     .mat-form-field-underline {
         display: none;
     }
-
-    .mat-form-field-flex {
-        border-radius: 20px !important;
-    }
 }
+
+.new-post-form .mat-form-field-flex {
+    border-radius: 20px !important;
+}
+
 
 .mat-form-field .mat-form-field-label-wrapper label {
     line-height: 1rem;
@@ -97,6 +102,7 @@ body {
         width: 54px;
         height: 54px;
         border-radius: 50%;
+        object-fit: cover;
     }
 }
 
@@ -113,6 +119,7 @@ body {
     border-radius: 20px;
     cursor: pointer;
 }
+
 //[End] Buttons
 
 //[Start] Others
@@ -127,6 +134,10 @@ body {
 
 .no-characters-left {
     color: globalVars.$color-invalid;
+}
+
+.no-events {
+    pointer-events: none;
 }
 
 //[End] Others

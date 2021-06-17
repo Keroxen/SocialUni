@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { map, take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -39,34 +39,18 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
-                // console.log(doc.data());
                 this.userFirstName = doc.data()?.firstName;
                 this.userLastName = doc.data()?.lastName;
                 this.userImageURL = doc.data()?.imageURL;
+                console.log(this.userImageURL);
             });
         });
     }
 
     ngOnInit(): void {
-        // TODO it needs more testing...
-
-        // this.loaded = true;
-        // this.dataService.getPosts()
-        //     .subscribe(data => {
-        //     console.log(data);
-        //     this.latestPosts = data;
-        // });
-
-        this.latestPosts = this.afs.collection<Post>('posts', posts => posts.orderBy('created', 'desc'))
-            .snapshotChanges().pipe(map(actions => actions.map(a => {
-                    const id = a.payload.doc.id;
-                    const data = a.payload.doc.data() as Post;
-                    console.log(a.type);
-                    return {id, ...data};
-                    // this.latestPosts.push(a);
-                    // }
-                })
-            ));
+        this.dataService.getPosts().subscribe(posts => {
+            this.latestPosts = posts;
+        });
     }
 
     ngOnDestroy(): void {
@@ -92,6 +76,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (newComment && newComment.trim()) {
             this.afs.collection<Post>('posts').doc(postId).collection<Comment>('comments').add({
                 content: newComment,
+                uid: this.currentUid,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
                 userFirstName: this.userFirstName,
                 userLastName: this.userLastName,
