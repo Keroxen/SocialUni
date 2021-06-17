@@ -2,7 +2,7 @@
     <div class="left">
         <app-new-post></app-new-post>
 
-        <div class="post-card-item" *ngFor="let post of latestPosts | async">
+        <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper" >
                 <div class="profile-img-wrapper">
                     <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">

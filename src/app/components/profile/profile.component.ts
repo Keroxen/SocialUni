@@ -103,7 +103,6 @@ export class ProfileComponent implements OnInit {
     }
 
     uploadImage(): void {
-        console.log(this.uploadedImageName);
         if (this.uploadedImageName !== undefined) {
             // const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.')) + Math.floor(Math.random() * 1000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
             const filePath = `${this.basePath}/${this.uploadedImageName}`;
@@ -112,6 +111,8 @@ export class ProfileComponent implements OnInit {
                 cacheControl: 'public, max-age=4000'
             };
             const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
+            const postsBatch = this.afs.firestore.batch();
+            const commentsBatch = this.afs.firestore.batch();
 
             console.log(this.uploadedFile);
             upload.snapshotChanges().pipe(finalize(() => {
@@ -121,11 +122,24 @@ export class ProfileComponent implements OnInit {
                     this.afs.collection('users').doc(this.authService.currentUid).set({
                         imageURL: url,
                     }, {merge: true});
+
+                    this.afs.collection('posts', posts => posts.where('uid', '==', this.authService.currentUid))
+                        .get().toPromise().then(response => {
+                        response.docs.forEach(doc => {
+                            postsBatch.update(doc.ref, {userImageURL: url});
+                        });
+                        postsBatch.commit();
+                    });
+                    this.afs.collectionGroup('comments', comments => comments.where('uid', '==', this.authService.currentUid))
+                        .get().toPromise().then(response => {
+                        response.docs.forEach(doc => {
+                            commentsBatch.update(doc.ref, {userImageURL: url});
+                            console.log(doc);
+                        });
+                        commentsBatch.commit();
+                    });
                 });
             })).pipe(takeUntil(this.destroy$)).subscribe();
-
         }
-
-
     }
 }
