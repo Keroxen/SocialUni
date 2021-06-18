@@ -46,18 +46,15 @@ body {
 
 // [End] Navbar
 
-// [Start] Mat-form-field
-// mat-form-field - label color when invalid
+// [Start] Material components
 .mat-form-field.mat-form-field-invalid .mat-form-field-label {
     color: red;
 }
 
-// mat-form-field - outline color when invalid
 .mat-form-field-appearance-outline.mat-form-field-invalid.mat-form-field-invalid .mat-form-field-outline-thick {
     color: red;
 }
 
-// mat-form-field - caret color when invalid
 .mat-form-field-invalid .mat-input-element,
 .mat-warn .mat-input-element {
     caret-color: red;
@@ -91,7 +88,10 @@ body {
     }
 }
 
-// [End] Mat-form-field
+.delete-icon {
+    color: globalVars.$color-invalid !important;
+}
+// [End] Material components
 
 // [Start] Profile image in cards
 .profile-img-wrapper {
@@ -120,6 +120,10 @@ body {
     cursor: pointer;
 }
 
+.disabled-btn {
+    pointer-events: none;
+    opacity: 0.5;
+}
 //[End] Buttons
 
 //[Start] Others
