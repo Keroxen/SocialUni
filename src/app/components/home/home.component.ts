@@ -11,6 +11,8 @@ import { Post } from '@models/post.model';
 import { Comment } from '@models/comment.model';
 import { AuthService } from '@services/auth.service';
 import { LikeDislike } from '@models/likeDislike.model';
+import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-home',
@@ -30,12 +32,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    deleteSnackbarText = 'Post deleted!';
+    commentSnackbarText = 'New comment added!';
 
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private afAuth: AngularFireAuth) {
+                private afAuth: AngularFireAuth, private snackBar: MatSnackBar) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
@@ -108,6 +112,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             //     numberOfComments: this.increment
             // });
             this.newCommentForm.reset();
+            this.showSnackbar(this.commentSnackbarText);
         } else {
             console.log('empty post');
         }
@@ -191,6 +196,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onDeletePost(postID: string): void {
         this.postsCollection.doc(postID).delete();
+        this.showSnackbar(this.deleteSnackbarText);
+    }
+
+    showSnackbar(snackbarText: string): void {
+        this.snackBar.openFromComponent(SnackbarComponent, {
+            data: snackbarText,
+            duration: 1000
+        });
     }
 
 }
