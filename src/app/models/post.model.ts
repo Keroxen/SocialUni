@@ -16,4 +16,5 @@ export interface Post {
     dislikes?: LikeDislike[];
     numberOfLikes?: FieldValue;
     numberOfDislikes?: FieldValue;
+    numberOfComments?: FieldValue;
 }

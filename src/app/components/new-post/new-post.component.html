@@ -4,7 +4,7 @@
             <img class="profile-img" [src]="userImageURL" alt="Profile image">
         </div>
         <div class="new-post-form-wrapper">
-            <form [formGroup]="newPostForm" class="new-post-form">
+            <form [formGroup]="newPostForm" class="new-post-form" (keyup.enter)="onNewPost()">
                 <mat-form-field class="new-post-field" appearance="fill" floatLabel="auto">
                     <mat-label>Share something interesting...</mat-label>
                     <textarea cdkTextareaAutosize
@@ -24,6 +24,8 @@
         </div>
     </div>
     <div class="new-post-submit-wrapper">
-        <button class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post</button>
+        <button [ngClass]="{'disabled-btn' : !newPostForm.get('newPostText')?.value?.trim().length}"
+                class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post
+        </button>
     </div>
 </div>

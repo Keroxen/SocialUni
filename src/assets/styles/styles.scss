@@ -120,6 +120,10 @@ body {
     cursor: pointer;
 }
 
+.disabled-btn {
+    pointer-events: none;
+    opacity: 0.5;
+}
 //[End] Buttons
 
 //[Start] Others

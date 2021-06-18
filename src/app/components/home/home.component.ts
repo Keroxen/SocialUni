@@ -42,7 +42,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.userFirstName = doc.data()?.firstName;
                 this.userLastName = doc.data()?.lastName;
                 this.userImageURL = doc.data()?.imageURL;
-                console.log(this.userImageURL);
             });
         });
     }
@@ -59,22 +58,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     showHideComments(post: Post): void {
-        if (!post.areCommentsVisible) {
-            post.areCommentsVisible = true;
-            this.dataService.getPostComments(post.id).subscribe(comments => {
-                post.comments = comments;
-            });
-        } else {
-            post.areCommentsVisible = false;
-        }
+        // TODO
+        const postRef = this.postsCollection.doc(post.id);
+
+        // postRef.get().subscribe()
+
+        // if (!post.areCommentsVisible) {
+        post.areCommentsVisible = !post.areCommentsVisible;
+        this.dataService.getPostComments(post.id).subscribe(comments => {
+            post.comments = comments;
+            //     console.log('here');
+            //     console.log(post.areCommentsVisible);
+            //     if (post.areCommentsVisible) {
+            //     } else {
+            //         postRef.update({
+            //             areCommentsVisible: true
+            //         });
+            //     }
+        });
+        // this.updateShowHideCommentsField(post);
+        // postRef.update({
+        //     areCommentsVisible: post.areCommentsVisible
+        // });
+        // } else {
+        //     post.areCommentsVisible = false;
+        // }
     }
 
-    onSubmitComment(postId: string): void {
+    updateShowHideCommentsField(post: Post): void {
+        this.postsCollection.doc(post.id).update({
+            areCommentsVisible: post.areCommentsVisible
+        });
+    }
+
+    onSubmitComment(postID: string): void {
         console.log(this.newCommentForm.get('newComment')?.value);
-        console.log(postId);
+        const postDoc = this.postsCollection.doc(postID);
         const newComment = this.newCommentForm.get('newComment')?.value;
         if (newComment && newComment.trim()) {
-            this.postsCollection.doc(postId).collection<Comment>('comments').add({
+            postDoc.collection<Comment>('comments').add({
                 content: newComment,
                 uid: this.currentUid,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
@@ -82,6 +104,9 @@ export class HomeComponent implements OnInit, OnDestroy {
                 userLastName: this.userLastName,
                 userImageURL: this.userImageURL,
             });
+            // postDoc.update({
+            //     numberOfComments: this.increment
+            // });
             this.newCommentForm.reset();
         } else {
             console.log('empty post');
@@ -89,44 +114,79 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onReactionClick(postID: string, type: string): void {
-        const reactionTypeCollection = this.postsCollection.doc(postID).collection<LikeDislike>(type,
+        const likesCollectionRef = this.postsCollection.doc(postID).collection<LikeDislike>('likes',
             likes => likes.where('uid', '==', this.currentUid));
-        const reactionCounter = this.postsCollection.doc(postID);
+        const dislikesCollectionRef = this.postsCollection.doc(postID).collection<LikeDislike>('dislikes',
+            likes => likes.where('uid', '==', this.currentUid));
+        const reactionsRef = this.postsCollection.doc(postID);
 
-        reactionTypeCollection.get().toPromise().then(querySnapshot => {
-            console.log(querySnapshot.docs);
-            if (querySnapshot.docs.length > 0) {
-                querySnapshot.forEach(doc => {
-                    console.log(doc.ref.delete());
-                    if (type === 'likes') {
-                        reactionCounter.update({
+        if (type === 'like') {
+            likesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
                             numberOfLikes: this.decrement
                         });
-                    } else if (type === 'dislikes') {
-                        reactionCounter.update({
-                            numberOfDislikes: this.decrement
-                        });
-                    }
-                });
-            } else {
-                if (type === 'likes') {
-                    reactionCounter.update({
+                    });
+                } else {
+                    reactionsRef.update({
                         numberOfLikes: this.increment
                     });
-                } else if (type === 'dislikes') {
-                    reactionCounter.update({
-                        numberOfDislikes: this.increment
+                    likesCollectionRef.add({
+                        uid: this.currentUid,
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        userFirstName: this.userFirstName,
+                        userLastName: this.userLastName,
+                        userImageURL: this.userImageURL,
                     });
                 }
-                reactionTypeCollection.add({
-                    uid: this.currentUid,
-                    created: firebase.firestore.FieldValue.serverTimestamp(),
-                    userFirstName: this.userFirstName,
-                    userLastName: this.userLastName,
-                    userImageURL: this.userImageURL,
-                });
-            }
-        });
+            });
+
+            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfDislikes: this.decrement
+                        });
+                    });
+                }
+            });
+        } else if (type === 'dislike') {
+            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfDislikes: this.decrement
+                        });
+                    });
+                } else {
+                    reactionsRef.update({
+                        numberOfDislikes: this.increment
+                    });
+                    dislikesCollectionRef.add({
+                        uid: this.currentUid,
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        userFirstName: this.userFirstName,
+                        userLastName: this.userLastName,
+                        userImageURL: this.userImageURL,
+                    });
+                }
+            });
+
+            likesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfLikes: this.decrement
+                        });
+                    });
+                }
+            });
+        }
     }
 
     onDeletePost(postID: string): void {
