@@ -26,6 +26,7 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         password: new FormControl('', Validators.required),
         university: new FormControl('', Validators.required),
         accessCode: new FormControl('', Validators.required),
+        isTeacher: new FormControl(false)
     });
 
     loginForm = new FormGroup({
@@ -81,9 +82,10 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         const password = this.signupForm.value.password;
         const university = this.signupForm.value.university;
         const accessCode = this.signupForm.value.accessCode;
+        const isTeacher = this.signupForm.value.isTeacher;
 
         if (accessCode === '1234') {
-            this.authService.signUp(email, password, firstName, lastName, dob, university, accessCode);
+            this.authService.signUp(email, password, firstName, lastName, dob, university, accessCode, isTeacher);
             this.dialogRef.close();
         } else {
             console.log('invalid code');

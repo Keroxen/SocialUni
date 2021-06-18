@@ -27,6 +27,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userIsTeacher: boolean | undefined;
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
@@ -35,6 +36,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
                 this.userFirstName = doc.data()?.firstName;
                 this.userLastName = doc.data()?.lastName;
                 this.userImageURL = doc.data()?.imageURL;
+                this.userIsTeacher = doc.data()?.isTeacher;
             });
         });
     }
@@ -60,6 +62,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
                 userFirstName: this.userFirstName,
                 userLastName: this.userLastName,
                 userImageURL: this.userImageURL,
+                userIsTeacher: this.userIsTeacher
             });
             this.newPostForm.reset();
             this.charactersLeft = this.charactersLimit;

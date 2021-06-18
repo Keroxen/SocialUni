@@ -40,7 +40,17 @@
             &-author {
                 font-size: 15px;
                 font-weight: bold;
+                display: flex;
+
+                .teacher-badge {
+                    margin-left: 0.5rem;
+                    background: #fff700;
+                    border-radius: 11px;
+                    padding: 0 7px;
+                    font-weight: 500;
+                }
             }
+
 
             &-datetime {
                 font-size: 11px;
