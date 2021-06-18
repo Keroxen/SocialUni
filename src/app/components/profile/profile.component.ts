@@ -98,14 +98,14 @@ export class ProfileComponent implements OnInit {
             const lastName = this.profileForm.value.lastName;
             const email = this.profileForm.value.email;
             const university = this.profileForm.value.university;
-            const accessCode = this.profileForm.value.accessCode;
+            // const accessCode = this.profileForm.value.accessCode;
 
             this.afs.collection('users').doc(this.authService.currentUid).update({
                 firstName,
                 lastName,
                 email,
                 university,
-                accessCode,
+                // accessCode,
             });
             this.isEditingMode = false;
 

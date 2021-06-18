@@ -5,5 +5,6 @@ export interface UserData {
     email: string;
     university: string;
     accessCode: string;
+    isTeacher: boolean;
     imageURL: string;
 }

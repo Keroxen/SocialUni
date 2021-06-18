@@ -88,9 +88,15 @@ body {
     }
 }
 
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background,
+.mat-checkbox-checked.mat-accent .mat-checkbox-background {
+    background-color: globalVars.$primary-color;
+}
+
 .delete-icon {
     color: globalVars.$color-invalid !important;
 }
+
 // [End] Material components
 
 // [Start] Profile image in cards
@@ -124,6 +130,7 @@ body {
     pointer-events: none;
     opacity: 0.5;
 }
+
 //[End] Buttons
 
 //[Start] Others

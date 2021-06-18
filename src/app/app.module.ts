@@ -17,6 +17,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -61,7 +62,8 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
         AngularFirestoreModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        MatMenuModule
+        MatMenuModule,
+        MatCheckboxModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent]

@@ -10,6 +10,7 @@ export interface Post {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userIsTeacher: boolean | undefined;
     areCommentsVisible?: boolean;
     comments?: Comment[];
     likes?: LikeDislike[];
