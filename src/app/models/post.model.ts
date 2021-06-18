@@ -6,6 +6,7 @@ export interface Post {
     id?: string;
     content: string;
     created: any;
+    imageURL?: string | undefined;
     uid: string | undefined;
     userFirstName: string | undefined;
     userLastName: string | undefined;

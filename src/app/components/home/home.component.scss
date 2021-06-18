@@ -69,7 +69,6 @@
                     display: flex;
                     justify-content: space-between;
                     justify-self: flex-end;
-                    margin-top: auto;
 
                     .reactions-wrapper {
                         display: flex;
@@ -102,12 +101,21 @@
                         background-color: globalVars.$gray-1;
                         border-radius: 4px;
                         border: none;
+                        align-items: center;
 
                         .mat-icon {
                             margin-right: 0.5rem;
                         }
                     }
                 }
+            }
+
+            &-image {
+                margin-bottom: 2em;
+                max-width: 100%;
+                width: auto;
+                height: auto;
+                border-radius: 6px;
             }
 
             &-comments {
@@ -141,6 +149,7 @@
 
                         .characters-left {
                             align-self: flex-end;
+                            margin-left: 10px;
                         }
                     }
 

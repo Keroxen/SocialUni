@@ -134,7 +134,6 @@ export class ProfileComponent implements OnInit {
                 commentsBatch.commit();
             });
         }
-
     }
 
     previewImage(event: any): void {
