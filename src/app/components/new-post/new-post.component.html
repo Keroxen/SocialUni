@@ -13,10 +13,19 @@
                               (ngModelChange)="checkTextLength()"
                               [maxLength]="charactersLimit"
                               matInput
-                              rows="3"
+                              rows="5"
                               formControlName="newPostText">
                     </textarea>
+                    <label for="img-upload">
+                        <mat-icon class="new-post-img-icon">add_photo_alternate</mat-icon>
+                    </label>
+                    <input id="img-upload" type="file" (change)="previewImage($event)" formControlName="newPostImage"
+                           accept="image/*">
                 </mat-form-field>
+                <div class="new-post-img-preview-container" *ngIf="postImageURL">
+                    <img class="new-post-img-preview" [src]="postImageURL" alt="Post image" >
+                    <mat-icon class="reset-img-icon" (click)="onResetImgPreview()">close</mat-icon>
+                </div>
             </form>
             <div class="characters-left" [ngClass]="{'no-characters-left': charactersLeft === 0}">
                 {{charactersLeft}} {{charactersLeft === 1 ? 'character remaining' : 'characters remaining'}}
@@ -24,7 +33,7 @@
         </div>
     </div>
     <div class="new-post-submit-wrapper">
-        <button [ngClass]="{'disabled-btn' : !newPostForm.get('newPostText')?.value?.trim().length}"
+        <button [ngClass]="{'disabled-btn' : !isFormValid()}"
                 class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post
         </button>
     </div>

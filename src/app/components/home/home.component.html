@@ -10,7 +10,7 @@
                     </div>
                     <div class="post-details">
                         <div class="post-author">{{post.userFirstName}} {{post.userLastName}}
-                            <div class="teacher-badge" *ngIf="post.userIsTeacher">Professor</div>
+                            <div class="teacher-badge" *ngIf="post.userIsTeacher">Teacher</div>
                         </div>
                         <div class="post-datetime">
                             {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
@@ -18,7 +18,7 @@
                     </div>
                 </div>
                 <div class="post-menu" *ngIf="post.uid === currentUid">
-                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                     <mat-menu #menu="matMenu">
@@ -30,9 +30,10 @@
                 </div>
             </div>
             <div class="post-content">
-                <div class="post-content-text">
+                <div class="post-content-text" *ngIf="post.content">
                     {{post.content}}
                 </div>
+                <img class="post-image" *ngIf="post.imageURL" [src]="post.imageURL">
                 <div class="reactions-comments-wrapper">
                     <div class="reactions-wrapper">
                         <div class="likes-section">

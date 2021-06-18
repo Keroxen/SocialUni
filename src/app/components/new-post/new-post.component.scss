@@ -2,7 +2,6 @@
 
 .new-post {
     width: 650px;
-    height: 200px;
     background: white;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
     padding: 20px 25px;
@@ -29,7 +28,31 @@
     &-field {
         border-radius: 20px;
         width: 100%;
-        padding: 0 10px 10px;
+    }
+
+    &-img-icon {
+        margin-top: 12px;
+        cursor: pointer;
+    }
+
+    #img-upload {
+        display: none;
+    }
+
+    &-img-preview {
+        width: 410px;
+
+        &-container {
+            position: relative;
+        }
+    }
+
+    .reset-img-icon {
+        cursor: pointer;
+        position: absolute;
+        right: 3px;
+        top: 0;
+        color: globalVars.$color-invalid;
     }
 
     &-submit {

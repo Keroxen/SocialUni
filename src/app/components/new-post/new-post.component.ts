@@ -1,13 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFireStorage } from '@angular/fire/storage';
 import firebase from 'firebase';
 
-import { Post } from '@models/post.model';
 import { DataService } from '@services/data.service';
+import { Post } from '@models/post.model';
 
 @Component({
     selector: 'app-new-post',
@@ -18,10 +19,11 @@ export class NewPostComponent implements OnInit, OnDestroy {
     destroy$: Subject<boolean> = new Subject<boolean>();
 
     newPostForm = new FormGroup({
-        newPostText: new FormControl('')
+        newPostText: new FormControl(''),
+        newPostImage: new FormControl('')
     });
 
-    charactersLimit = 130;
+    charactersLimit = 1380;
     charactersLeft = this.charactersLimit;
     currentUid: string | undefined;
     userFirstName: string | undefined;
@@ -29,7 +31,13 @@ export class NewPostComponent implements OnInit, OnDestroy {
     userImageURL: string | undefined;
     userIsTeacher: boolean | undefined;
 
-    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService) {
+    basePath = '/postsImages';
+    uploadedImageName: string | undefined;
+    uploadedFile: any;
+    postImageURL: string | undefined;
+    postImageDlURL: string | undefined;
+
+    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService, private storage: AngularFireStorage) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
@@ -50,25 +58,72 @@ export class NewPostComponent implements OnInit, OnDestroy {
         this.charactersLeft = this.charactersLimit - currentLength;
     }
 
-    onNewPost(): void {
-        console.log(this.newPostForm.get('newPostText')?.value);
-
+    saveNewPost(): void {
         const postContent = this.newPostForm.get('newPostText')?.value;
-        if (postContent && postContent.trim()) {
-            this.afs.collection<Post>('posts').add({
-                content: postContent,
-                created: firebase.firestore.FieldValue.serverTimestamp(),
-                uid: this.currentUid,
-                userFirstName: this.userFirstName,
-                userLastName: this.userLastName,
-                userImageURL: this.userImageURL,
-                userIsTeacher: this.userIsTeacher
-            });
-            this.newPostForm.reset();
-            this.charactersLeft = this.charactersLimit;
-        } else {
-            console.log('empty post');
+        this.afs.collection<Post>('posts').add({
+            content: postContent,
+            created: firebase.firestore.FieldValue.serverTimestamp(),
+            imageURL: this.postImageDlURL,
+            uid: this.currentUid,
+            userFirstName: this.userFirstName,
+            userLastName: this.userLastName,
+            userImageURL: this.userImageURL ?? '',
+            userIsTeacher: this.userIsTeacher
+        });
+        this.newPostForm.reset();
+        this.uploadedFile = null;
+        this.uploadedImageName = undefined;
+        this.postImageURL = '';
+        this.charactersLeft = this.charactersLimit;
+    }
+
+    isFormValid(): boolean {
+        const postContent = this.newPostForm.get('newPostText')?.value;
+        return !!(postContent && postContent.trim() || this.uploadedFile);
+    }
+
+    previewImage(event: any): void {
+        this.uploadedImageName = event.target.files[0].name;
+        this.uploadedFile = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.postImageURL = reader.result as string;
+        };
+        reader.readAsDataURL(this.uploadedFile);
+    }
+
+    onNewPost(): void {
+        if (this.uploadedImageName === undefined) {
+            this.uploadedImageName = '';
         }
+        if (this.isFormValid()) {
+            const selectedFileName = this.uploadedImageName;
+            const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
+                + Math.floor(Math.random() * 10000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+            const filePath = `${this.basePath}/${selectedFileForUpload}`;
+            const fileRef = this.storage.ref(filePath);
+            const metadata = {
+                cacheControl: 'public, max-age=4000'
+            };
+            const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
+
+            upload.snapshotChanges().pipe(finalize(() => {
+                fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
+                    if (selectedFileName === '') {
+                        url = '';
+                    }
+                    console.log(url);
+                    this.postImageDlURL = url;
+                    this.saveNewPost();
+                });
+            })).pipe(takeUntil(this.destroy$)).subscribe();
+        }
+    }
+
+    onResetImgPreview(): void {
+        this.uploadedFile = null;
+        this.uploadedImageName = undefined;
+        this.postImageURL = '';
     }
 
     ngOnDestroy(): void {
