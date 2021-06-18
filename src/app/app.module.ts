@@ -31,6 +31,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AuthService } from '@services/auth.service';
 import { DataService } from '@services/data.service';
 import { NewPostComponent } from '@components/new-post/new-post.component';
+import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
     declarations: [
@@ -41,6 +43,7 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
         AuthDialogComponent,
         HomeComponent,
         NewPostComponent,
+        SnackbarComponent,
     ],
     imports: [
         BrowserModule,
@@ -63,10 +66,11 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
         MatDatepickerModule,
         MatNativeDateModule,
         MatMenuModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatSnackBarModule
     ],
     providers: [AuthService, DataService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {
 }

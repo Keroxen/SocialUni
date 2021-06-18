@@ -1,14 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import firebase from 'firebase';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
+import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 
 @Component({
     selector: 'app-new-post',
@@ -37,7 +39,10 @@ export class NewPostComponent implements OnInit, OnDestroy {
     postImageURL: string | undefined;
     postImageDlURL: string | undefined;
 
-    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService, private storage: AngularFireStorage) {
+    snackbarText = 'New post added!';
+
+    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService,
+                private storage: AngularFireStorage, private snackBar: MatSnackBar) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
@@ -117,6 +122,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
                     this.saveNewPost();
                 });
             })).pipe(takeUntil(this.destroy$)).subscribe();
+            this.showSnackbar();
         }
     }
 
@@ -124,6 +130,13 @@ export class NewPostComponent implements OnInit, OnDestroy {
         this.uploadedFile = null;
         this.uploadedImageName = undefined;
         this.postImageURL = '';
+    }
+
+    showSnackbar(): void {
+        this.snackBar.openFromComponent(SnackbarComponent, {
+            data: this.snackbarText,
+            duration: 1500
+        });
     }
 
     ngOnDestroy(): void {

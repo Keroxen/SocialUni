@@ -72,6 +72,8 @@
 
                     .reactions-wrapper {
                         display: flex;
+                        width: 100px;
+                        justify-content: space-between;
 
                         .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
                             display: flex;
@@ -87,6 +89,8 @@
 
                         .number-of-likes, .number-of-dislikes {
                             margin-right: 0.5rem;
+                            font-size: 15px;
+                            font-weight: bold;
                         }
 
                         .like-btn, .dislike-btn {

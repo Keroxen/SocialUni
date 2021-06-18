@@ -4,10 +4,12 @@ import { Observable, Subject } from 'rxjs';
 import { finalize, map, startWith, takeUntil } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { DataService } from '@services/data.service';
 import { AuthService } from '@services/auth.service';
 import { University } from '@models/university.model';
+import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 
 @Component({
     selector: 'app-profile',
@@ -41,7 +43,11 @@ export class ProfileComponent implements OnInit {
     uploadedImageName: string | undefined;
     uploadedFile: any;
 
-    constructor(private authService: AuthService, private dataService: DataService, private storage: AngularFireStorage, private afs: AngularFirestore) {
+    imageSnackbarText = 'Photo changed successfully!';
+    personalDetailsSnackbarText = 'Personal details saved!';
+
+    constructor(private authService: AuthService, private dataService: DataService, private storage: AngularFireStorage,
+                private afs: AngularFirestore, private snackBar: MatSnackBar) {
     }
 
     ngOnInit(): void {
@@ -133,6 +139,7 @@ export class ProfileComponent implements OnInit {
                 });
                 commentsBatch.commit();
             });
+            this.showSnackbar(this.personalDetailsSnackbarText);
         }
     }
 
@@ -184,6 +191,14 @@ export class ProfileComponent implements OnInit {
                     });
                 });
             })).pipe(takeUntil(this.destroy$)).subscribe();
+            this.showSnackbar(this.imageSnackbarText);
         }
+    }
+
+    showSnackbar(snackbarText: string): void {
+        this.snackBar.openFromComponent(SnackbarComponent, {
+            data: snackbarText,
+            duration: 1000
+        });
     }
 }
