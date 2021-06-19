@@ -39,14 +39,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     decrement = firebase.firestore.FieldValue.increment(-1);
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private afAuth: AngularFireAuth, private snackBar: MatSnackBar) {
-        this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
-            this.currentUid = user?.uid;
-            this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
-                this.userFirstName = doc.data()?.firstName;
-                this.userLastName = doc.data()?.lastName;
-                this.userImageURL = doc.data()?.imageURL;
-            });
+                private snackBar: MatSnackBar) {
+        this.dataService.getUserData(this.authService.currentUid).ref.get().then(doc => {
+            this.userFirstName = doc.data()?.firstName;
+            this.userLastName = doc.data()?.lastName;
+            this.userImageURL = doc.data()?.imageURL;
+            console.log(this.dataService.currentUid);
         });
     }
 
@@ -96,102 +94,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     onSubmitComment(postID: string): void {
-        console.log(this.newCommentForm.get('newComment')?.value);
-        const postDoc = this.postsCollection.doc(postID);
-        const newComment = this.newCommentForm.get('newComment')?.value;
-        if (newComment && newComment.trim()) {
-            postDoc.collection<Comment>('comments').add({
-                content: newComment,
-                uid: this.currentUid,
-                created: firebase.firestore.FieldValue.serverTimestamp(),
-                userFirstName: this.userFirstName,
-                userLastName: this.userLastName,
-                userImageURL: this.userImageURL,
-            });
-            // postDoc.update({
-            //     numberOfComments: this.increment
-            // });
-            this.newCommentForm.reset();
-            this.showSnackbar(this.commentSnackbarText);
-        } else {
-            console.log('empty post');
-        }
+        const comment = this.newCommentForm.get('newComment')?.value;
+        this.dataService.onSubmitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL);
+        this.newCommentForm.reset();
+        this.showSnackbar(this.commentSnackbarText);
     }
 
     onReactionClick(postID: string, type: string): void {
-        const likesCollectionRef = this.postsCollection.doc(postID).collection<LikeDislike>('likes',
-            likes => likes.where('uid', '==', this.currentUid));
-        const dislikesCollectionRef = this.postsCollection.doc(postID).collection<LikeDislike>('dislikes',
-            likes => likes.where('uid', '==', this.currentUid));
-        const reactionsRef = this.postsCollection.doc(postID);
-
-        if (type === 'like') {
-            likesCollectionRef.get().toPromise().then(querySnapshot => {
-                if (querySnapshot.docs.length > 0) {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.delete();
-                        reactionsRef.update({
-                            numberOfLikes: this.decrement
-                        });
-                    });
-                } else {
-                    reactionsRef.update({
-                        numberOfLikes: this.increment
-                    });
-                    likesCollectionRef.add({
-                        uid: this.currentUid,
-                        created: firebase.firestore.FieldValue.serverTimestamp(),
-                        userFirstName: this.userFirstName,
-                        userLastName: this.userLastName,
-                        userImageURL: this.userImageURL,
-                    });
-                }
-            });
-
-            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
-                if (querySnapshot.docs.length > 0) {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.delete();
-                        reactionsRef.update({
-                            numberOfDislikes: this.decrement
-                        });
-                    });
-                }
-            });
-        } else if (type === 'dislike') {
-            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
-                if (querySnapshot.docs.length > 0) {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.delete();
-                        reactionsRef.update({
-                            numberOfDislikes: this.decrement
-                        });
-                    });
-                } else {
-                    reactionsRef.update({
-                        numberOfDislikes: this.increment
-                    });
-                    dislikesCollectionRef.add({
-                        uid: this.currentUid,
-                        created: firebase.firestore.FieldValue.serverTimestamp(),
-                        userFirstName: this.userFirstName,
-                        userLastName: this.userLastName,
-                        userImageURL: this.userImageURL,
-                    });
-                }
-            });
-
-            likesCollectionRef.get().toPromise().then(querySnapshot => {
-                if (querySnapshot.docs.length > 0) {
-                    querySnapshot.forEach(doc => {
-                        doc.ref.delete();
-                        reactionsRef.update({
-                            numberOfLikes: this.decrement
-                        });
-                    });
-                }
-            });
-        }
+        this.dataService.onReactionClick(postID, type, this.userFirstName, this.userLastName, this.userImageURL);
     }
 
     onDeletePost(postID: string): void {

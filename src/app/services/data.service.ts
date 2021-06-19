@@ -1,17 +1,30 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Post } from '@models/post.model';
 import { UserData } from '@models/userData.model';
+import { LikeDislike } from '@models/likeDislike.model';
+import firebase from 'firebase';
+import { takeUntil } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AuthService } from '@services/auth.service';
+import { Comment } from '@models/comment.model';
 
 @Injectable()
 export class DataService {
     private postsCollection: AngularFirestoreCollection<Post> | undefined;
     private commentsCollection: AngularFirestoreCollection<Comment> | undefined;
     userData: UserData | undefined;
+    currentUid: string | undefined;
 
-    constructor(private afs: AngularFirestore) {
+    increment = firebase.firestore.FieldValue.increment(1);
+    decrement = firebase.firestore.FieldValue.increment(-1);
+    postsCollectionRef = this.afs.collection<Post>('posts');
+
+    constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
+        this.currentUid = this.authService.currentUid;
+        console.log(this.currentUid);
     }
 
     getPosts(): Observable<Post[]> {
@@ -26,6 +39,97 @@ export class DataService {
     getPostComments(postID: string | undefined): Observable<Comment[]> {
         this.commentsCollection = this.afs.collection<Post>('posts').doc(postID).collection('comments', comments => comments.orderBy('created', 'desc'));
         return this.commentsCollection.valueChanges();
+    }
+
+    onReactionClick(postID: string, type: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+        const likesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('likes',
+            likes => likes.where('uid', '==', this.currentUid));
+        const dislikesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('dislikes',
+            dislikes => dislikes.where('uid', '==', this.currentUid));
+        const reactionsRef = this.postsCollectionRef.doc(postID);
+        if (type === 'like') {
+            likesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfLikes: this.decrement
+                        });
+                    });
+                } else {
+                    reactionsRef.update({
+                        numberOfLikes: this.increment
+                    });
+                    likesCollectionRef.add({
+                        uid: this.currentUid,
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        userFirstName,
+                        userLastName,
+                        userImageURL,
+                    });
+                }
+            });
+
+            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfDislikes: this.decrement
+                        });
+                    });
+                }
+            });
+        } else if (type === 'dislike') {
+            dislikesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfDislikes: this.decrement
+                        });
+                    });
+                } else {
+                    reactionsRef.update({
+                        numberOfDislikes: this.increment
+                    });
+                    dislikesCollectionRef.add({
+                        uid: this.currentUid,
+                        created: firebase.firestore.FieldValue.serverTimestamp(),
+                        userFirstName,
+                        userLastName,
+                        userImageURL,
+                    });
+                }
+            });
+
+            likesCollectionRef.get().toPromise().then(querySnapshot => {
+                if (querySnapshot.docs.length > 0) {
+                    querySnapshot.forEach(doc => {
+                        doc.ref.delete();
+                        reactionsRef.update({
+                            numberOfLikes: this.decrement
+                        });
+                    });
+                }
+            });
+        }
+    }
+
+    onSubmitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+        const postDoc = this.postsCollectionRef.doc(postID);
+        if (comment && comment.trim()) {
+            postDoc.collection<Comment>('comments').add({
+                content: comment,
+                uid: this.currentUid,
+                created: firebase.firestore.FieldValue.serverTimestamp(),
+                userFirstName,
+                userLastName,
+                userImageURL,
+            });
+        } else {
+            console.log('empty post');
+        }
     }
 
 }

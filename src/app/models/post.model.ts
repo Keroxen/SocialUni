@@ -1,6 +1,8 @@
-import { LikeDislike } from '@models/likeDislike.model';
 import firebase from 'firebase';
 import FieldValue = firebase.firestore.FieldValue;
+
+import { LikeDislike } from '@models/likeDislike.model';
+import { Comment } from '@models/comment.model';
 
 export interface Post {
     id?: string;
