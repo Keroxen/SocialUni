@@ -33,8 +33,12 @@
                 align-items: center;
                 margin-top: 72px;
 
-                .change-photo-btn {
+                .img-with-reset {
+                    position: relative;
 
+                    .reset-img-icon {
+                        right: 10%;
+                    }
                 }
             }
 
@@ -70,6 +74,10 @@
         padding: 9px 12px 0;
         margin-top: 2rem;
         max-width: 300px;
+    }
+
+    .green-btn {
+        background-color: #46a35e;
     }
 
 }

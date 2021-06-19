@@ -10,6 +10,7 @@ import { DataService } from '@services/data.service';
 import { AuthService } from '@services/auth.service';
 import { University } from '@models/university.model';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import * as appConfig from '@config/app.config.json';
 
 @Component({
     selector: 'app-profile',
@@ -42,6 +43,8 @@ export class ProfileComponent implements OnInit {
     basePath = '/profileImages';
     uploadedImageName: string | undefined;
     uploadedFile: any;
+    isDefaultImage = false;
+    showSaveBtn = false;
 
     imageSnackbarText = 'Photo changed successfully!';
     personalDetailsSnackbarText = 'Personal details saved!';
@@ -59,6 +62,8 @@ export class ProfileComponent implements OnInit {
             this.userUniversity = doc.data()?.university;
             this.userAccessCode = doc.data()?.accessCode;
             this.populatePersonalDetails();
+            this.checkDefaultImage();
+            console.log(this.uploadedFile)
         });
         this.populateUniversityDropdown();
         this.today = new Date();
@@ -144,19 +149,24 @@ export class ProfileComponent implements OnInit {
     }
 
     previewImage(event: any): void {
-        this.uploadedImageName = event.target.files[0].name;
-        this.uploadedFile = event.target.files[0];
-        const reader = new FileReader();
-        reader.onload = () => {
-            this.userImageURL = reader.result as string;
-        };
-        reader.readAsDataURL(this.uploadedFile);
+        if (event.target.files[0]) {
+            this.uploadedImageName = event.target.files[0].name;
+            this.uploadedFile = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.userImageURL = reader.result as string;
+            };
+            reader.readAsDataURL(this.uploadedFile);
+            this.isDefaultImage = false;
+            this.showSaveBtn = true;
+        }
     }
 
     uploadImage(): void {
-        if (this.uploadedImageName !== undefined) {
+        let selectedFileForUpload = '';
+        if (this.uploadedImageName !== undefined || this.uploadedImageName === 'default') {
             const selectedFileName = this.uploadedImageName;
-            const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
+            selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
                 + Math.floor(Math.random() * 10000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
             const filePath = `${this.basePath}/${selectedFileForUpload}`;
             const fileRef = this.storage.ref(filePath);
@@ -164,17 +174,18 @@ export class ProfileComponent implements OnInit {
                 cacheControl: 'public, max-age=4000'
             };
             const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
-
             const postsBatch = this.afs.firestore.batch();
             const commentsBatch = this.afs.firestore.batch();
             upload.snapshotChanges().pipe(finalize(() => {
                 fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
-                    console.log(url);
+                    if (this.isDefaultImage) {
+                        url = appConfig.defaultUserImageURl;
+                    }
                     this.userImageURL = url;
                     this.afs.collection('users').doc(this.authService.currentUid).set({
                         imageURL: url,
                     }, {merge: true});
-
+                    console.log(url);
                     this.afs.collection('posts', posts => posts.where('uid', '==', this.authService.currentUid))
                         .get().toPromise().then(response => {
                         response.docs.forEach(doc => {
@@ -193,6 +204,21 @@ export class ProfileComponent implements OnInit {
             })).pipe(takeUntil(this.destroy$)).subscribe();
             this.showSnackbar(this.imageSnackbarText);
         }
+    }
+
+    checkDefaultImage(): void {
+        this.isDefaultImage = this.userImageURL === appConfig.defaultUserImageURl;
+        console.log(this.isDefaultImage);
+        console.log(this.userImageURL);
+        console.log(appConfig.defaultUserImageURl);
+    }
+
+    onResetImgPreview(): void {
+        this.uploadedFile = null;
+        this.uploadedImageName = 'default';
+        this.userImageURL = appConfig.defaultUserImageURl;
+        this.isDefaultImage = true;
+        this.showSaveBtn = true;
     }
 
     showSnackbar(snackbarText: string): void {

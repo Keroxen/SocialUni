@@ -1,6 +1,7 @@
 <div class="profile">
     <div class="profile-left">
-        <button class="profile-btn btn-primary" (click)="isEditingMode ? savePersonalDetails() : toggleProfileEditing()">
+        <button class="profile-btn btn-primary" [ngClass]="{'green-btn': isEditingMode}"
+                (click)="isEditingMode ? savePersonalDetails() : toggleProfileEditing()">
             {{isEditingMode ? 'Save your personal details' : 'Edit your personal details'}}
         </button>
         <form class="profile-form" [formGroup]="profileForm" [ngClass]="{'no-events' : !isEditingMode}">
@@ -30,18 +31,22 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
-<!--            <mat-form-field appearance="outline">-->
-<!--                <mat-label>Access code</mat-label>-->
-<!--                <input matInput formControlName="accessCode" type="text" class="access-code"-->
-<!--                       autocomplete="one-time-code">-->
-<!--            </mat-form-field>-->
+            <!--            <mat-form-field appearance="outline">-->
+            <!--                <mat-label>Access code</mat-label>-->
+            <!--                <input matInput formControlName="accessCode" type="text" class="access-code"-->
+            <!--                       autocomplete="one-time-code">-->
+            <!--            </mat-form-field>-->
         </form>
     </div>
     <div class="profile-right">
         <div class="profile-big-img-wrapper">
-            <img class="profile-big-img" [src]=userImageURL alt="Profile Image">
+            <div class="img-with-reset">
+                <img class="profile-big-img" [src]=userImageURL alt="Profile Image">
+                <mat-icon *ngIf="!isDefaultImage" class="reset-img-icon" (click)="onResetImgPreview()">close</mat-icon>
+            </div>
             <input type="file" class="image-upload" (change)="previewImage($event)" accept="image/*">
-            <button class="profile-btn btn-primary change-photo-btn" (click)="uploadImage()">
+            <button [ngClass]="{'hidden': !showSaveBtn}" class="profile-btn btn-primary green-btn"
+                    (click)="uploadImage()">
                 Save your new photo
             </button>
         </div>
