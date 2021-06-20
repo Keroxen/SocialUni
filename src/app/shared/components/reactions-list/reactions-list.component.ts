@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { UserData } from '@models/userData.model';
 import { DataService } from '@services/data.service';
 
 @Component({
@@ -10,7 +9,7 @@ import { DataService } from '@services/data.service';
     styleUrls: ['./reactions-list.component.scss']
 })
 export class ReactionsListComponent implements OnInit {
-
+    pageNumber = 1;
     postID: string | undefined;
     reactionType: string | undefined;
     usersList: any[] = [];

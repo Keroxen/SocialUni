@@ -1,5 +1,7 @@
+@use "src/assets/styles/globalVars";
+
 .snackbar {
     &-text {
-        color: white;
+        color: globalVars.$white;
     }
 }

@@ -2,10 +2,10 @@
     <mat-icon [mat-dialog-close]="true" class="close-icon">close</mat-icon>
     <div class="list-wrapper">
         <ul>
-            <li *ngFor="let user of usersList">
+<!--            TODO change to a higher number-->
+            <li *ngFor="let user of usersList | paginate: {itemsPerPage: 1, currentPage: pageNumber}">
                 <div class="user-item">
                     <div class="overlay"></div>
-
                     <div class="image-and-details">
                         <div class="profile-img-wrapper">
                             <img class="profile-img" [src]="user.userImageURL" alt="Profile Image">
@@ -22,5 +22,7 @@
                 </div>
             </li>
         </ul>
+        <pagination-controls class="pagination" (pageChange)="pageNumber = $event" previousLabel=""
+                             nextLabel=""></pagination-controls>
     </div>
 </div>

@@ -121,7 +121,7 @@ body {
 
 .post-card-item, .user-item {
     width: 650px;
-    background: white;
+    background: globalVars.$white;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
     padding: 20px 25px;
     border-radius: 30px;
@@ -351,3 +351,108 @@ body {
 }
 
 //[End] Others
+
+// [Start] Pagination
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+
+    *:focus {
+        outline: none !important;
+    }
+
+    .ngx-pagination {
+        display: flex;
+        align-items: center;
+
+        & .current {
+            background-color: globalVars.$primary-color;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0;
+            line-height: 21px;
+            margin-right: 10px;
+        }
+
+        & .pagination-next a::after,
+        & .pagination-next.disabled::after,
+        & .pagination-previous a::before,
+        & .pagination-previous.disabled::before {
+            height: 40px;
+            width: 40px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        & .pagination-next a::after,
+        & .pagination-next.disabled::after {
+            content: ">" !important;
+            margin: 0;
+        }
+
+        & .pagination-previous {
+            a {
+                padding: 0;
+            }
+        }
+
+        & .pagination-next {
+            a {
+                padding: 0;
+            }
+        }
+
+        & .disabled {
+            padding: 0;
+        }
+
+        & .pagination-previous a::before,
+        & .pagination-previous.disabled::before {
+            content: "<" !important;
+        }
+
+        & a:hover,
+        & button:hover {
+            background-color: globalVars.$white;
+        }
+
+        & a:hover:not(.pagination-previous a):not(.pagination-next a) {
+            background-color: globalVars.$white;
+        }
+    }
+
+    ul li:not(.pagination-previous):not(.pagination-next):not(.current):not(.small-screen) {
+        height: 40px;
+        width: 40px;
+        border: 1px solid globalVars.$secondary-color;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        cursor: pointer;
+
+        a {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0;
+            line-height: 21px;
+            color: globalVars.$secondary-color;
+        }
+    }
+}
+// [End] Pagination

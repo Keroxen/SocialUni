@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -73,7 +74,8 @@ import { ReactionsListComponent } from '@shared/components/reactions-list/reacti
         MatMenuModule,
         MatCheckboxModule,
         MatSnackBarModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        NgxPaginationModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent],
