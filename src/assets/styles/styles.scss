@@ -97,9 +97,187 @@ body {
     color: globalVars.$color-invalid !important;
 }
 
+.mat-progress-spinner {
+    margin-left: 50%;
+    top: 50%;
+    position: absolute !important;
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: globalVars.$primary-color;
+}
+
+.mat-menu-item .mat-icon-no-color, .mat-menu-item-submenu-trigger::after {
+    color: rgba(0,0,0,.87);
+}
+
 // [End] Material components
 
 // [Start] Profile image in cards
+
+.post-card-item {
+    width: 650px;
+    background: white;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
+    padding: 20px 25px;
+    border-radius: 30px;
+    margin-bottom: 2rem;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    word-break: break-all;
+
+    .image-and-details {
+        display: flex;
+
+        &-wrapper {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        &-wrapper.space {
+            justify-content: space-between;
+        }
+    }
+
+    .post {
+        &-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        &-author {
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+
+            .teacher-badge {
+                margin-left: 0.5rem;
+                background: #fff700;
+                border-radius: 11px;
+                padding: 0 7px;
+                font-weight: 500;
+            }
+        }
+
+
+        &-datetime {
+            font-size: 11px;
+        }
+
+        &-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+
+            &-text {
+                margin-bottom: 1rem;
+            }
+
+            .reactions-comments-wrapper {
+                display: flex;
+                justify-content: space-between;
+                justify-self: flex-end;
+
+                .reactions-wrapper {
+                    display: flex;
+                    width: 100px;
+                    justify-content: space-between;
+
+                    .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
+                        display: flex;
+                    }
+
+                    .likes-section {
+                        margin-right: 1rem;
+                    }
+
+                    .likes-section, .dislikes-section {
+                        align-items: center;
+                    }
+
+                    .number-of-likes, .number-of-dislikes {
+                        margin-right: 0.5rem;
+                        font-size: 15px;
+                        font-weight: bold;
+                    }
+
+                    .like-btn, .dislike-btn {
+                        cursor: pointer;
+                    }
+                }
+
+                .comments-btn {
+                    display: inline-flex;
+                    cursor: pointer;
+                    padding: 10px 12px;
+                    background-color: globalVars.$gray-1;
+                    border-radius: 4px;
+                    border: none;
+                    align-items: center;
+
+                    .mat-icon {
+                        margin-right: 0.5rem;
+                    }
+                }
+            }
+        }
+
+        &-image {
+            margin-bottom: 2em;
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        &-comments {
+            border-top: 1px solid globalVars.$gray-3;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+
+            .comment-container {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                background-color: globalVars.$gray-2;
+                border-radius: 20px;
+                padding: 12px;
+                word-break: break-word;
+                margin-bottom: 1rem;
+            }
+
+            .new-comment {
+                &-container {
+                    display: flex;
+
+                    .profile-img-wrapper {
+                        margin-left: 12px;
+                    }
+                }
+
+                &-field {
+                    width: 100%;
+                    line-height: normal;
+
+                    .characters-left {
+                        align-self: flex-end;
+                        margin-left: 10px;
+                    }
+                }
+
+                &-btn {
+                    height: 37px;
+                    width: 70px;
+                    margin-left: auto;
+                    margin-top: 1em;
+                }
+
+            }
+        }
+    }
+}
+
 .profile-img-wrapper {
     margin-right: 20px;
     display: inline-flex;
@@ -149,6 +327,18 @@ body {
 
 .no-events {
     pointer-events: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.reset-img-icon {
+    cursor: pointer;
+    position: absolute;
+    right: 3px;
+    top: 0;
+    color: globalVars.$color-invalid;
 }
 
 //[End] Others

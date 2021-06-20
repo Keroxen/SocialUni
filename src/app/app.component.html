@@ -1,2 +1,3 @@
-<app-main-nav *ngIf="this.authService.isLoggedIn"></app-main-nav>
+<mat-spinner *ngIf="authService.currentUid == undefined && authService.isLoggedIn"></mat-spinner>
+<app-main-nav *ngIf="authService.isLoggedIn"></app-main-nav>
 <app-landing-page *ngIf="!this.authService.isLoggedIn"></app-landing-page>

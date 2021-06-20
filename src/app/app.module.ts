@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,6 +34,7 @@ import { DataService } from '@services/data.service';
 import { NewPostComponent } from '@components/new-post/new-post.component';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
 
 @NgModule({
     declarations: [
@@ -44,6 +46,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         HomeComponent,
         NewPostComponent,
         SnackbarComponent,
+        SavedPostsComponent,
     ],
     imports: [
         BrowserModule,
@@ -67,7 +70,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
         MatNativeDateModule,
         MatMenuModule,
         MatCheckboxModule,
-        MatSnackBarModule
+        MatSnackBarModule,
+        MatProgressSpinnerModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent],
