@@ -19,7 +19,7 @@ export class AuthService {
     public navigationPathEnum = NavigationPaths;
 
     constructor(private router: Router, private afs: AngularFirestore, private afAuth: AngularFireAuth) {
-        this.afAuth.authState.subscribe(user => {
+        this.afAuth.onAuthStateChanged((user: any) => {
             if (user) {
                 this.currentUid = user.uid;
                 console.log('this.currentUid ', this.currentUid);
