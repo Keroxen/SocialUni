@@ -3,12 +3,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
 import { AuthService } from '@services/auth.service';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 
 @Component({
     selector: 'app-home',
@@ -36,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     decrement = firebase.firestore.FieldValue.increment(-1);
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private snackBar: MatSnackBar) {
+                private snackBar: MatSnackBar, public dialog: MatDialog) {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
             this.userFirstName = doc.data()?.firstName;
@@ -97,8 +99,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.showSnackbar(this.commentSnackbarText);
     }
 
-    onReactionClick(postID: string, type: string): void {
-        this.dataService.reactionClick(postID, type, this.userFirstName, this.userLastName, this.userImageURL);
+    onReactionClick(postID: string, reactionType: string): void {
+        this.dataService.reactionClick(postID, reactionType, this.userFirstName, this.userLastName, this.userImageURL);
     }
 
     onDeletePost(postID: string): void {
@@ -115,6 +117,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.snackBar.openFromComponent(SnackbarComponent, {
             data: snackbarText,
             duration: 1000
+        });
+    }
+
+    onOpenReactionsModal(postID: string, reactionType: string): void {
+        this.dialog.open(ReactionsListComponent, {
+            data: {
+                postID,
+                reactionType
+            },
+            height: 'fit-content',
+            maxHeight: '90vh',
+            // minHeight: 'auto !important',
+            // width: 'auto'
         });
     }
 

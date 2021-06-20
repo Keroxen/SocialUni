@@ -39,9 +39,13 @@ body {
 }
 
 .mat-dialog-container {
-    min-height: 400px !important;
     border-radius: 30px !important;
-    width: 1000px !important;
+}
+
+.reactions-list {
+    .mat-dialog-container {
+        height: 90vh;
+    }
 }
 
 // [End] Navbar
@@ -108,14 +112,14 @@ body {
 }
 
 .mat-menu-item .mat-icon-no-color, .mat-menu-item-submenu-trigger::after {
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
 }
 
 // [End] Material components
 
 // [Start] Profile image in cards
 
-.post-card-item {
+.post-card-item, .user-item {
     width: 650px;
     background: white;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
@@ -125,7 +129,6 @@ body {
     min-height: 100px;
     display: flex;
     flex-direction: column;
-    word-break: break-all;
 
     .image-and-details {
         display: flex;
@@ -181,7 +184,6 @@ body {
 
                 .reactions-wrapper {
                     display: flex;
-                    width: 100px;
                     justify-content: space-between;
 
                     .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
@@ -194,12 +196,19 @@ body {
 
                     .likes-section, .dislikes-section {
                         align-items: center;
+                        width: 50px;
+                        justify-content: space-between;
                     }
 
                     .number-of-likes, .number-of-dislikes {
                         margin-right: 0.5rem;
                         font-size: 15px;
                         font-weight: bold;
+                        cursor: pointer;
+                    }
+
+                    .number-of-likes:hover, .number-of-dislikes:hover {
+                        text-decoration: underline;
                     }
 
                     .like-btn, .dislike-btn {
@@ -215,6 +224,7 @@ body {
                     border-radius: 4px;
                     border: none;
                     align-items: center;
+                    height: 45px;
 
                     .mat-icon {
                         margin-right: 0.5rem;
@@ -269,8 +279,7 @@ body {
                 &-btn {
                     height: 37px;
                     width: 70px;
-                    margin-left: auto;
-                    margin-top: 1em;
+                    margin: 1em 0.2em 0.1em auto;
                 }
 
             }

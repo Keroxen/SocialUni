@@ -54,7 +54,7 @@
                         </mat-icon>
                     </div>
                 </div>
-                <button class="comments-btn" (click)="showHideComments(post)">
+                <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
                     <mat-icon>comment</mat-icon>
                     Comments
                     <!--                        {{post.numberOfComments}} Comments-->
@@ -80,7 +80,7 @@
                                   rows="3"
                                   formControlName="newComment">
                             </textarea>
-                        <button
+                        <button mat-raised-button
                             [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
                             class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
                         </button>

@@ -1,0 +1,26 @@
+<div class="reactions-list">
+    <mat-icon [mat-dialog-close]="true" class="close-icon">close</mat-icon>
+    <div class="list-wrapper">
+        <ul>
+            <li *ngFor="let user of usersList">
+                <div class="user-item">
+                    <div class="overlay"></div>
+
+                    <div class="image-and-details">
+                        <div class="profile-img-wrapper">
+                            <img class="profile-img" [src]="user.userImageURL" alt="Profile Image">
+                        </div>
+                        <div class="post-details">
+                            <div class="post-author">{{user.userFirstName}} {{user.userLastName}}
+                                <div class="teacher-badge" *ngIf="user.userIsTeacher">Teacher</div>
+                            </div>
+                            <div class="post-datetime">
+                                {{user.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

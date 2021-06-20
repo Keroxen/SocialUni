@@ -35,6 +35,7 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
+import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 
 @NgModule({
     declarations: [
@@ -47,6 +48,7 @@ import { SavedPostsComponent } from '@components/saved-posts/saved-posts.compone
         NewPostComponent,
         SnackbarComponent,
         SavedPostsComponent,
+        ReactionsListComponent,
     ],
     imports: [
         BrowserModule,
