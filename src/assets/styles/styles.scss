@@ -39,9 +39,13 @@ body {
 }
 
 .mat-dialog-container {
-    min-height: 400px !important;
     border-radius: 30px !important;
-    width: 1000px !important;
+}
+
+.reactions-list {
+    .mat-dialog-container {
+        height: 90vh;
+    }
 }
 
 // [End] Navbar
@@ -108,16 +112,16 @@ body {
 }
 
 .mat-menu-item .mat-icon-no-color, .mat-menu-item-submenu-trigger::after {
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
 }
 
 // [End] Material components
 
 // [Start] Profile image in cards
 
-.post-card-item {
+.post-card-item, .user-item {
     width: 650px;
-    background: white;
+    background: globalVars.$white;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.15);
     padding: 20px 25px;
     border-radius: 30px;
@@ -125,7 +129,6 @@ body {
     min-height: 100px;
     display: flex;
     flex-direction: column;
-    word-break: break-all;
 
     .image-and-details {
         display: flex;
@@ -181,7 +184,6 @@ body {
 
                 .reactions-wrapper {
                     display: flex;
-                    width: 100px;
                     justify-content: space-between;
 
                     .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
@@ -194,12 +196,19 @@ body {
 
                     .likes-section, .dislikes-section {
                         align-items: center;
+                        width: 50px;
+                        justify-content: space-between;
                     }
 
                     .number-of-likes, .number-of-dislikes {
                         margin-right: 0.5rem;
                         font-size: 15px;
                         font-weight: bold;
+                        cursor: pointer;
+                    }
+
+                    .number-of-likes:hover, .number-of-dislikes:hover {
+                        text-decoration: underline;
                     }
 
                     .like-btn, .dislike-btn {
@@ -215,6 +224,7 @@ body {
                     border-radius: 4px;
                     border: none;
                     align-items: center;
+                    height: 45px;
 
                     .mat-icon {
                         margin-right: 0.5rem;
@@ -269,8 +279,7 @@ body {
                 &-btn {
                     height: 37px;
                     width: 70px;
-                    margin-left: auto;
-                    margin-top: 1em;
+                    margin: 1em 0.2em 0.1em auto;
                 }
 
             }
@@ -342,3 +351,108 @@ body {
 }
 
 //[End] Others
+
+// [Start] Pagination
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+
+    *:focus {
+        outline: none !important;
+    }
+
+    .ngx-pagination {
+        display: flex;
+        align-items: center;
+
+        & .current {
+            background-color: globalVars.$primary-color;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0;
+            line-height: 21px;
+            margin-right: 10px;
+        }
+
+        & .pagination-next a::after,
+        & .pagination-next.disabled::after,
+        & .pagination-previous a::before,
+        & .pagination-previous.disabled::before {
+            height: 40px;
+            width: 40px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            font-size: 28px;
+            font-weight: 400;
+        }
+
+        & .pagination-next a::after,
+        & .pagination-next.disabled::after {
+            content: ">" !important;
+            margin: 0;
+        }
+
+        & .pagination-previous {
+            a {
+                padding: 0;
+            }
+        }
+
+        & .pagination-next {
+            a {
+                padding: 0;
+            }
+        }
+
+        & .disabled {
+            padding: 0;
+        }
+
+        & .pagination-previous a::before,
+        & .pagination-previous.disabled::before {
+            content: "<" !important;
+        }
+
+        & a:hover,
+        & button:hover {
+            background-color: globalVars.$white;
+        }
+
+        & a:hover:not(.pagination-previous a):not(.pagination-next a) {
+            background-color: globalVars.$white;
+        }
+    }
+
+    ul li:not(.pagination-previous):not(.pagination-next):not(.current):not(.small-screen) {
+        height: 40px;
+        width: 40px;
+        border: 1px solid globalVars.$secondary-color;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        cursor: pointer;
+
+        a {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 0;
+            line-height: 21px;
+            color: globalVars.$secondary-color;
+        }
+    }
+}
+// [End] Pagination

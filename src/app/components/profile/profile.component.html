@@ -1,6 +1,6 @@
 <div class="profile">
     <div class="profile-left">
-        <button class="profile-btn btn-primary" [ngClass]="{'green-btn': isEditingMode}"
+        <button mat-raised-button class="profile-btn btn-primary" [ngClass]="{'green-btn': isEditingMode}"
                 (click)="isEditingMode ? savePersonalDetails() : toggleProfileEditing()">
             {{isEditingMode ? 'Save your personal details' : 'Edit your personal details'}}
         </button>
@@ -45,7 +45,7 @@
                 <mat-icon *ngIf="!isDefaultImage" class="reset-img-icon" (click)="onResetImgPreview()">close</mat-icon>
             </div>
             <input type="file" class="image-upload" (change)="previewImage($event)" accept="image/*">
-            <button [ngClass]="{'hidden': !showSaveBtn}" class="profile-btn btn-primary green-btn"
+            <button mat-raised-button [ngClass]="{'hidden': !showSaveBtn}" class="profile-btn btn-primary green-btn"
                     (click)="uploadImage()">
                 Save your new photo
             </button>

@@ -19,6 +19,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +36,7 @@ import { NewPostComponent } from '@components/new-post/new-post.component';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
+import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 
 @NgModule({
     declarations: [
@@ -47,6 +49,7 @@ import { SavedPostsComponent } from '@components/saved-posts/saved-posts.compone
         NewPostComponent,
         SnackbarComponent,
         SavedPostsComponent,
+        ReactionsListComponent,
     ],
     imports: [
         BrowserModule,
@@ -71,7 +74,8 @@ import { SavedPostsComponent } from '@components/saved-posts/saved-posts.compone
         MatMenuModule,
         MatCheckboxModule,
         MatSnackBarModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        NgxPaginationModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent],

@@ -41,20 +41,20 @@
                 <div class="reactions-comments-wrapper">
                     <div class="reactions-wrapper">
                         <div class="likes-section">
-                            <div class="number-of-likes">
+                            <div class="number-of-likes" (click)="onOpenReactionsModal(post.id, 'likes')">
                                 {{post.numberOfLikes === 0 ? '' : post.numberOfLikes}}
                             </div>
                             <mat-icon class="like-btn" (click)="onReactionClick(post.id, 'like')">thumb_up</mat-icon>
                         </div>
                         <div class="dislikes-section">
-                            <div class="number-of-dislikes">
+                            <div class="number-of-dislikes" (click)="onOpenReactionsModal(post.id, 'dislikes')">
                                 {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
                             </div>
                             <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislike')">thumb_down
                             </mat-icon>
                         </div>
                     </div>
-                    <button class="comments-btn" (click)="showHideComments(post)">
+                    <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
                         <mat-icon>comment</mat-icon>
                         Comments
                         <!--                        {{post.numberOfComments}} Comments-->
@@ -80,7 +80,7 @@
                                       rows="3"
                                       formControlName="newComment">
                             </textarea>
-                            <button
+                            <button mat-raised-button
                                 [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
                                 class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
                             </button>

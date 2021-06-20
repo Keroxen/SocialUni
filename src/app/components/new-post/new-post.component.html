@@ -33,7 +33,7 @@
         </div>
     </div>
     <div class="new-post-submit-wrapper">
-        <button [ngClass]="{'disabled-btn' : !isFormValid()}"
+        <button mat-raised-button [ngClass]="{'disabled-btn' : !isFormValid()}"
                 class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post
         </button>
     </div>

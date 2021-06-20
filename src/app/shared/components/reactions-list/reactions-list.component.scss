@@ -1,0 +1,41 @@
+.reactions-list {
+
+    .close-icon {
+        margin-left: auto;
+        display: flex;
+        cursor: pointer;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr
+    }
+
+    .user-item {
+        width: 90%;
+        padding: 20px;
+        min-height: auto;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: .5s ease;
+        background-color: #636363;
+        border-radius: 30px;
+    }
+
+    .overlay:hover {
+        opacity: 0.1;
+    }
+}

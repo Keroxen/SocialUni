@@ -9,13 +9,13 @@ import { UserData } from '@models/userData.model';
 import { LikeDislike } from '@models/likeDislike.model';
 import { AuthService } from '@services/auth.service';
 import { Comment } from '@models/comment.model';
+import DocumentData = firebase.firestore.DocumentData;
 
 @Injectable()
 export class DataService {
     private postsCollection: AngularFirestoreCollection<Post> | undefined;
     private commentsCollection: AngularFirestoreCollection<Comment> | undefined;
     userData: UserData | undefined;
-    currentUid: string | undefined;
 
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
@@ -23,8 +23,6 @@ export class DataService {
     usersCollectionRef = this.afs.collection<UserData>('users');
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
-        this.currentUid = this.authService.currentUid;
-        console.log(this.currentUid);
     }
 
     getPosts(): Observable<Post[]> {
@@ -41,27 +39,30 @@ export class DataService {
         return this.commentsCollection.valueChanges();
     }
 
-    reactionClick(postID: string, type: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+    reactionClick(postID: string, reactionType: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
         const likesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('likes',
-            likes => likes.where('uid', '==', this.currentUid));
+            likes => likes.where('uid', '==', this.authService.currentUid));
         const dislikesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('dislikes',
-            dislikes => dislikes.where('uid', '==', this.currentUid));
+            dislikes => dislikes.where('uid', '==', this.authService.currentUid));
         const reactionsRef = this.postsCollectionRef.doc(postID);
-        if (type === 'like') {
+        if (reactionType === 'like') {
             likesCollectionRef.get().toPromise().then(querySnapshot => {
                 if (querySnapshot.docs.length > 0) {
                     querySnapshot.forEach(doc => {
                         doc.ref.delete();
+                        console.log('like', this.authService.currentUid, postID);
                         reactionsRef.update({
                             numberOfLikes: this.decrement
                         });
                     });
                 } else {
+                    console.log('else in like', this.authService.currentUid, postID);
+
                     reactionsRef.update({
                         numberOfLikes: this.increment
                     });
                     likesCollectionRef.add({
-                        uid: this.currentUid,
+                        uid: this.authService.currentUid,
                         created: firebase.firestore.FieldValue.serverTimestamp(),
                         userFirstName,
                         userLastName,
@@ -79,7 +80,7 @@ export class DataService {
                     });
                 }
             });
-        } else if (type === 'dislike') {
+        } else if (reactionType === 'dislike') {
             dislikesCollectionRef.get().toPromise().then(querySnapshot => {
                 if (querySnapshot.docs.length > 0) {
                     querySnapshot.forEach(doc => {
@@ -93,7 +94,7 @@ export class DataService {
                         numberOfDislikes: this.increment
                     });
                     dislikesCollectionRef.add({
-                        uid: this.currentUid,
+                        uid: this.authService.currentUid,
                         created: firebase.firestore.FieldValue.serverTimestamp(),
                         userFirstName,
                         userLastName,
@@ -119,7 +120,7 @@ export class DataService {
         if (comment && comment.trim()) {
             postDoc.collection<Comment>('comments').add({
                 content: comment,
-                uid: this.currentUid,
+                uid: this.authService.currentUid,
                 created: firebase.firestore.FieldValue.serverTimestamp(),
                 userFirstName,
                 userLastName,
@@ -136,19 +137,23 @@ export class DataService {
     }
 
     savePost(postID: string): void {
-        this.usersCollectionRef.doc(this.currentUid).update({
+        this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
         });
     }
 
     async removeSavedPost(postID: string): Promise<void> {
-        return await this.usersCollectionRef.doc(this.currentUid).update({
+        return await this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayRemove(postID)
         });
     }
 
     getSavedPosts(): AngularFirestoreDocument<UserData> {
-        return this.usersCollectionRef.doc(this.currentUid);
+        return this.usersCollectionRef.doc(this.authService.currentUid);
+    }
+
+    getReactionsList(postID: string | undefined, reactionType: string | undefined): Observable<DocumentData[]> {
+        return this.postsCollectionRef.doc(postID).collection(reactionType as string, reaction => reaction.orderBy('created', 'desc')).valueChanges();
     }
 
 }
