@@ -97,6 +97,20 @@ body {
     color: globalVars.$color-invalid !important;
 }
 
+.mat-progress-spinner {
+    margin-left: 50%;
+    top: 50%;
+    position: absolute !important;
+}
+
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: globalVars.$primary-color;
+}
+
+.mat-menu-item .mat-icon-no-color, .mat-menu-item-submenu-trigger::after {
+    color: rgba(0,0,0,.87);
+}
+
 // [End] Material components
 
 // [Start] Profile image in cards

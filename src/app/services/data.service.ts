@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
+import firebase from 'firebase';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import { Post } from '@models/post.model';
 import { UserData } from '@models/userData.model';
 import { LikeDislike } from '@models/likeDislike.model';
-import firebase from 'firebase';
-import { takeUntil } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { AuthService } from '@services/auth.service';
 import { Comment } from '@models/comment.model';
 
@@ -21,6 +20,7 @@ export class DataService {
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
     postsCollectionRef = this.afs.collection<Post>('posts');
+    usersCollectionRef = this.afs.collection<UserData>('users');
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
         this.currentUid = this.authService.currentUid;
@@ -41,7 +41,7 @@ export class DataService {
         return this.commentsCollection.valueChanges();
     }
 
-    onReactionClick(postID: string, type: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+    reactionClick(postID: string, type: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
         const likesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('likes',
             likes => likes.where('uid', '==', this.currentUid));
         const dislikesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('dislikes',
@@ -69,7 +69,6 @@ export class DataService {
                     });
                 }
             });
-
             dislikesCollectionRef.get().toPromise().then(querySnapshot => {
                 if (querySnapshot.docs.length > 0) {
                     querySnapshot.forEach(doc => {
@@ -102,7 +101,6 @@ export class DataService {
                     });
                 }
             });
-
             likesCollectionRef.get().toPromise().then(querySnapshot => {
                 if (querySnapshot.docs.length > 0) {
                     querySnapshot.forEach(doc => {
@@ -116,7 +114,7 @@ export class DataService {
         }
     }
 
-    onSubmitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+    submitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
         const postDoc = this.postsCollectionRef.doc(postID);
         if (comment && comment.trim()) {
             postDoc.collection<Comment>('comments').add({
@@ -130,6 +128,27 @@ export class DataService {
         } else {
             console.log('empty post');
         }
+    }
+
+    async deletePost(postID: string): Promise<void> {
+        await this.removeSavedPost(postID);
+        return await this.postsCollectionRef.doc(postID).delete();
+    }
+
+    savePost(postID: string): void {
+        this.usersCollectionRef.doc(this.currentUid).update({
+            savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
+        });
+    }
+
+    async removeSavedPost(postID: string): Promise<void> {
+        return await this.usersCollectionRef.doc(this.currentUid).update({
+            savedPosts: firebase.firestore.FieldValue.arrayRemove(postID)
+        });
+    }
+
+    getSavedPosts(): AngularFirestoreDocument<UserData> {
+        return this.usersCollectionRef.doc(this.currentUid);
     }
 
 }

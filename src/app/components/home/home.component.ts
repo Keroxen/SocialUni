@@ -2,17 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import firebase from 'firebase';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
-import { Comment } from '@models/comment.model';
 import { AuthService } from '@services/auth.service';
-import { LikeDislike } from '@models/likeDislike.model';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
     selector: 'app-home',
@@ -34,17 +30,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     userImageURL: string | undefined;
     deleteSnackbarText = 'Post deleted!';
     commentSnackbarText = 'New comment added!';
+    saveSnackbarText = 'Post saved!';
 
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
                 private snackBar: MatSnackBar) {
-        this.dataService.getUserData(this.authService.currentUid).ref.get().then(doc => {
+        this.currentUid = this.authService.currentUid;
+        this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
             this.userFirstName = doc.data()?.firstName;
             this.userLastName = doc.data()?.lastName;
             this.userImageURL = doc.data()?.imageURL;
-            console.log(this.dataService.currentUid);
         });
     }
 
@@ -95,18 +92,23 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onSubmitComment(postID: string): void {
         const comment = this.newCommentForm.get('newComment')?.value;
-        this.dataService.onSubmitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL);
+        this.dataService.submitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL);
         this.newCommentForm.reset();
         this.showSnackbar(this.commentSnackbarText);
     }
 
     onReactionClick(postID: string, type: string): void {
-        this.dataService.onReactionClick(postID, type, this.userFirstName, this.userLastName, this.userImageURL);
+        this.dataService.reactionClick(postID, type, this.userFirstName, this.userLastName, this.userImageURL);
     }
 
     onDeletePost(postID: string): void {
-        this.postsCollection.doc(postID).delete();
+        this.dataService.deletePost(postID);
         this.showSnackbar(this.deleteSnackbarText);
+    }
+
+    onSavePost(postID: string): void {
+        this.dataService.savePost(postID);
+        this.showSnackbar(this.saveSnackbarText);
     }
 
     showSnackbar(snackbarText: string): void {

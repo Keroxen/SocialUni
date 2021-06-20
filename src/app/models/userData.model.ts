@@ -7,4 +7,5 @@ export interface UserData {
     accessCode: string;
     isTeacher: boolean;
     imageURL: string;
+    savedPosts?: any;
 }
