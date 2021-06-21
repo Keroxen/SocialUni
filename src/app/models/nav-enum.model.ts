@@ -4,4 +4,5 @@ export enum NavigationPaths {
     Profile = '/profile',
     Notifications = '/notifications',
     Saved = '/saved',
+    ViewProfile = '/view-profile'
 }

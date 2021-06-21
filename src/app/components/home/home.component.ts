@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -11,6 +12,7 @@ import { Post } from '@models/post.model';
 import { AuthService } from '@services/auth.service';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
+import { NavigationPaths } from '@models/nav-enum.model';
 
 @Component({
     selector: 'app-home',
@@ -20,6 +22,8 @@ import { ReactionsListComponent } from '@shared/components/reactions-list/reacti
 export class HomeComponent implements OnInit, OnDestroy {
     currentUid: string | undefined;
     destroy$: Subject<boolean> = new Subject<boolean>();
+    navigationPathEnum = NavigationPaths;
+
     latestPosts: Observable<Post[]> | any;
     postsCollection = this.afs.collection<Post>('posts');
 
@@ -30,6 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userIsTeacher: boolean | undefined;
     deleteSnackbarText = 'Post deleted!';
     commentSnackbarText = 'New comment added!';
     saveSnackbarText = 'Post saved!';
@@ -38,12 +43,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     decrement = firebase.firestore.FieldValue.increment(-1);
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private snackBar: MatSnackBar, public dialog: MatDialog) {
+                private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router) {
         this.currentUid = this.authService.currentUid;
-        this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
-            this.userFirstName = doc.data()?.firstName;
-            this.userLastName = doc.data()?.lastName;
-            this.userImageURL = doc.data()?.imageURL;
+        this.dataService.getUserData(this.currentUid).ref.get().then((doc: any) => {
+            const userData = doc.data();
+            this.userFirstName = userData.firstName;
+            this.userLastName = userData.lastName;
+            this.userImageURL = userData.imageURL;
+            this.userIsTeacher = userData.isTeacher;
         });
     }
 
@@ -94,7 +101,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     onSubmitComment(postID: string): void {
         const comment = this.newCommentForm.get('newComment')?.value;
-        this.dataService.submitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL);
+        this.dataService.submitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL, this.userIsTeacher);
         this.newCommentForm.reset();
         this.showSnackbar(this.commentSnackbarText);
     }
@@ -131,6 +138,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             // minHeight: 'auto !important',
             // width: 'auto'
         });
+    }
+
+    goToUerProfile(userID: string): void {
+        this.router.navigate([this.navigationPathEnum.ViewProfile, userID]);
     }
 
 }

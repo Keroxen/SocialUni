@@ -37,6 +37,7 @@ import { SnackbarComponent } from '@shared/components/snackbar/snackbar.componen
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
+import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
 
 @NgModule({
     declarations: [
@@ -50,6 +51,7 @@ import { ReactionsListComponent } from '@shared/components/reactions-list/reacti
         SnackbarComponent,
         SavedPostsComponent,
         ReactionsListComponent,
+        ViewProfileComponent,
     ],
     imports: [
         BrowserModule,

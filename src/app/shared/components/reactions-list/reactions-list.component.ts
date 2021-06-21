@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { DataService } from '@services/data.service';
+import { Router } from '@angular/router';
+import { NavigationPaths } from '@models/nav-enum.model';
 
 @Component({
     selector: 'app-reactions-list',
@@ -13,9 +15,10 @@ export class ReactionsListComponent implements OnInit {
     postID: string | undefined;
     reactionType: string | undefined;
     usersList: any[] = [];
+    public navigationPathEnum = NavigationPaths;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data: { postID: string, reactionType: string },
-                private dataService: DataService) {
+                private dataService: DataService, private router: Router) {
     }
 
     ngOnInit(): void {
@@ -28,5 +31,9 @@ export class ReactionsListComponent implements OnInit {
             console.log(data);
         });
 
+    }
+
+    goToUserProfile(userID: string): void {
+        this.router.navigate([this.navigationPathEnum.ViewProfile, userID]);
     }
 }

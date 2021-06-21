@@ -1,7 +1,7 @@
 export interface UserData {
     firstName: string;
     lastName: string;
-    dob: string | number | Date;
+    dob: any;
     email: string;
     university: string;
     accessCode: string;

@@ -4,7 +4,7 @@
 
         <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper space">
-                <div class="image-and-details">
+                <div class="image-and-details" (click)="goToUerProfile(post.uid)">
                     <div class="profile-img-wrapper">
                         <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
                     </div>
@@ -81,21 +81,25 @@
                                       formControlName="newComment">
                             </textarea>
                             <button mat-raised-button
-                                [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
-                                class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
+                                    [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
+                                    class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
                             </button>
                         </mat-form-field>
                     </form>
                 </div>
                 <div class="comment-container" *ngFor="let comment of post.comments">
                     <div class="image-and-details-wrapper">
-                        <div class="profile-img-wrapper">
-                            <img class="profile-img" [src]="comment.userImageURL" alt="Profile Image">
-                        </div>
-                        <div class="post-details">
-                            <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}</div>
-                            <div class="post-datetime">
-                                {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                        <div class="image-and-details" (click)="goToUerProfile(comment.uid)">
+                            <div class="profile-img-wrapper">
+                                <img class="profile-img" [src]="comment.userImageURL" alt="Profile Image">
+                            </div>
+                            <div class="post-details">
+                                <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}
+                                    <div class="teacher-badge" *ngIf="comment.userIsTeacher">Teacher</div>
+                                </div>
+                                <div class="post-datetime">
+                                    {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                                </div>
                             </div>
                         </div>
                     </div>
