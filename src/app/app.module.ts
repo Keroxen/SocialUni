@@ -38,6 +38,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
+import { SearchComponent } from '@components/search/search.component';
+import { NgAisHighlightModule, NgAisHitsModule, NgAisInstantSearchModule, NgAisSearchBoxModule } from 'angular-instantsearch';
 
 @NgModule({
     declarations: [
@@ -52,6 +54,7 @@ import { ViewProfileComponent } from '@components/view-profile/view-profile.comp
         SavedPostsComponent,
         ReactionsListComponent,
         ViewProfileComponent,
+        SearchComponent,
     ],
     imports: [
         BrowserModule,
@@ -77,7 +80,11 @@ import { ViewProfileComponent } from '@components/view-profile/view-profile.comp
         MatCheckboxModule,
         MatSnackBarModule,
         MatProgressSpinnerModule,
-        NgxPaginationModule
+        NgxPaginationModule,
+        NgAisInstantSearchModule,
+        NgAisSearchBoxModule,
+        NgAisHitsModule,
+        NgAisHighlightModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent],

@@ -7,6 +7,7 @@
         "forceConsistentCasingInFileNames": true,
         "strict": true,
         "noImplicitReturns": true,
+        "noImplicitAny": false,
         "noFallthroughCasesInSwitch": true,
         "sourceMap": true,
         "declaration": false,
@@ -20,8 +21,17 @@
         "lib": [
             "es2018",
             "dom"
-        ]
+        ],
+        "typeRoots": [
+            "./types",
+            "./node_modules/@types"
+        ],
+        "skipLibCheck": true
     },
+    "exclude": [
+        "node_modules",
+        "typings"
+    ],
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
         "strictInjectionParameters": true,

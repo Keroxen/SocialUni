@@ -13,6 +13,7 @@ import { AuthService } from '@services/auth.service';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { NavigationPaths } from '@models/nav-enum.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'app-home',
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     newCommentForm = new FormGroup({
         newComment: new FormControl('')
     });
-
+    showResults = false;
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
@@ -38,6 +39,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     deleteSnackbarText = 'Post deleted!';
     commentSnackbarText = 'New comment added!';
     saveSnackbarText = 'Post saved!';
+
+    searchConfig = {
+        ...environment.algolia,
+        indexName: 'users'
+    };
 
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
@@ -52,6 +58,14 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.userImageURL = userData.imageURL;
             this.userIsTeacher = userData.isTeacher;
         });
+    }
+
+    searchChanged(search: any) {
+        if (search.length) {
+            this.showResults = true;
+        } else {
+            this.showResults = false;
+        }
     }
 
     ngOnInit(): void {

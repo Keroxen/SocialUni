@@ -6,7 +6,12 @@ import * as appConfig from '@config/app.config.json';
 
 export const environment = {
     production: false,
-    firebase: appConfig.firebaseConfigEnvironmentProductionFalse
+    firebase: appConfig.firebaseConfigEnvironmentProductionFalse,
+
+    algolia: {
+        appId: 'RWAQLBEIF8',
+        apiKey: '2c5e5991f513d07a3c4046f7364a41dd'
+    }
 };
 
 /*

@@ -1,7 +1,16 @@
 <div class="home">
     <div class="left">
         <app-new-post></app-new-post>
-
+        <ais-instantsearch [config]="searchConfig">
+            <ais-search-box (change)="searchChanged($event)"></ais-search-box>
+            <ais-hits *ngIf="showResults">
+                <ng-template let-hits="hits">
+                    <div *ngFor="let hit of hits">
+                        <ais-highlight attribute="firstName" [hit]="hit"></ais-highlight>
+                    </div>
+                </ng-template>
+            </ais-hits>
+        </ais-instantsearch>
         <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper space">
                 <div class="image-and-details" (click)="goToUerProfile(post.uid)">
