@@ -115,7 +115,7 @@ export class DataService {
         }
     }
 
-    submitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+    submitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined, userIsTeacher: boolean | undefined): void {
         const postDoc = this.postsCollectionRef.doc(postID);
         if (comment && comment.trim()) {
             postDoc.collection<Comment>('comments').add({
@@ -125,6 +125,7 @@ export class DataService {
                 userFirstName,
                 userLastName,
                 userImageURL,
+                userIsTeacher
             });
         } else {
             console.log('empty post');
@@ -153,7 +154,7 @@ export class DataService {
     }
 
     getReactionsList(postID: string | undefined, reactionType: string | undefined): Observable<DocumentData[]> {
-        return this.postsCollectionRef.doc(postID).collection(reactionType as string, reaction => reaction.orderBy('created', 'desc')).valueChanges();
+        return this.postsCollectionRef.doc(postID).collection(reactionType as string, (reaction: any) => reaction.orderBy('created', 'desc')).valueChanges({idField: 'id'});
     }
 
 }

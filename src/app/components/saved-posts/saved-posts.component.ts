@@ -24,6 +24,8 @@ export class SavedPostsComponent implements OnInit {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userIsTeacher: boolean | undefined;
+
     newCommentForm = new FormGroup({
         newComment: new FormControl('')
     });
@@ -32,9 +34,11 @@ export class SavedPostsComponent implements OnInit {
                 private snackBar: MatSnackBar, private cd: ChangeDetectorRef) {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
-            this.userFirstName = doc.data()?.firstName;
-            this.userLastName = doc.data()?.lastName;
-            this.userImageURL = doc.data()?.imageURL;
+            const userData = doc.data();
+            this.userFirstName = userData?.firstName;
+            this.userLastName = userData?.lastName;
+            this.userImageURL = userData?.imageURL;
+            this.userIsTeacher = userData?.isTeacher;
         });
     }
 
@@ -63,7 +67,7 @@ export class SavedPostsComponent implements OnInit {
 
     onSubmitComment(postID: string): void {
         const comment = this.newCommentForm.get('newComment')?.value;
-        this.dataService.submitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL);
+        this.dataService.submitComment(comment, postID, this.userFirstName, this.userLastName, this.userImageURL, this.userIsTeacher);
         this.newCommentForm.reset();
         this.showSnackbar(this.commentSnackbarText);
     }

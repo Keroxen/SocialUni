@@ -1,0 +1,16 @@
+<div class="view-profile" *ngIf="user">
+    <h2 class="heading">{{user.firstName}} {{user.lastName}}</h2>
+    <div class="image-details-container">
+        <img class="view-profile-img" [src]=user.imageURL alt="Profile Image">
+        <div class="details-container">
+            <div class="row">{{user.university}}</div>
+            <div class="row">{{user.dob.toDate() | date: 'dd MMM y'}}</div>
+            <div class="row">
+                <a href="mailto:{{user.email">{{user.email}}</a>
+            </div>
+        </div>
+        <div class="user-posts-container">
+
+        </div>
+    </div>
+</div>

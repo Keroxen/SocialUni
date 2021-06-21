@@ -131,8 +131,6 @@ body {
     flex-direction: column;
 
     .image-and-details {
-        display: flex;
-
         &-wrapper {
             display: flex;
             margin-bottom: 1rem;
@@ -153,14 +151,7 @@ body {
             font-size: 15px;
             font-weight: bold;
             display: flex;
-
-            .teacher-badge {
-                margin-left: 0.5rem;
-                background: #fff700;
-                border-radius: 11px;
-                padding: 0 7px;
-                font-weight: 500;
-            }
+            text-transform: capitalize;
         }
 
 
@@ -285,6 +276,7 @@ body {
             }
         }
     }
+
 }
 
 .profile-img-wrapper {
@@ -297,6 +289,23 @@ body {
         border-radius: 50%;
         object-fit: cover;
     }
+}
+
+.image-and-details {
+    display: flex;
+    cursor: pointer;
+}
+
+.teacher-badge {
+    margin-left: 0.5rem;
+    background: #fff700;
+    border-radius: 11px;
+    padding: 0 7px;
+    font-weight: 500;
+}
+
+.post-author:hover {
+    text-decoration: underline;
 }
 
 // [End] Profile image in cards
@@ -455,4 +464,5 @@ body {
         }
     }
 }
+
 // [End] Pagination

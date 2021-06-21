@@ -4,7 +4,7 @@
         <ul>
 <!--            TODO change to a higher number-->
             <li *ngFor="let user of usersList | paginate: {itemsPerPage: 1, currentPage: pageNumber}">
-                <div class="user-item">
+                <div class="user-item" (click)="goToUserProfile(user.uid)" [mat-dialog-close]="true">
                     <div class="overlay"></div>
                     <div class="image-and-details">
                         <div class="profile-img-wrapper">
