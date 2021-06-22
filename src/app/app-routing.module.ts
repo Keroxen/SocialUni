@@ -12,7 +12,7 @@ const routes: Routes = [
     {path: '', redirectTo: '/landing-page', pathMatch: 'full'},
     {path: 'landing-page', component: LandingPageComponent},
     {path: 'profile', component: ProfileComponent, canActivate: [AngularFireAuthGuard]},
-    {path: 'home', component: HomeComponent, canActivate: [AngularFireAuthGuard]},
+    {path: 'home', component: HomeComponent},
     {path: 'saved', component: SavedPostsComponent, canActivate: [AngularFireAuthGuard]},
     {path: 'view-profile/:id', component: ViewProfileComponent, canActivate: [AngularFireAuthGuard]},
 ];
