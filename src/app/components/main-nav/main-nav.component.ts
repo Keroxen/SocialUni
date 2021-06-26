@@ -23,7 +23,7 @@ export class MainNavComponent implements OnInit {
     public navigationPathEnum = NavigationPaths;
     closeDrawer = false;
 
-    constructor(private breakpointObserver: BreakpointObserver, private authService: AuthService, private router: Router) {
+    constructor(private breakpointObserver: BreakpointObserver, public authService: AuthService, private router: Router) {
     }
 
     onLogout(): void {

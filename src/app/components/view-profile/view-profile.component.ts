@@ -19,7 +19,6 @@ export class ViewProfileComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe(params => {
             this.userID = params.id;
-            console.log('-------------------');
             this.dataService.getUserData(this.userID).ref.get().then((user: any) => {
                 this.user = user?.data();
                 console.log(this.user);
