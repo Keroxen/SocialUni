@@ -1,23 +1,22 @@
+<img src="assets/images/SocialUni.png" alt="logo" class="logo">
 <div class="landing-wrapper">
-    <!--    <div class="landing-left">-->
-    <img src="assets/images/landing2.jpg" alt="Landing page photo" class="landing-left">
-
-    <!--    </div>-->
-    <div class="landing-right-absolute">
-        <div class="landing-right">
-            <img src="https://via.placeholder.com/50" alt="logo">
-            <div class="welcome-messages-wrapper">
-                <div class="welcome-message">
-                    Welcome to *insert name here*
-                </div>
-                <div class="log-in-message">
-                    Log in to your account or sign up to be a part of this community
-                </div>
+    <div class="landing-content">
+        <div class="welcome-messages-wrapper">
+            <div class="welcome-message">
+                Welcome to <span class="bold">SocialUni</span>
             </div>
-            <div class="landing-btn-wrapper">
-                <button type="button" mat-raised-button color="accent" (click)="openDialog('login')">Log in</button>
-                <button type="button" mat-raised-button color="accent" (click)="openDialog('signup')">Sign up</button>
+            <div class="buttons-message">
+                <button class="landing-btn" type="button" mat-raised-button color="accent"
+                        (click)="openDialog('login')">Log in
+                </button>
+                to see what's new or
+                <button class="landing-btn" type="button" mat-raised-button color="accent"
+                        (click)="openDialog('signup')">Sign up
+                </button>
+                to find out what your friends are talking about
             </div>
+        </div>
+        <div class="landing-btn-wrapper">
         </div>
     </div>
 </div>
