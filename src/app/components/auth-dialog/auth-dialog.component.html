@@ -1,7 +1,8 @@
 <h2 mat-dialog-title>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</h2>
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content class="mat-typography"
+                    [ngClass]="{'login-dialog' : authMode === 'login', 'signup-dialog' : authMode === 'signup'}">
     <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSignup()" *ngIf="authMode === 'signup'">
-        <div class="left-side">
+        <div class="row">
             <mat-form-field appearance="outline">
                 <mat-label>First name</mat-label>
                 <input matInput placeholder="First name" formControlName="firstName" autocomplete="given-name">
@@ -16,6 +17,8 @@
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
+        </div>
+        <div class="row">
             <mat-form-field appearance="outline">
                 <mat-label>Email address</mat-label>
                 <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
@@ -26,8 +29,8 @@
                        autocomplete="new-password">
             </mat-form-field>
         </div>
-        <div class="right-side">
-            <mat-form-field appearance="fill">
+        <div class="row">
+            <mat-form-field appearance="outline">
                 <mat-label>University</mat-label>
                 <input type="text"
                        placeholder="Type to search..."
@@ -46,7 +49,12 @@
                 <input matInput formControlName="accessCode" type="text" class="access-code"
                        autocomplete="one-time-code">
             </mat-form-field>
-            <mat-checkbox formControlName="isTeacher">Is this user a teacher?</mat-checkbox>
+        </div>
+        <div class="checkboxes-container">
+            <mat-checkbox formControlName="isTeacher">Are you a teacher?</mat-checkbox>
+            <mat-checkbox formControlName="agreedPolicy">I agree to <a class="policy"
+                                                                       href="https://www.privacypolicies.com/live/42518265-c5de-411e-9e0b-77e9b3408262"
+                                                                       target="_blank">Privacy Policy</a></mat-checkbox>
         </div>
     </form>
 
@@ -66,6 +74,6 @@
 <mat-dialog-actions align="center">
     <button mat-button
             (click)="authMode === 'login' ? onLogin() : onSignup()"
-            [ngClass]="{'login-btn': authMode === 'login', 'signup-btn': authMode === 'signup'}"
+            [ngClass]="{'login-btn': authMode === 'login', 'signup-btn': authMode === 'signup', 'disabled-btn': !loginForm.valid && !signupForm.valid}"
             type="submit" mat-raised-button>{{ authMode === 'login' ? 'Log in' : 'Sign up' }}</button>
 </mat-dialog-actions>

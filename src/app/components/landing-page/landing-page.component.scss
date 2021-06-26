@@ -1,14 +1,5 @@
 @use "src/assets/styles/globalVars";
 
-.logo {
-    width: 120px;
-    z-index: 10;
-    position: absolute;
-    left: 50px;
-    top: 30px;
-    border-radius: 50%;
-}
-
 .landing {
     &-wrapper {
         background: url("../../../assets/images/landing2.jpg") center center no-repeat;
@@ -41,12 +32,8 @@
             color: globalVars.$white;
         }
 
-        .bold {
-            color: globalVars.$primary-color;
-        }
-
         .welcome-message {
-            margin-bottom: 12rem;
+            margin-bottom: 10rem;
             font-size: 58px;
         }
 
@@ -55,7 +42,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            font-size: 34px;
+            font-size: 28px;
         }
 
         .landing-btn {
