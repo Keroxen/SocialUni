@@ -4,7 +4,7 @@
         <img class="view-profile-img" [src]=user.imageURL alt="Profile Image">
         <div class="details-container">
             <div class="row">{{user.university}}</div>
-            <div class="row">{{user.dob.toDate() | date: 'dd MMM y'}}</div>
+            <div class="row">{{user.dob?.toDate() | date: 'dd MMM y'}}</div>
             <div class="row">
                 <a href="mailto:{{user.email">{{user.email}}</a>
             </div>

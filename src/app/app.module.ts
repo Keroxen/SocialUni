@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
@@ -38,6 +38,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
+import { SearchComponent } from '@components/search/search.component';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { ViewProfileComponent } from '@components/view-profile/view-profile.comp
         SavedPostsComponent,
         ReactionsListComponent,
         ViewProfileComponent,
+        SearchComponent,
     ],
     imports: [
         BrowserModule,
@@ -77,7 +79,8 @@ import { ViewProfileComponent } from '@components/view-profile/view-profile.comp
         MatCheckboxModule,
         MatSnackBarModule,
         MatProgressSpinnerModule,
-        NgxPaginationModule
+        NgxPaginationModule,
+        FormsModule
     ],
     providers: [AuthService, DataService],
     bootstrap: [AppComponent],

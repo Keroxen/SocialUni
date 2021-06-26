@@ -1,0 +1,17 @@
+<div class="search">
+    <input type="text" [(ngModel)]="searchInput" (keyup)="onSearch($event)" placeholder="Find someone...">
+    <ng-container *ngIf="searchInput">
+        <div class="user-item" (click)="goToUserProfile(user.id)" *ngFor="let user of users">
+            <div class="image-and-details">
+                <div class="profile-img-wrapper">
+                    <img class="profile-img" [src]="user.imageURL" alt="Profile Image">
+                </div>
+                <div class="post-details">
+                    <div class="post-author">{{user.lastName}} {{user.firstName}}
+                        <div class="teacher-badge" *ngIf="user.isTeacher">Teacher</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>

@@ -75,8 +75,10 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
 
         console.log(this.signupForm.valid);
 
-        const firstName = this.signupForm.value.firstName;
-        const lastName = this.signupForm.value.lastName;
+        const FirstName = this.signupForm.value.firstName;
+        const LastName = this.signupForm.value.lastName;
+        const firstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1);
+        const lastName = LastName.charAt(0).toUpperCase() + LastName.slice(1);
         const dob = this.signupForm.value.dob;
         const email = this.signupForm.value.email;
         const password = this.signupForm.value.password;

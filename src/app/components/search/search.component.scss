@@ -1,0 +1,30 @@
+.search {
+    padding: 70px 60px 60px;
+
+    input {
+        height: 50px;
+        width: 420px;
+        border-radius: 8px;
+        border-width: 1px;
+        font-size: 20px;
+        padding: 0 1rem;
+    }
+
+    input:focus-visible {
+        outline: none;
+    }
+
+    .user-item {
+        width: auto;
+        margin: 1rem 0;
+        padding: 15px;
+        /* height: 20px; */
+        /* height: fit-content; */
+        /* padding: 0; */
+        min-height: fit-content;
+
+        .image-and-details {
+            align-items: center;
+        }
+    }
+}

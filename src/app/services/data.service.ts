@@ -157,4 +157,9 @@ export class DataService {
         return this.postsCollectionRef.doc(postID).collection(reactionType as string, (reaction: any) => reaction.orderBy('created', 'desc')).valueChanges({idField: 'id'});
     }
 
+    getUsers(start: any, end: any): Observable<UserData[]> {
+        return this.afs.collection<UserData>('users', users => users.limit(2).orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
+        // return this.usersCollectionRef.valueChanges();
+    }
+
 }

@@ -115,6 +115,9 @@ body {
     color: rgba(0, 0, 0, .87);
 }
 
+.mat-drawer-content {
+    display: flex !important;
+}
 // [End] Material components
 
 // [Start] Profile image in cards
