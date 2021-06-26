@@ -2,7 +2,7 @@
     height: 100%;
 
     .sidenav {
-        width: 200px;
+        width: 230px;
     }
 
     .sidenav .mat-toolbar {
@@ -34,9 +34,15 @@
         justify-content: space-between;
     }
 
+    .app-name {
+        cursor: pointer;
+    }
+
     .logo {
         text-decoration: none;
         cursor: pointer;
+        width: 50px;
+        position: initial;
     }
 
     .mat-list-item .mat-icon {

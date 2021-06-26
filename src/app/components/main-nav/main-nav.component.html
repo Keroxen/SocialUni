@@ -3,12 +3,13 @@
                  [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
     >
         <mat-toolbar>
-            <a (click)="goTo(navigationPathEnum.Home);closeDrawer ? drawer.close() : drawer.open()" class="logo"> Name
-                <img src="https://via.placeholder.com/50" alt="Logo">
+            <a (click)="goTo(navigationPathEnum.Home);closeDrawer ? drawer.close() : drawer.open()" class="app-name">SocialUni
             </a>
+            <img class="logo" src="assets/images/SocialUni.png" alt="Logo">
         </mat-toolbar>
         <mat-nav-list class="nav-list">
-            <a mat-list-item (click)="goTo(navigationPathEnum.Notifications); closeDrawer ? drawer.close() : drawer.open()">Notifications
+            <a mat-list-item
+               (click)="goTo(navigationPathEnum.Notifications); closeDrawer ? drawer.close() : drawer.open()">Notifications
                 <mat-icon>notifications</mat-icon>
             </a>
             <a mat-list-item (click)="goTo(navigationPathEnum.Saved); closeDrawer ? drawer.close() : drawer.open()">Saved
@@ -31,7 +32,7 @@
         >
             <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
         </button>
-        <span>licenta</span>
+        <span class="app-name">SocialUni</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
     <app-search *ngIf="authService.currentUid != undefined"></app-search>

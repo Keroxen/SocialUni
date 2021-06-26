@@ -151,6 +151,10 @@ body {
 .mat-dialog-actions {
     margin-bottom: 0;
 }
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 70px;
+}
 // [End] Material components
 
 // [Start] Profile image in cards
