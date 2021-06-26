@@ -26,7 +26,8 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         password: new FormControl('', Validators.required),
         university: new FormControl('', Validators.required),
         accessCode: new FormControl('', Validators.required),
-        isTeacher: new FormControl(false)
+        isTeacher: new FormControl(false),
+        agreedPolicy: new FormControl(false, Validators.requiredTrue)
     });
 
     loginForm = new FormGroup({
@@ -85,8 +86,9 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         const university = this.signupForm.value.university;
         const accessCode = this.signupForm.value.accessCode;
         const isTeacher = this.signupForm.value.isTeacher;
+        const agreedPolicy = this.signupForm.value.agreedPolicy;
 
-        if (accessCode === '1234') {
+        if (accessCode === '1234' && agreedPolicy) {
             this.authService.signUp(email, password, firstName, lastName, dob, university, accessCode, isTeacher);
             this.dialogRef.close();
         } else {
@@ -98,7 +100,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         if (!this.loginForm.valid) {
             return;
         }
-
         const email = this.loginForm.value.email;
         const password = this.loginForm.value.password;
 

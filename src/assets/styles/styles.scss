@@ -118,6 +118,43 @@ body {
 .mat-drawer-content {
     display: flex !important;
 }
+
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+    color: globalVars.$primary-color;
+}
+
+.mat-checkbox-label {
+    font-size: 15px;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical),
+.cdk-keyboard-focused .mat-calendar-body-active > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .cdk-program-focused .mat-calendar-body-active
+> .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical), .mat-calendar-body-selected {
+    background-color: globalVars.$primary-color;
+    color: globalVars.$white;
+}
+
+.mat-dialog-container {
+    padding: 34px 24px !important;
+    padding-bottom: 42px !important;
+}
+
+.login-dialog {
+    height: 200px;
+}
+
+.signup-dialog {
+    height: 310px;
+    width: 70vw;
+}
+
+.mat-dialog-actions {
+    margin-bottom: 0;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 70px;
+}
 // [End] Material components
 
 // [Start] Profile image in cards
@@ -362,6 +399,19 @@ body {
     color: globalVars.$color-invalid;
 }
 
+.app-name {
+    color: globalVars.$primary-color;
+    font-weight: bold;
+}
+
+.logo {
+    width: 120px;
+    z-index: 10;
+    position: absolute;
+    left: 50px;
+    top: 30px;
+    border-radius: 50%;
+}
 //[End] Others
 
 // [Start] Pagination

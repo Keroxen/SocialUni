@@ -20,8 +20,8 @@ export class LandingPageComponent implements OnInit {
 
     openDialog(authMode: string): void {
         this.dialog.open(AuthDialogComponent, {
-            minHeight: '400px',
-            width: '80vw'
+            minHeight: '355px',
+            minWidth: '40vw',
         });
         this.authService.updateAuthMode(authMode);
     }
