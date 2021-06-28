@@ -1,8 +1,21 @@
 <div class="home">
 <!--    <div class="left">-->
         <app-new-post></app-new-post>
+<!--        <button (click)="requestPermission()">-->
+<!--            Hello this is a chat app. You should let us send you notifications for this reason.-->
+<!--        </button>-->
 
-        <div class="post-card-item" *ngFor="let post of latestPosts">
+<!--    <button (click)="listen()">-->
+<!--        listen-->
+<!--    </button>-->
+
+    <div *ngIf="msgService.currentMessage | async as message ">
+        <h1>{{message.notification.title}}</h1>
+        <p>{{message.notification.body}}</p>
+    </div>
+
+
+        <div class="post-card-item" *ngFor="let post of latestPosts | async">
             <div class="image-and-details-wrapper space">
                 <div class="image-and-details" (click)="goToUerProfile(post.uid)">
                     <div class="profile-img-wrapper">

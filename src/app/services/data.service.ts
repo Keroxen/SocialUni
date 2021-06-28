@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -25,9 +25,9 @@ export class DataService {
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
     }
 
-    getPosts(): Observable<Post[]> {
+    getPosts(): Observable<DocumentChangeAction<Post>[]> {
         this.postsCollection = this.afs.collection<Post>('posts', posts => posts.orderBy('created', 'desc'));
-        return this.postsCollection.valueChanges({idField: 'id'});
+        return this.postsCollection.snapshotChanges();
     }
 
     getUserData(currentUid: string | undefined): AngularFirestoreDocument<UserData> {

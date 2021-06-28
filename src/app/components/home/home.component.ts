@@ -6,6 +6,8 @@ import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase';
+import { AngularFireMessaging } from '@angular/fire/messaging';
+import { map, mergeMapTo, take } from 'rxjs/operators';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
@@ -13,6 +15,8 @@ import { AuthService } from '@services/auth.service';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { NavigationPaths } from '@models/nav-enum.model';
+import { MessagingService } from '@services/messaging.service';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
     selector: 'app-home',
@@ -42,8 +46,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
 
+
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router) {
+                private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router,
+                private afMessaging: AngularFireMessaging, public msgService: MessagingService, private afAuth: AngularFireAuth) {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then((doc: any) => {
             const userData = doc.data();
@@ -55,10 +61,50 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.dataService.getPosts().subscribe(posts => {
-            this.latestPosts = posts;
+        this.latestPosts = this.dataService.getPosts().pipe(
+            map(actions => actions.map(a => {
+                const data = a.payload.doc.data() as Post;
+                const id = a.payload.doc.id;
+                // if (data.uid === this.authService.currentUid && a.type === 'modified') {
+                //     console.log('da');
+                // }
+                return {id, ...data};
+            }))
+        );
+        // this.latestPosts = this.postsCollection.stateChanges().pipe(
+        //     map(actions => actions.map(a => {
+        //         const data = a.payload.doc.data() as Post;
+        //         const id = a.payload.doc.id;
+        //         return {id, ...data};
+        //     }))
+        // );
+
+        this.afAuth.user.pipe(take(1)).subscribe(user => {
+            console.log(user);
+            this.msgService.getPermission(user);
+            this.msgService.receiveMessage();
         });
+
     }
+
+    // requestPermission(): void {
+    //     this.afMessaging.requestToken
+    //         .subscribe(
+    //             (token) => {
+    //                 console.log('Permission granted! Save to the server!', token);
+    //             },
+    //             (error) => {
+    //                 console.error(error);
+    //             },
+    //         );
+    // }
+    //
+    // listen(): void {
+    //     this.afMessaging.messages
+    //         .subscribe((message) => {
+    //             console.log(message);
+    //         });
+    // }
 
     ngOnDestroy(): void {
         this.destroy$.next(true);

@@ -20,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -39,6 +40,7 @@ import { SavedPostsComponent } from '@components/saved-posts/saved-posts.compone
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
 import { SearchComponent } from '@components/search/search.component';
+import { MessagingService } from '@services/messaging.service';
 
 @NgModule({
     declarations: [
@@ -73,6 +75,7 @@ import { SearchComponent } from '@components/search/search.component';
         MatAutocompleteModule,
         AngularFireModule.initializeApp(environment.firebase),
         AngularFirestoreModule,
+        AngularFireMessagingModule,
         MatDatepickerModule,
         MatNativeDateModule,
         MatMenuModule,
@@ -82,7 +85,7 @@ import { SearchComponent } from '@components/search/search.component';
         NgxPaginationModule,
         FormsModule
     ],
-    providers: [AuthService, DataService],
+    providers: [AuthService, DataService, MessagingService],
     bootstrap: [AppComponent],
 })
 export class AppModule {
