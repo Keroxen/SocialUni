@@ -129,19 +129,20 @@ exports.notifyUser = functions.firestore.document('posts/{postId}/comments/{comm
     const userId = commentData.uid;
     const db = admin.firestore();
     const userRef = db.collection('users').doc(userId);
+    // let postUId: string;
 
 
     // const postId = event.ref.parent.id;
     const parentPost = event.ref.parent.parent;
 
     parentPost?.get().then(post => {
-        console.log('data in parent---', post.data());
+        // console.log('data in parent---', post.data());
         // .forEach(doc => {
         //     console.log('data in parent---', doc.data());
         // });
         // if (post.data()?.uid === userId) {
         const postUId = post.data()?.uid;
-        console.log('IN IF DE LA POST UID === USERID');
+        // console.log('IN IF DE LA POST UID === USERID');
         db.collection('users').doc(postUId).collection('notifications').add({
             userFirstName: commentData?.userFirstName,
             userLastName: commentData?.userLastName,
@@ -150,40 +151,35 @@ exports.notifyUser = functions.firestore.document('posts/{postId}/comments/{comm
             uid: commentData?.uid,
             created: commentData?.created,
             postId: parentPost?.id,
+        }).then(() => {
+            const payload = {
+                notification: {
+                    title: 'New comment',
+                    body: `${commentData?.userFirstName} ${commentData?.userLastName}` + ' added a new comment to your post',
+                },
+                data: {
+                    userImg: `${commentData?.userImageURL}`,
+                    userFirstName: `${commentData?.userFirstName}`,
+                    userLastName: `${commentData?.userLastName}`,
+                    userIsTeacher: `${commentData?.userIsTeacher}`,
+                    postId: `${parentPost?.id}`,
+                    uid: postUId,
+                },
+            };
+            return userRef.get().then(snapshot => snapshot.data())
+                .then(user => {
+                    const tokens = user?.fcmTokens ? Object.keys(user.fcmTokens) : [];
+                    if (!tokens.length) {
+                        throw new Error('There was an error retrieving the token');
+                    }
+                    return admin.messaging().sendToDevice(tokens, payload);
+                })
+                .catch(err => console.log(err));
         }).catch(err => console.log(err));
-
-        //     .get().then(data => {
-        //     console.log('------------------DATA-------------', data.data());
-        //     const userData = data.data();
-        //     if (userData) {
-        //         userRef.collection('notifications').add({
-        //             userFirstName: userData.userFirstName,
-        //             userLastName: userData.userLastName,
-        //             userImageURL: userData.userImageURL,
-        //             userIsTeacher: userData.userIsTeacher,
-        //             uid: userData.uid,
-        //             created: userData.created,
-        //             postId: parentPost?.id,
-        //         }).catch(err => console.log(err));
-        //     }
-        // }).catch(err => console.log(err));
-        // }
     }).catch(err => console.log(err));
+    return 0;
 
-    const payload = {
-        notification: {
-            title: 'New comment!',
-            body: `${userId} posted a new comment to your post, --- ${commentData.userFirstName} --- name??`,
-        },
-    };
-
-    return userRef.get().then(snapshot => snapshot.data())
-        .then(user => {
-            const tokens = user?.fcmTokens ? Object.keys(user.fcmTokens) : [];
-            if (!tokens.length) {
-                throw new Error('error!!!');
-            }
-            return admin.messaging().sendToDevice(tokens, payload);
-        })
-        .catch(err => console.log(err));
+    // parentPost?.get().then(post => {
+    //
+    // }).catch(err => console.log(err));
 });

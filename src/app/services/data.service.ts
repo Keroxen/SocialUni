@@ -3,13 +3,14 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument,
 import { Observable } from 'rxjs';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
+import DocumentData = firebase.firestore.DocumentData;
 
 import { Post } from '@models/post.model';
 import { UserData } from '@models/userData.model';
 import { LikeDislike } from '@models/likeDislike.model';
 import { AuthService } from '@services/auth.service';
 import { Comment } from '@models/comment.model';
-import DocumentData = firebase.firestore.DocumentData;
+import { Notifications } from '@models/notifications.model';
 
 @Injectable()
 export class DataService {
@@ -160,6 +161,10 @@ export class DataService {
     getUsers(start: any, end: any): Observable<UserData[]> {
         return this.afs.collection<UserData>('users', users => users.limit(2).orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
         // return this.usersCollectionRef.valueChanges();
+    }
+
+    getUserNotifications(): Observable<Notifications[]> {
+        return this.usersCollectionRef.doc(this.authService.currentUid).collection<Notifications>('notifications', notifications => notifications.orderBy('created', 'desc')).valueChanges();
     }
 
 }

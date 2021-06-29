@@ -21,6 +21,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -41,6 +42,7 @@ import { ReactionsListComponent } from '@shared/components/reactions-list/reacti
 import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
 import { SearchComponent } from '@components/search/search.component';
 import { MessagingService } from '@services/messaging.service';
+import { NotificationsComponent } from '@components/notifications/notifications.component';
 
 @NgModule({
     declarations: [
@@ -56,6 +58,7 @@ import { MessagingService } from '@services/messaging.service';
         ReactionsListComponent,
         ViewProfileComponent,
         SearchComponent,
+        NotificationsComponent,
     ],
     imports: [
         BrowserModule,
@@ -83,7 +86,11 @@ import { MessagingService } from '@services/messaging.service';
         MatSnackBarModule,
         MatProgressSpinnerModule,
         NgxPaginationModule,
-        FormsModule
+        FormsModule,
+        ToastrModule.forRoot({
+            positionClass: 'inline',
+        }),
+        ToastContainerModule
     ],
     providers: [AuthService, DataService, MessagingService],
     bootstrap: [AppComponent],
