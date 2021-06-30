@@ -12,6 +12,10 @@
     src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     margin: 0;
 }
@@ -217,6 +221,7 @@ body {
                 .reactions-wrapper {
                     display: flex;
                     justify-content: space-between;
+                    width: 110px;
 
                     .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
                         display: flex;
@@ -228,7 +233,7 @@ body {
 
                     .likes-section, .dislikes-section {
                         align-items: center;
-                        width: 50px;
+                        width: 40px;
                         justify-content: space-between;
                     }
 
