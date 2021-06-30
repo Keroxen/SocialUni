@@ -6,6 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase';
+import { map } from 'rxjs/operators';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
@@ -42,6 +43,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
 
+
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
                 private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router) {
         this.currentUid = this.authService.currentUid;
@@ -55,10 +57,46 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.dataService.getPosts().subscribe(posts => {
-            this.latestPosts = posts;
-        });
+        this.latestPosts = this.dataService.getPosts().pipe(
+            map(actions => actions.map(a => {
+                const data = a.payload.doc.data() as Post;
+                const id = a.payload.doc.id;
+                // if (data.uid === this.authService.currentUid && a.type === 'modified') {
+                //     console.log('da');
+                // }
+                return {id, ...data};
+            }))
+        );
+        // this.latestPosts = this.postsCollection.stateChanges().pipe(
+        //     map(actions => actions.map(a => {
+        //         const data = a.payload.doc.data() as Post;
+        //         const id = a.payload.doc.id;
+        //         return {id, ...data};
+        //     }))
+        // );
+
+
+
     }
+
+    // requestPermission(): void {
+    //     this.afMessaging.requestToken
+    //         .subscribe(
+    //             (token) => {
+    //                 console.log('Permission granted! Save to the server!', token);
+    //             },
+    //             (error) => {
+    //                 console.error(error);
+    //             },
+    //         );
+    // }
+    //
+    // listen(): void {
+    //     this.afMessaging.messages
+    //         .subscribe((message) => {
+    //             console.log(message);
+    //         });
+    // }
 
     ngOnDestroy(): void {
         this.destroy$.next(true);
@@ -140,7 +178,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
-    goToUerProfile(userID: string): void {
+    goToUserProfile(userID: string): void {
         this.router.navigate([this.navigationPathEnum.ViewProfile, userID]);
     }
 

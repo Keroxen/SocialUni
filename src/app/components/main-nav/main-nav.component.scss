@@ -48,6 +48,12 @@
     .mat-list-item .mat-icon {
         margin-right: 40px;
     }
+}
 
-
+.toast-custom-container {
+    position: fixed;
+    bottom: 20px;
+    right: 220px;
+    width: 100px;
+    z-index: 99;
 }

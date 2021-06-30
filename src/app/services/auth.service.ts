@@ -12,6 +12,7 @@ import * as appConfig from '@config/app.config.json';
 @Injectable()
 export class AuthService {
     currentUid: string | undefined;
+    user: any;
     private authMode: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
     public authMode$: Observable<string | null> = this.authMode.asObservable();
 
@@ -21,6 +22,7 @@ export class AuthService {
     constructor(private router: Router, private afs: AngularFirestore, private afAuth: AngularFireAuth) {
         this.afAuth.onAuthStateChanged((user: any) => {
             if (user) {
+                this.user = user;
                 this.currentUid = user.uid;
                 console.log('this.currentUid ', this.currentUid);
                 localStorage.setItem('user', JSON.stringify(user));

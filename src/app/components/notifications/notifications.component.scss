@@ -1,0 +1,22 @@
+.notifications {
+    width: 60vw;
+    height: 100vh;
+    padding: 60px;
+
+    .user-item {
+        width: 580px;
+        cursor: pointer;
+    }
+
+    .author-and-comment {
+        display: flex;
+    }
+
+    .post-author {
+        margin-right: 0.3rem;
+    }
+
+    .image-and-details {
+        align-items: center;
+    }
+}

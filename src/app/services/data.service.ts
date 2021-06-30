@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
+import DocumentData = firebase.firestore.DocumentData;
 
 import { Post } from '@models/post.model';
 import { UserData } from '@models/userData.model';
 import { LikeDislike } from '@models/likeDislike.model';
 import { AuthService } from '@services/auth.service';
 import { Comment } from '@models/comment.model';
-import DocumentData = firebase.firestore.DocumentData;
+import { Notifications } from '@models/notifications.model';
 
 @Injectable()
 export class DataService {
@@ -25,9 +26,9 @@ export class DataService {
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
     }
 
-    getPosts(): Observable<Post[]> {
+    getPosts(): Observable<DocumentChangeAction<Post>[]> {
         this.postsCollection = this.afs.collection<Post>('posts', posts => posts.orderBy('created', 'desc'));
-        return this.postsCollection.valueChanges({idField: 'id'});
+        return this.postsCollection.snapshotChanges();
     }
 
     getUserData(currentUid: string | undefined): AngularFirestoreDocument<UserData> {
@@ -160,6 +161,10 @@ export class DataService {
     getUsers(start: any, end: any): Observable<UserData[]> {
         return this.afs.collection<UserData>('users', users => users.limit(2).orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
         // return this.usersCollectionRef.valueChanges();
+    }
+
+    getUserNotifications(): Observable<Notifications[]> {
+        return this.usersCollectionRef.doc(this.authService.currentUid).collection<Notifications>('notifications', notifications => notifications.orderBy('created', 'desc')).valueChanges();
     }
 
 }
