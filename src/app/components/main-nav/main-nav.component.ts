@@ -66,8 +66,8 @@ export class MainNavComponent implements OnInit {
                     ,
                     '', {
                         enableHtml: true,
-                        timeOut: 0,
-                        extendedTimeOut: 0,
+                        // timeOut: 0,
+                        // extendedTimeOut: 0,
                         tapToDismiss: true, // TODO true later
                     })
                     .onTap
@@ -79,7 +79,7 @@ export class MainNavComponent implements OnInit {
 
     toastrGoToPost(postId: string): void {
         console.log(postId);
-        console.log('toaster clicked');
+        console.log('toaster clicked---view post page soon');
     }
 
 }
