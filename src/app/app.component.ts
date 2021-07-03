@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
 
             this.afAuth.user.pipe(take(1)).subscribe(user => {
                 console.log(user);
-                console.log('in token')
+                console.log('in token');
                 this.msgService.getPermission(user);
                 this.msgService.receiveMessage();
             });

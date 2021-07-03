@@ -17,20 +17,20 @@
                 <mat-label>Email address</mat-label>
                 <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
             </mat-form-field>
-            <mat-form-field appearance="fill">
-                <mat-label>University</mat-label>
-                <input type="text"
-                       placeholder="Type to search..."
-                       matInput
-                       formControlName="university"
-                       [matAutocomplete]="auto"
-                       autocomplete="disabled">
-                <mat-autocomplete #auto="matAutocomplete">
-                    <mat-option *ngFor="let university of filteredUniversities | async" [value]="university.name">
-                        {{university.name}}
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
+<!--            <mat-form-field appearance="fill">-->
+<!--                <mat-label>University</mat-label>-->
+<!--                <input type="text"-->
+<!--                       placeholder="Type to search..."-->
+<!--                       matInput-->
+<!--                       formControlName="university"-->
+<!--                       [matAutocomplete]="auto"-->
+<!--                       autocomplete="disabled">-->
+<!--                <mat-autocomplete #auto="matAutocomplete">-->
+<!--                    <mat-option *ngFor="let university of filteredUniversities | async" [value]="university.name">-->
+<!--                        {{university.name}}-->
+<!--                    </mat-option>-->
+<!--                </mat-autocomplete>-->
+<!--            </mat-form-field>-->
             <!--            <mat-form-field appearance="outline">-->
             <!--                <mat-label>Access code</mat-label>-->
             <!--                <input matInput formControlName="accessCode" type="text" class="access-code"-->

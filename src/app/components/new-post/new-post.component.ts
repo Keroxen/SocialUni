@@ -25,7 +25,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
         newPostImage: new FormControl('')
     });
 
-    charactersLimit = 1380;
+    charactersLimit = 1000;
     charactersLeft = this.charactersLimit;
     currentUid: string | undefined;
     userFirstName: string | undefined;
@@ -104,11 +104,11 @@ export class NewPostComponent implements OnInit, OnDestroy {
         if (this.isFormValid()) {
             const selectedFileName = this.uploadedImageName;
             const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
-                + Math.floor(Math.random() * 10000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+                + new Date().getTime() + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
             const filePath = `${this.basePath}/${selectedFileForUpload}`;
             const fileRef = this.storage.ref(filePath);
             const metadata = {
-                cacheControl: 'public, max-age=4000'
+                cacheControl: 'public, max-age=3600'
             };
             const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
 
@@ -117,7 +117,6 @@ export class NewPostComponent implements OnInit, OnDestroy {
                     if (selectedFileName === '') {
                         url = '';
                     }
-                    console.log(url);
                     this.postImageDlURL = url;
                     this.saveNewPost();
                 });

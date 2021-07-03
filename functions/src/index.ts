@@ -124,25 +124,14 @@ admin.initializeApp();
 //     });
 // });
 
-exports.notifyUser = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(event => {
+exports.commentNotification = functions.firestore.document('posts/{postId}/comments/{commentId}').onCreate(event => {
     const commentData = event.data();
     const userId = commentData.uid;
     const db = admin.firestore();
     const userRef = db.collection('users').doc(userId);
-    // let postUId: string;
-
-
-    // const postId = event.ref.parent.id;
     const parentPost = event.ref.parent.parent;
-
     parentPost?.get().then(post => {
-        // console.log('data in parent---', post.data());
-        // .forEach(doc => {
-        //     console.log('data in parent---', doc.data());
-        // });
-        // if (post.data()?.uid === userId) {
         const postUId = post.data()?.uid;
-        // console.log('IN IF DE LA POST UID === USERID');
         db.collection('users').doc(postUId).collection('notifications').add({
             userFirstName: commentData?.userFirstName,
             userLastName: commentData?.userLastName,

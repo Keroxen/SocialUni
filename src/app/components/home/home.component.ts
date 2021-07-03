@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
@@ -57,16 +57,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        this.latestPosts = this.dataService.getPosts().pipe(
-            map(actions => actions.map(a => {
-                const data = a.payload.doc.data() as Post;
-                const id = a.payload.doc.id;
-                // if (data.uid === this.authService.currentUid && a.type === 'modified') {
-                //     console.log('da');
-                // }
-                return {id, ...data};
-            }))
-        );
+        this.dataService.getPosts().pipe(takeUntil(this.destroy$))
+            .subscribe(posts => {
+            this.latestPosts = posts;
+        });
+    }
+
+        // );
+
+
+
+        //
+        // this.latestPosts = this.dataService.getPosts().pipe(
+        //     map(actions => actions.map(a => {
+        //         const data = a.payload.doc.data() as Post;
+        //         const id = a.payload.doc.id;
+        //         return {id, ...data};
+        //     }))
+        // );
+
         // this.latestPosts = this.postsCollection.stateChanges().pipe(
         //     map(actions => actions.map(a => {
         //         const data = a.payload.doc.data() as Post;
@@ -77,7 +86,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
 
-    }
 
     // requestPermission(): void {
     //     this.afMessaging.requestToken

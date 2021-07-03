@@ -63,7 +63,6 @@ export class ProfileComponent implements OnInit {
             this.userAccessCode = doc.data()?.accessCode;
             this.populatePersonalDetails();
             this.checkDefaultImage();
-            console.log(this.uploadedFile)
         });
         this.populateUniversityDropdown();
         this.today = new Date();
@@ -105,25 +104,20 @@ export class ProfileComponent implements OnInit {
 
     savePersonalDetails(): void {
         if (this.profileForm.valid) {
+            this.isEditingMode = false;
             const firstName = this.profileForm.value.firstName;
             const lastName = this.profileForm.value.lastName;
             const email = this.profileForm.value.email;
-            const university = this.profileForm.value.university;
-            // const accessCode = this.profileForm.value.accessCode;
-
             this.afs.collection('users').doc(this.authService.currentUid).update({
                 firstName,
                 lastName,
                 email,
-                university,
-                // accessCode,
             });
-            this.isEditingMode = false;
-
             const postsBatch = this.afs.firestore.batch();
             const commentsBatch = this.afs.firestore.batch();
-
-            this.afs.collection('posts', posts => posts.where('uid', '==', this.authService.currentUid))
+            const notificationsBatch = this.afs.firestore.batch();
+            this.afs.collection('posts', posts => posts
+                .where('uid', '==', this.authService.currentUid))
                 .get().toPromise().then(response => {
                 response.docs.forEach(doc => {
                     postsBatch.update(doc.ref,
@@ -134,7 +128,8 @@ export class ProfileComponent implements OnInit {
                 });
                 postsBatch.commit();
             });
-            this.afs.collectionGroup('comments', comments => comments.where('uid', '==', this.authService.currentUid))
+            this.afs.collectionGroup('comments', comments => comments
+                .where('uid', '==', this.authService.currentUid))
                 .get().toPromise().then(response => {
                 response.docs.forEach(doc => {
                     commentsBatch.update(doc.ref, {
@@ -143,6 +138,17 @@ export class ProfileComponent implements OnInit {
                     });
                 });
                 commentsBatch.commit();
+            });
+            this.afs.collectionGroup('notifications', comments => comments
+                .where('uid', '==', this.authService.currentUid))
+                .get().toPromise().then(response => {
+                response.docs.forEach(doc => {
+                    notificationsBatch.update(doc.ref, {
+                        userFirstName: firstName,
+                        userLastName: lastName
+                    });
+                });
+                notificationsBatch.commit();
             });
             this.showSnackbar(this.personalDetailsSnackbarText);
         }
@@ -176,6 +182,7 @@ export class ProfileComponent implements OnInit {
             const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
             const postsBatch = this.afs.firestore.batch();
             const commentsBatch = this.afs.firestore.batch();
+            const notificationsBatch = this.afs.firestore.batch();
             upload.snapshotChanges().pipe(finalize(() => {
                 fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
                     if (this.isDefaultImage) {
@@ -199,6 +206,13 @@ export class ProfileComponent implements OnInit {
                             commentsBatch.update(doc.ref, {userImageURL: url});
                         });
                         commentsBatch.commit();
+                    });
+                    this.afs.collectionGroup('notifications', notifications => notifications.where('uid', '==', this.authService.currentUid))
+                        .get().toPromise().then(response => {
+                        response.docs.forEach(doc => {
+                            notificationsBatch.update(doc.ref, {userImageURL: url});
+                        });
+                        notificationsBatch.commit();
                     });
                 });
             })).pipe(takeUntil(this.destroy$)).subscribe();

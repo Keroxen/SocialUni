@@ -31,9 +31,9 @@ export class AuthService {
         });
     }
 
-    signUp(email: string, password: string, firstName: string, lastName: string, dob: string, university: string, accessCode: string, isTeacher: boolean): void {
+    signUp(email: string, password: string, firstName: string, lastName: string, dob: string,
+           university: string, accessCode: string, isTeacher: boolean): void {
         this.afAuth.createUserWithEmailAndPassword(email, password).then(newUser => {
-            console.log('success', newUser);
             const newUserRef: AngularFirestoreDocument<UserData> = this.afs.doc(`users/${newUser.user?.uid}`);
             newUserRef.set({
                 firstName,
@@ -46,8 +46,6 @@ export class AuthService {
                 imageURL: appConfig.defaultUserImageURl
             });
             this.router.navigateByUrl(this.navigationPathEnum.Home);
-        }).catch(error => {
-            console.log('error', error);
         });
     }
 
