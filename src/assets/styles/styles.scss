@@ -174,55 +174,44 @@ body {
     min-height: 100px;
     display: flex;
     flex-direction: column;
-
     .image-and-details {
         &-wrapper {
             display: flex;
             margin-bottom: 1rem;
         }
-
         &-wrapper.space {
             justify-content: space-between;
         }
     }
-
     .post {
         &-details {
             display: flex;
             flex-direction: column;
         }
-
         &-author {
             font-size: 15px;
             font-weight: bold;
             display: flex;
             text-transform: capitalize;
         }
-
-
         &-datetime {
             font-size: 11px;
         }
-
         &-content {
             display: flex;
             flex-direction: column;
             height: 100%;
-
             &-text {
                 margin-bottom: 1rem;
             }
-
             .reactions-comments-wrapper {
                 display: flex;
                 justify-content: space-between;
                 justify-self: flex-end;
-
                 .reactions-wrapper {
                     display: flex;
                     justify-content: space-between;
                     width: 110px;
-
                     .likes-section, .dislikes-section, .number-of-likes, .number-of-dislikes {
                         display: flex;
                     }

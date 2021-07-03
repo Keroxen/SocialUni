@@ -49,8 +49,8 @@ export class MainNavComponent implements OnInit {
         this.toastrService.overlayContainer = this.toastContainer;
 
         this.msgService.currentMessage.subscribe(notification => {
-            console.log(notification.data.uid)
-            console.log(this.authService.currentUid)
+            console.log(notification.data.uid);
+            console.log(this.authService.currentUid);
             if (this.authService.currentUid === notification.data.uid) {
                 this.toastrService.show(`
                 <p class="notification-title">New comment to your post</p>
@@ -66,9 +66,7 @@ export class MainNavComponent implements OnInit {
                     ,
                     '', {
                         enableHtml: true,
-                        // timeOut: 0,
-                        // extendedTimeOut: 0,
-                        tapToDismiss: true, // TODO true later
+                        tapToDismiss: true,
                     })
                     .onTap
                     .pipe(take(1))

@@ -1,5 +1,6 @@
 <div class="view-profile" *ngIf="user">
     <h2 class="heading">{{user.firstName}} {{user.lastName}}</h2>
+    <div class="teacher-badge" *ngIf="user.isTeacher">Teacher</div>
     <div class="image-details-container">
         <img class="view-profile-img" [src]=user.imageURL alt="Profile Image">
         <div class="details-container">

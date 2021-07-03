@@ -19,10 +19,11 @@
         display: inline-flex;
         width: 100%;
         justify-content: space-between;
+        flex-direction: column;
     }
 
     &-form {
-        width: 83%;
+        //width: 83%;
     }
 
     &-field {
@@ -55,6 +56,18 @@
         &-btn {
             height: 40px;
             width: 85px;
+        }
+    }
+
+    .characters-left {
+        align-self: flex-end;
+        margin-bottom: 8px;
+        margin-top: 8px;
+    }
+
+    ::ng-deep {
+        .mat-form-field-wrapper {
+            padding-bottom: 0;
         }
     }
 }

@@ -24,16 +24,15 @@ export class AuthService {
             if (user) {
                 this.user = user;
                 this.currentUid = user.uid;
-                console.log('this.currentUid ', this.currentUid);
                 localStorage.setItem('user', JSON.stringify(user));
                 JSON.parse(localStorage.getItem('user') as string);
             }
         });
     }
 
-    signUp(email: string, password: string, firstName: string, lastName: string, dob: string, university: string, accessCode: string, isTeacher: boolean): void {
+    signUp(email: string, password: string, firstName: string, lastName: string, dob: string,
+           university: string, accessCode: string, isTeacher: boolean): void {
         this.afAuth.createUserWithEmailAndPassword(email, password).then(newUser => {
-            console.log('success', newUser);
             const newUserRef: AngularFirestoreDocument<UserData> = this.afs.doc(`users/${newUser.user?.uid}`);
             newUserRef.set({
                 firstName,
@@ -46,19 +45,14 @@ export class AuthService {
                 imageURL: appConfig.defaultUserImageURl
             });
             this.router.navigateByUrl(this.navigationPathEnum.Home);
-        }).catch(error => {
-            console.log('error', error);
         });
     }
 
     logIn(email: string, password: string): void {
         this.afAuth.signInWithEmailAndPassword(email, password)
             .then(status => {
-                console.log('logged in', status);
                 this.router.navigateByUrl(this.navigationPathEnum.Home);
-            }).catch(error => {
-            console.log('failed to log in', error);
-        });
+            });
     }
 
     logOut(): void {

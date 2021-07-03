@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -26,9 +26,10 @@ export class DataService {
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
     }
 
-    getPosts(): Observable<DocumentChangeAction<Post>[]> {
-        this.postsCollection = this.afs.collection<Post>('posts', posts => posts.orderBy('created', 'desc'));
-        return this.postsCollection.snapshotChanges();
+    getPosts(): Observable<Post[]> {
+        this.postsCollection = this.afs.collection<Post>('posts',
+            posts => posts.orderBy('created', 'desc'));
+        return this.postsCollection.valueChanges({idField: 'id'});
     }
 
     getUserData(currentUid: string | undefined): AngularFirestoreDocument<UserData> {
@@ -51,14 +52,11 @@ export class DataService {
                 if (querySnapshot.docs.length > 0) {
                     querySnapshot.forEach(doc => {
                         doc.ref.delete();
-                        console.log('like', this.authService.currentUid, postID);
                         reactionsRef.update({
                             numberOfLikes: this.decrement
                         });
                     });
                 } else {
-                    console.log('else in like', this.authService.currentUid, postID);
-
                     reactionsRef.update({
                         numberOfLikes: this.increment
                     });
@@ -128,8 +126,6 @@ export class DataService {
                 userImageURL,
                 userIsTeacher
             });
-        } else {
-            console.log('empty post');
         }
     }
 
@@ -138,15 +134,15 @@ export class DataService {
         return await this.postsCollectionRef.doc(postID).delete();
     }
 
-    savePost(postID: string): void {
-        this.usersCollectionRef.doc(this.authService.currentUid).update({
-            savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
-        });
-    }
-
     async removeSavedPost(postID: string): Promise<void> {
         return await this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayRemove(postID)
+        });
+    }
+
+    savePost(postID: string): void {
+        this.usersCollectionRef.doc(this.authService.currentUid).update({
+            savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
         });
     }
 
@@ -159,8 +155,8 @@ export class DataService {
     }
 
     getUsers(start: any, end: any): Observable<UserData[]> {
-        return this.afs.collection<UserData>('users', users => users.limit(2).orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
-        // return this.usersCollectionRef.valueChanges();
+        return this.afs.collection<UserData>('users', users => users.limit(2)
+            .orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
     }
 
     getUserNotifications(): Observable<Notifications[]> {

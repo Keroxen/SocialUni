@@ -3,7 +3,7 @@
     <div class="list-wrapper">
         <ul>
 <!--            TODO change to a higher number-->
-            <li *ngFor="let user of usersList | paginate: {itemsPerPage: 1, currentPage: pageNumber}">
+            <li *ngFor="let user of usersList | paginate: {itemsPerPage: 2, currentPage: pageNumber}">
                 <div class="user-item" (click)="goToUserProfile(user.uid)" [mat-dialog-close]="true">
                     <div class="overlay"></div>
                     <div class="image-and-details">

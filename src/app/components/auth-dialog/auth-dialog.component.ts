@@ -49,7 +49,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         if (this.authMode === 'signup') {
             this.authService.getUniversities().pipe(takeUntil(this.destroy$)).subscribe(data => {
                 this.universities = data;
-                // console.log(this.universities);
                 this.filteredUniversities = this.signupForm.get('university')?.valueChanges
                     .pipe(
                         startWith(''),
@@ -74,8 +73,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        console.log(this.signupForm.valid);
-
         const FirstName = this.signupForm.value.firstName;
         const LastName = this.signupForm.value.lastName;
         const firstName = FirstName.charAt(0).toUpperCase() + FirstName.slice(1);
@@ -91,8 +88,6 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
         if (accessCode === '1234' && agreedPolicy) {
             this.authService.signUp(email, password, firstName, lastName, dob, university, accessCode, isTeacher);
             this.dialogRef.close();
-        } else {
-            console.log('invalid code');
         }
     }
 

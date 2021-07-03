@@ -1,7 +1,6 @@
 <div class="home">
         <app-new-post></app-new-post>
-
-        <div class="post-card-item" *ngFor="let post of latestPosts | async">
+        <div class="post-card-item" *ngFor="let post of latestPosts">
             <div class="image-and-details-wrapper space">
                 <div class="image-and-details" (click)="goToUserProfile(post.uid)">
                     <div class="profile-img-wrapper">
@@ -56,7 +55,6 @@
                     <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
                         <mat-icon>comment</mat-icon>
                         Comments
-                        <!--                        {{post.numberOfComments}} Comments-->
                     </button>
                 </div>
             </div>

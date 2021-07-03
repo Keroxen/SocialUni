@@ -18,6 +18,7 @@ const routes: Routes = [
     {path: 'view-profile/:id', component: ViewProfileComponent, canActivate: [AngularFireAuthGuard]},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AngularFireAuthGuard]},
 ];
+// VIEW POST 2 IULIE
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
