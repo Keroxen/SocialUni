@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import firebase from 'firebase';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -140,15 +140,11 @@ export class DataService {
         });
     }
 
-
-
     savePost(postID: string): void {
         this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
         });
     }
-
-
 
     getSavedPosts(): AngularFirestoreDocument<UserData> {
         return this.usersCollectionRef.doc(this.authService.currentUid);
@@ -159,8 +155,8 @@ export class DataService {
     }
 
     getUsers(start: any, end: any): Observable<UserData[]> {
-        return this.afs.collection<UserData>('users', users => users.limit(2).orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
-        // return this.usersCollectionRef.valueChanges();
+        return this.afs.collection<UserData>('users', users => users.limit(2)
+            .orderBy('firstName').orderBy('lastName').startAt(start).endAt(end)).valueChanges({idField: 'id'});
     }
 
     getUserNotifications(): Observable<Notifications[]> {

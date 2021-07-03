@@ -5,7 +5,7 @@
     <ng-template #hasPosts>
         <h2>Your saved posts</h2>
         <ng-container *ngFor="let post of savedPostsArray; let i = index">
-            <div class="post-card-item" *ngIf="post.userImageURL">
+            <div class="post-card-item" *ngIf="post?.userImageURL">
                 <div class="image-and-details-wrapper space">
                     <div class="image-and-details">
                         <div class="profile-img-wrapper">

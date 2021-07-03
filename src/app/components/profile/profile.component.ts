@@ -173,7 +173,7 @@ export class ProfileComponent implements OnInit {
         if (this.uploadedImageName !== undefined || this.uploadedImageName === 'default') {
             const selectedFileName = this.uploadedImageName;
             selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
-                + Math.floor(Math.random() * 10000) + 1 + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+                + new Date().getTime() + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
             const filePath = `${this.basePath}/${selectedFileForUpload}`;
             const fileRef = this.storage.ref(filePath);
             const metadata = {

@@ -24,7 +24,6 @@ export class AuthService {
             if (user) {
                 this.user = user;
                 this.currentUid = user.uid;
-                console.log('this.currentUid ', this.currentUid);
                 localStorage.setItem('user', JSON.stringify(user));
                 JSON.parse(localStorage.getItem('user') as string);
             }
@@ -52,11 +51,8 @@ export class AuthService {
     logIn(email: string, password: string): void {
         this.afAuth.signInWithEmailAndPassword(email, password)
             .then(status => {
-                console.log('logged in', status);
                 this.router.navigateByUrl(this.navigationPathEnum.Home);
-            }).catch(error => {
-            console.log('failed to log in', error);
-        });
+            });
     }
 
     logOut(): void {
