@@ -193,6 +193,7 @@ body {
             font-weight: bold;
             display: flex;
             text-transform: capitalize;
+            cursor: pointer;
         }
         &-datetime {
             font-size: 11px;
@@ -304,7 +305,7 @@ body {
 
                 &-btn {
                     height: 37px;
-                    width: 70px;
+                    width: fit-content;
                     margin: 1em 0.2em 0.1em auto;
                 }
 

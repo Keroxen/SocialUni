@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireModule } from '@angular/fire';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -22,6 +22,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { ToastrModule, ToastContainerModule } from 'ngx-toastr';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,6 +47,10 @@ import { SearchComponent } from '@components/search/search.component';
 import { MessagingService } from '@services/messaging.service';
 import { NotificationsComponent } from '@components/notifications/notifications.component';
 import { ViewPostComponent } from '@components/view-post/view-post.component';
+
+export function HttpLoaderFactory(httpClient: HttpClient): TranslateHttpLoader {
+    return new TranslateHttpLoader(httpClient);
+}
 
 @NgModule({
     declarations: [
@@ -92,7 +99,15 @@ import { ViewPostComponent } from '@components/view-post/view-post.component';
         ToastrModule.forRoot({
             positionClass: 'inline',
         }),
-        ToastContainerModule
+        ToastContainerModule,
+        TranslateModule.forRoot({
+            defaultLanguage: 'en',
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient],
+            },
+        })
     ],
     providers: [AuthService, DataService, MessagingService],
     bootstrap: [AppComponent],

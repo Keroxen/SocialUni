@@ -19,6 +19,20 @@
     }
 
     &-left {
+        .translate-icons {
+            display: inline-flex;
+            margin-top: 1rem;
+
+            img {
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+
+                &:first-of-type {
+                    margin-right: 1.5rem;
+                }
+            }
+        }
     }
 
     &-right {

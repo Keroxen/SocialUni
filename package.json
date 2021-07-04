@@ -23,6 +23,8 @@
     "@angular/platform-browser-dynamic": "~11.2.3",
     "@angular/router": "~11.2.3",
     "@firebase/database-types": "^0.7.2",
+    "@ngx-translate/core": "^13.0.0",
+    "@ngx-translate/http-loader": "^6.0.0",
     "firebase": "^8.6.8",
     "ngx-pagination": "^5.1.1",
     "ngx-toastr": "^13.2.1",

@@ -30,6 +30,7 @@
             align-items: center;
             margin: 30px 0;
             color: globalVars.$white;
+            position: relative;
         }
 
         .welcome-message {
@@ -59,6 +60,23 @@
             &:last-child {
                 background: globalVars.$primary-color;
                 margin-left: 1rem;
+            }
+        }
+
+        .translate-icons {
+            display: inline-flex;
+            position: absolute;
+            top: -40px;
+            right: 0;
+
+            img {
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+
+                &:first-of-type {
+                    margin-right: 1.5rem;
+                }
             }
         }
     }

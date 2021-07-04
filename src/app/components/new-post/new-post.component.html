@@ -6,7 +6,7 @@
         <div class="new-post-form-wrapper">
             <form [formGroup]="newPostForm" class="new-post-form" (keyup.enter)="onNewPost()">
                 <mat-form-field class="new-post-field" appearance="fill" floatLabel="auto">
-                    <mat-label>Share something interesting...</mat-label>
+                    <mat-label>{{"share" | translate}}...</mat-label>
                     <textarea cdkTextareaAutosize
                               cdkAutosizeMinRows="1"
                               cdkAutosizeMaxRows="5"
@@ -28,13 +28,13 @@
                 </div>
             </form>
             <div class="characters-left" [ngClass]="{'no-characters-left': charactersLeft === 0}">
-                {{charactersLeft}} {{charactersLeft === 1 ? 'character remaining' : 'characters remaining'}}
+                {{charactersLeft}} {{charactersLeft === 1 ? oneCharacterRem : charactersRem}}
             </div>
         </div>
     </div>
     <div class="new-post-submit-wrapper">
         <button mat-raised-button [ngClass]="{'disabled-btn' : !isFormValid()}"
-                class="new-post-submit-btn btn-primary" (click)="onNewPost()">Post
+                class="new-post-submit-btn btn-primary" (click)="onNewPost()">{{"post" | translate}}
         </button>
     </div>
 </div>

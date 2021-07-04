@@ -1,42 +1,30 @@
 <div class="profile">
     <div class="profile-left">
-        <button mat-raised-button class="profile-btn btn-primary" [ngClass]="{'green-btn': isEditingMode}"
-                (click)="isEditingMode ? savePersonalDetails() : toggleProfileEditing()">
-            {{isEditingMode ? 'Save your personal details' : 'Edit your personal details'}}
+        <button *ngIf="!isEditingMode" mat-raised-button class="profile-btn btn-primary" (click)="toggleProfileEditing()">
+            {{"editProfile" | translate}}
+        </button>
+        <button *ngIf="isEditingMode" mat-raised-button class="profile-btn btn-primary green-btn" (click)="savePersonalDetails()">
+            {{"saveProfile" | translate}}
         </button>
         <form class="profile-form" [formGroup]="profileForm" [ngClass]="{'no-events' : !isEditingMode}">
             <mat-form-field appearance="outline">
-                <mat-label>First name</mat-label>
+                <mat-label>{{"firstName" | translate}}</mat-label>
                 <input matInput placeholder="First name" formControlName="firstName" autocomplete="given-name">
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>Last name</mat-label>
+                <mat-label>{{"lastName" | translate}}</mat-label>
                 <input matInput placeholder="Last name" formControlName="lastName" autocomplete="family-name">
             </mat-form-field>
             <mat-form-field appearance="outline">
-                <mat-label>Email address</mat-label>
+                <mat-label>{{"email" | translate}}</mat-label>
                 <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
             </mat-form-field>
-<!--            <mat-form-field appearance="fill">-->
-<!--                <mat-label>University</mat-label>-->
-<!--                <input type="text"-->
-<!--                       placeholder="Type to search..."-->
-<!--                       matInput-->
-<!--                       formControlName="university"-->
-<!--                       [matAutocomplete]="auto"-->
-<!--                       autocomplete="disabled">-->
-<!--                <mat-autocomplete #auto="matAutocomplete">-->
-<!--                    <mat-option *ngFor="let university of filteredUniversities | async" [value]="university.name">-->
-<!--                        {{university.name}}-->
-<!--                    </mat-option>-->
-<!--                </mat-autocomplete>-->
-<!--            </mat-form-field>-->
-            <!--            <mat-form-field appearance="outline">-->
-            <!--                <mat-label>Access code</mat-label>-->
-            <!--                <input matInput formControlName="accessCode" type="text" class="access-code"-->
-            <!--                       autocomplete="one-time-code">-->
-            <!--            </mat-form-field>-->
         </form>
+        <div class="lang-message">{{"langMessage" | translate}}</div>
+        <div class="translate-icons">
+            <img src="assets/images/en-flag.svg" alt="English" (click)="langEn()">
+            <img src="assets/images/ro-flag.svg" alt="Romanian" (click)="langRo()">
+        </div>
     </div>
     <div class="profile-right">
         <div class="profile-big-img-wrapper">
@@ -47,7 +35,7 @@
             <input type="file" class="image-upload" (change)="previewImage($event)" accept="image/*">
             <button mat-raised-button [ngClass]="{'hidden': !showSaveBtn}" class="profile-btn btn-primary green-btn"
                     (click)="uploadImage()">
-                Save your new photo
+                {{"savePhoto" | translate}}
             </button>
         </div>
     </div>

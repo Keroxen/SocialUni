@@ -9,16 +9,16 @@
         </mat-toolbar>
         <mat-nav-list class="nav-list">
             <a mat-list-item
-               (click)="goTo(navigationPathEnum.Notifications); closeDrawer ? drawer.close() : drawer.open()">Notifications
+               (click)="goTo(navigationPathEnum.Notifications); closeDrawer ? drawer.close() : drawer.open()">{{"notifications" | translate}}
                 <mat-icon>notifications</mat-icon>
             </a>
-            <a mat-list-item (click)="goTo(navigationPathEnum.Saved); closeDrawer ? drawer.close() : drawer.open()">Saved
+            <a mat-list-item (click)="goTo(navigationPathEnum.Saved); closeDrawer ? drawer.close() : drawer.open()">{{"saved" | translate}}
                 <mat-icon>bookmark</mat-icon>
             </a>
-            <a mat-list-item (click)="goTo(navigationPathEnum.Profile); closeDrawer ? drawer.close() : drawer.open()">Profile
+            <a mat-list-item (click)="goTo(navigationPathEnum.Profile); closeDrawer ? drawer.close() : drawer.open()">{{"profile" | translate}}
                 <mat-icon>account_circle</mat-icon>
             </a>
-            <a mat-list-item (click)="onLogout()">Log out
+            <a mat-list-item (click)="onLogout()">{{"logOut" | translate}}
                 <mat-icon>exit_to_app</mat-icon>
             </a>
         </mat-nav-list>

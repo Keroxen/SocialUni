@@ -45,6 +45,7 @@
 
         &-container {
             position: relative;
+            margin-top: 0.5rem;
         }
     }
 
@@ -56,6 +57,9 @@
         &-btn {
             height: 40px;
             width: 85px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 
