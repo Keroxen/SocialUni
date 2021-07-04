@@ -43,6 +43,7 @@ import { ViewProfileComponent } from '@components/view-profile/view-profile.comp
 import { SearchComponent } from '@components/search/search.component';
 import { MessagingService } from '@services/messaging.service';
 import { NotificationsComponent } from '@components/notifications/notifications.component';
+import { ViewPostComponent } from '@components/view-post/view-post.component';
 
 @NgModule({
     declarations: [
@@ -59,6 +60,7 @@ import { NotificationsComponent } from '@components/notifications/notifications.
         ViewProfileComponent,
         SearchComponent,
         NotificationsComponent,
+        ViewPostComponent,
     ],
     imports: [
         BrowserModule,

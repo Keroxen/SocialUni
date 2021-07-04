@@ -18,7 +18,7 @@ export interface Post {
     comments?: Comment[];
     likes?: LikeDislike[];
     dislikes?: LikeDislike[];
-    numberOfLikes?: FieldValue;
-    numberOfDislikes?: FieldValue;
+    numberOfLikes?: FieldValue | number;
+    numberOfDislikes?: FieldValue | number;
     numberOfComments?: FieldValue;
 }
