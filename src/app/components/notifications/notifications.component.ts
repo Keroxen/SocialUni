@@ -25,8 +25,7 @@ export class NotificationsComponent implements OnInit {
     }
 
     goToPost(postId: string): void {
-        console.log('to post');
-        // this.router.navigate([this.navigationPathEnum.ViewPost, postId]);
+        this.router.navigate([this.navigationPathEnum.ViewPost, postId]);
     }
 
     goToUserProfile(userID: string): void {

@@ -41,7 +41,7 @@ export class DataService {
         return this.commentsCollection.valueChanges();
     }
 
-    reactionClick(postID: string, reactionType: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
+    reactionClick(postID: string | undefined, reactionType: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined): void {
         const likesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('likes',
             likes => likes.where('uid', '==', this.authService.currentUid));
         const dislikesCollectionRef = this.postsCollectionRef.doc(postID).collection<LikeDislike>('dislikes',
@@ -114,7 +114,7 @@ export class DataService {
         }
     }
 
-    submitComment(comment: string, postID: string, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined, userIsTeacher: boolean | undefined): void {
+    submitComment(comment: string, postID: string | undefined, userFirstName: string | undefined, userLastName: string | undefined, userImageURL: string | undefined, userIsTeacher: boolean | undefined): void {
         const postDoc = this.postsCollectionRef.doc(postID);
         if (comment && comment.trim()) {
             postDoc.collection<Comment>('comments').add({
@@ -129,18 +129,18 @@ export class DataService {
         }
     }
 
-    async deletePost(postID: string): Promise<void> {
+    async deletePost(postID: string | undefined): Promise<void> {
         await this.removeSavedPost(postID);
         return await this.postsCollectionRef.doc(postID).delete();
     }
 
-    async removeSavedPost(postID: string): Promise<void> {
+    async removeSavedPost(postID: string | undefined): Promise<void> {
         return await this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayRemove(postID)
         });
     }
 
-    savePost(postID: string): void {
+    savePost(postID: string | undefined): void {
         this.usersCollectionRef.doc(this.authService.currentUid).update({
             savedPosts: firebase.firestore.FieldValue.arrayUnion(postID)
         });

@@ -8,6 +8,7 @@ import { HomeComponent } from '@components/home/home.component';
 import { SavedPostsComponent } from '@components/saved-posts/saved-posts.component';
 import { ViewProfileComponent } from '@components/view-profile/view-profile.component';
 import { NotificationsComponent } from '@components/notifications/notifications.component';
+import { ViewPostComponent } from '@components/view-post/view-post.component';
 
 const routes: Routes = [
     {path: '', redirectTo: '/landing-page', pathMatch: 'full'},
@@ -17,8 +18,8 @@ const routes: Routes = [
     {path: 'saved', component: SavedPostsComponent, canActivate: [AngularFireAuthGuard]},
     {path: 'view-profile/:id', component: ViewProfileComponent, canActivate: [AngularFireAuthGuard]},
     {path: 'notifications', component: NotificationsComponent, canActivate: [AngularFireAuthGuard]},
+    {path: 'view-post/:id', component: ViewPostComponent, canActivate: [AngularFireAuthGuard]},
 ];
-// VIEW POST 2 IULIE
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
