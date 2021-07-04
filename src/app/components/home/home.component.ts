@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import firebase from 'firebase';
-import { map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
@@ -14,6 +14,7 @@ import { AuthService } from '@services/auth.service';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import { ReactionsListComponent } from '@shared/components/reactions-list/reactions-list.component';
 import { NavigationPaths } from '@models/nav-enum.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-home',
@@ -36,16 +37,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     userLastName: string | undefined;
     userImageURL: string | undefined;
     userIsTeacher: boolean | undefined;
-    deleteSnackbarText = 'Post deleted!';
-    commentSnackbarText = 'New comment added!';
-    saveSnackbarText = 'Post saved!';
+    deleteSnackbarText = '';
+    commentSnackbarText = '';
+    saveSnackbarText = '';
 
     increment = firebase.firestore.FieldValue.increment(1);
     decrement = firebase.firestore.FieldValue.increment(-1);
 
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router) {
+                private snackBar: MatSnackBar, public dialog: MatDialog, private router: Router, private translate: TranslateService) {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then((doc: any) => {
             const userData = doc.data();
@@ -59,32 +60,32 @@ export class HomeComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.dataService.getPosts().pipe(takeUntil(this.destroy$))
             .subscribe(posts => {
-            this.latestPosts = posts;
-        });
+                this.latestPosts = posts;
+            });
+        this.deleteSnackbarText = this.translate.instant('deleteSnackbarText');
+        this.commentSnackbarText = this.translate.instant('commentSnackbarText');
+        this.saveSnackbarText = this.translate.instant('saveSnackbarText');
     }
 
-        // );
+    // );
 
 
+    //
+    // this.latestPosts = this.dataService.getPosts().pipe(
+    //     map(actions => actions.map(a => {
+    //         const data = a.payload.doc.data() as Post;
+    //         const id = a.payload.doc.id;
+    //         return {id, ...data};
+    //     }))
+    // );
 
-        //
-        // this.latestPosts = this.dataService.getPosts().pipe(
-        //     map(actions => actions.map(a => {
-        //         const data = a.payload.doc.data() as Post;
-        //         const id = a.payload.doc.id;
-        //         return {id, ...data};
-        //     }))
-        // );
-
-        // this.latestPosts = this.postsCollection.stateChanges().pipe(
-        //     map(actions => actions.map(a => {
-        //         const data = a.payload.doc.data() as Post;
-        //         const id = a.payload.doc.id;
-        //         return {id, ...data};
-        //     }))
-        // );
-
-
+    // this.latestPosts = this.postsCollection.stateChanges().pipe(
+    //     map(actions => actions.map(a => {
+    //         const data = a.payload.doc.data() as Post;
+    //         const id = a.payload.doc.id;
+    //         return {id, ...data};
+    //     }))
+    // );
 
 
     // requestPermission(): void {

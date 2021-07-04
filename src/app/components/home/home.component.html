@@ -8,7 +8,7 @@
                     </div>
                     <div class="post-details">
                         <div class="post-author">{{post.userFirstName}} {{post.userLastName}}
-                            <div class="teacher-badge" *ngIf="post.userIsTeacher">Teacher</div>
+                            <div class="teacher-badge" *ngIf="post.userIsTeacher">{{"teacher" | translate}}</div>
                         </div>
                         <div class="post-datetime">
                             {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
@@ -22,11 +22,11 @@
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item (click)="onSavePost(post.id)">
                             <mat-icon class="save-icon">bookmark</mat-icon>
-                            <span>Save post</span>
+                            <span>{{"save" | translate}}</span>
                         </button>
                         <button *ngIf="post.uid === currentUid" mat-menu-item (click)="onDeletePost(post.id)">
                             <mat-icon class="delete-icon">delete</mat-icon>
-                            <span>Delete post</span>
+                            <span>{{"delete" | translate}}</span>
                         </button>
                     </mat-menu>
                 </div>
@@ -54,7 +54,7 @@
                     </div>
                     <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
                         <mat-icon>comment</mat-icon>
-                        Comments
+                        {{"comments" | translate}}
                     </button>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                     <form [formGroup]="newCommentForm" class="new-post-form full-width"
                           (keyup.enter)="onSubmitComment(post.id)">
                         <mat-form-field class="new-comment-field" appearance="fill">
-                            <mat-label>Say something nice about this post...</mat-label>
+                            <mat-label>{{"saySomething" | translate}}</mat-label>
                             <textarea cdkTextareaAutosize
                                       cdkAutosizeMinRows="1"
                                       cdkAutosizeMaxRows="30"
@@ -79,7 +79,7 @@
                             </textarea>
                             <button mat-raised-button
                                     [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
-                                    class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">Reply
+                                    class="btn-primary new-comment-btn" (click)="onSubmitComment(post.id)">{{"reply" | translate}}
                             </button>
                         </mat-form-field>
                     </form>
@@ -92,7 +92,7 @@
                             </div>
                             <div class="post-details">
                                 <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}
-                                    <div class="teacher-badge" *ngIf="comment.userIsTeacher">Teacher</div>
+                                    <div class="teacher-badge" *ngIf="comment.userIsTeacher">{{"teacher" | translate}}</div>
                                 </div>
                                 <div class="post-datetime">
                                     {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}

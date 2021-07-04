@@ -7,6 +7,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { AuthService } from '@services/auth.service';
 import { University } from '@models/university.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-auth-dialog',
@@ -17,6 +18,10 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
     destroy$: Subject<boolean> = new Subject<boolean>();
     authMode: string | null = '';
     today: Date | undefined;
+    loginMessage = '';
+    signupMessage = '';
+    loginBtnMessage = '';
+    signupBtnMessage = '';
 
     signupForm = new FormGroup({
         firstName: new FormControl('', Validators.required),
@@ -38,7 +43,8 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
     filteredUniversities: Observable<University[]> | undefined;
     universities: University[] | undefined;
 
-    constructor(private authService: AuthService, private router: Router, private dialogRef: MatDialogRef<AuthDialogComponent>) {
+    constructor(private authService: AuthService, private router: Router, private dialogRef: MatDialogRef<AuthDialogComponent>,
+                public translate: TranslateService) {
     }
 
 
@@ -57,6 +63,10 @@ export class AuthDialogComponent implements OnInit, OnDestroy {
             });
             this.today = new Date();
         }
+        this.loginMessage = this.translate.instant('login');
+        this.signupMessage = this.translate.instant('signup');
+        this.loginBtnMessage = this.translate.instant('logIn');
+        this.signupBtnMessage = this.translate.instant('signUp');
     }
 
     private _filter(value: string): University[] {

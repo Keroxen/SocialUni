@@ -3,20 +3,22 @@
     <div class="landing-content">
         <div class="welcome-messages-wrapper">
             <div class="welcome-message">
-                Welcome to <span class="app-name">SocialUni</span>
+                {{"welcomeMessage" | translate}} <span class="app-name">SocialUni</span>
+            </div>
+            <div class="translate-icons">
+                <img src="assets/images/en-flag.svg" alt="English" (click)="langEn()">
+                <img src="assets/images/ro-flag.svg" alt="Romanian" (click)="langRo()">
             </div>
             <div class="buttons-message">
                 <button class="landing-btn" type="button" mat-raised-button color="accent"
-                        (click)="openDialog('login')">Log in
+                        (click)="openDialog('login')">{{"logIn" | translate}}
                 </button>
-                to see what's new or
+                {{"toSee" | translate}}
                 <button class="landing-btn" type="button" mat-raised-button color="accent"
-                        (click)="openDialog('signup')">Sign up
+                        (click)="openDialog('signup')">{{"signUp" | translate}}
                 </button>
-                to find out what your friends are talking about
+                {{"talkingAbout" | translate}}
             </div>
-        </div>
-        <div class="landing-btn-wrapper">
         </div>
     </div>
 </div>

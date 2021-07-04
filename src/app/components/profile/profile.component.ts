@@ -11,6 +11,7 @@ import { AuthService } from '@services/auth.service';
 import { University } from '@models/university.model';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
 import * as appConfig from '@config/app.config.json';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-profile',
@@ -46,11 +47,13 @@ export class ProfileComponent implements OnInit {
     isDefaultImage = false;
     showSaveBtn = false;
 
-    imageSnackbarText = 'Photo changed successfully!';
-    personalDetailsSnackbarText = 'Personal details saved!';
+    imageSnackbarText = '';
+    personalDetailsSnackbarText = '';
+    saveProfile = '';
+    editProfile = '';
 
     constructor(private authService: AuthService, private dataService: DataService, private storage: AngularFireStorage,
-                private afs: AngularFirestore, private snackBar: MatSnackBar) {
+                private afs: AngularFirestore, private snackBar: MatSnackBar, private translate: TranslateService) {
     }
 
     ngOnInit(): void {
@@ -66,6 +69,10 @@ export class ProfileComponent implements OnInit {
         });
         this.populateUniversityDropdown();
         this.today = new Date();
+        this.saveProfile = this.translate.instant('saveProfile');
+        this.editProfile = this.translate.instant('editProfile');
+        this.imageSnackbarText = this.translate.instant('imageSnackbarText');
+        this.personalDetailsSnackbarText = this.translate.instant('personalDetailsSnackbarText');
     }
 
     populatePersonalDetails(): void {
@@ -240,5 +247,15 @@ export class ProfileComponent implements OnInit {
             data: snackbarText,
             duration: 1000
         });
+    }
+
+    langEn(): void {
+        this.translate.use('en');
+        localStorage.setItem('language', 'en');
+    }
+
+    langRo(): void {
+        this.translate.use('ro');
+        localStorage.setItem('language', 'ro');
     }
 }

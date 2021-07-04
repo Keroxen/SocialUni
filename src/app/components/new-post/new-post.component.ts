@@ -11,6 +11,7 @@ import firebase from 'firebase';
 import { DataService } from '@services/data.service';
 import { Post } from '@models/post.model';
 import { SnackbarComponent } from '@shared/components/snackbar/snackbar.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-new-post',
@@ -39,10 +40,12 @@ export class NewPostComponent implements OnInit, OnDestroy {
     postImageURL: string | undefined;
     postImageDlURL: string | undefined;
 
-    snackbarText = 'New post added!';
+    snackbarText = '';
+    oneCharacterRem = '';
+    charactersRem = '';
 
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private dataService: DataService,
-                private storage: AngularFireStorage, private snackBar: MatSnackBar) {
+                private storage: AngularFireStorage, private snackBar: MatSnackBar, private translate: TranslateService) {
         this.afAuth.authState.pipe(takeUntil(this.destroy$)).subscribe(user => {
             this.currentUid = user?.uid;
             this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
@@ -55,7 +58,9 @@ export class NewPostComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-
+        this.oneCharacterRem = this.translate.instant('oneCharacterRem');
+        this.charactersRem = this.translate.instant('charactersRem');
+        this.snackbarText = this.translate.instant('newPostSnackbar');
     }
 
     checkTextLength(): void {

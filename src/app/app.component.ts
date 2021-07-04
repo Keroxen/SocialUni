@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { take } from 'rxjs/operators';
+import { AngularFireAuth } from '@angular/fire/auth';
 
 import { AuthService } from '@services/auth.service';
 import { NavigationPaths } from '@models/nav-enum.model';
 import { MessagingService } from '@services/messaging.service';
-import { take } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/auth';
 
 @Component({
     selector: 'app-root',
@@ -17,7 +18,14 @@ export class AppComponent implements OnInit {
     public navigationPathEnum = NavigationPaths;
 
     constructor(private router: Router, public authService: AuthService,
-                public msgService: MessagingService, private afAuth: AngularFireAuth) {
+                public msgService: MessagingService, private afAuth: AngularFireAuth, private translate: TranslateService) {
+        translate.setDefaultLang('en');
+        const lsLang = localStorage.getItem('language');
+        if (lsLang) {
+            translate.use(lsLang);
+        } else {
+            translate.use('en');
+        }
     }
 
     ngOnInit(): void {

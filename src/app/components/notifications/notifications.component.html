@@ -1,6 +1,6 @@
 <div class="notifications">
     <h2 *ngIf="!notifications">
-        You have no notifications!
+        {{"noNotif" | translate}}
     </h2>
     <div class="user-item" *ngFor="let notification of notifications" (click)="goToPost(notification.postId)">
         <div class="image-and-details">
@@ -11,9 +11,9 @@
                 <div class="author-and-comment">
                     <div class="post-author"
                          (click)="goToUserProfile(notification.uid)">{{notification.userFirstName}} {{notification.userLastName}}
-                        <div class="teacher-badge" *ngIf="notification.userIsTeacher">Teacher</div>
+                        <div class="teacher-badge" *ngIf="notification.userIsTeacher">{{"teacher" | translate}}</div>
                     </div>
-                    <div class="added-comment">added a comment to your post</div>
+                    <div class="added-comment">{{"addedComm" | translate}}</div>
                 </div>
                 <div class="post-datetime">
                     {{notification.created?.toDate() | date: 'dd MMM y, H:mm'}}
