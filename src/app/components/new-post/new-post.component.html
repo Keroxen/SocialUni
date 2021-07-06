@@ -16,14 +16,25 @@
                               rows="5"
                               formControlName="newPostText">
                     </textarea>
-                    <label for="img-upload">
-                        <mat-icon class="new-post-img-icon">add_photo_alternate</mat-icon>
-                    </label>
-                    <input id="img-upload" type="file" (change)="previewImage($event)" formControlName="newPostImage"
-                           accept="image/*">
+                    <div class="image-upload-container" [ngClass]="{'no-events' : uploadedFile}">
+                        <label for="img-upload">
+                            <mat-icon class="new-post-img-icon">add_photo_alternate</mat-icon>
+                        </label>
+                        <input id="img-upload" type="file" (change)="previewImage($event)"
+                               formControlName="newPostImage"
+                               accept="image/*">
+                    </div>
+                    <div class="file-upload-container" [ngClass]="{'no-events' : uploadedImage}">
+                        <label for="file-upload">
+                            <mat-icon class="new-post-img-icon">attach_file</mat-icon>
+                        </label>
+                        <input id="file-upload" type="file" (change)="onFileUpload($event)"
+                               formControlName="newPostFile"
+                               accept=".doc,.docx,.pdf,.txt">
+                    </div>
                 </mat-form-field>
                 <div class="new-post-img-preview-container" *ngIf="postImageURL">
-                    <img class="new-post-img-preview" [src]="postImageURL" alt="Post image" >
+                    <img class="new-post-img-preview" [src]="postImageURL" alt="Post image">
                     <mat-icon class="reset-img-icon" (click)="onResetImgPreview()">close</mat-icon>
                 </div>
             </form>

@@ -23,7 +23,8 @@ export class NewPostComponent implements OnInit, OnDestroy {
 
     newPostForm = new FormGroup({
         newPostText: new FormControl(''),
-        newPostImage: new FormControl('')
+        newPostImage: new FormControl(''),
+        newPostFile: new FormControl('')
     });
 
     charactersLimit = 1000;
@@ -33,12 +34,16 @@ export class NewPostComponent implements OnInit, OnDestroy {
     userLastName: string | undefined;
     userImageURL: string | undefined;
     userIsTeacher: boolean | undefined;
-
-    basePath = '/postsImages';
+    imagePath = '/postsImages';
+    filePath = '/postsFiles';
     uploadedImageName: string | undefined;
+    uploadedImage: any;
+    uploadedFileName = '';
     uploadedFile: any;
-    postImageURL: string | undefined;
-    postImageDlURL: string | undefined;
+    postImageURL: string | '' | undefined;
+    postImageDlURL = '';
+    postFileURL: string | undefined;
+    postFileDlURL = '';
 
     snackbarText = '';
     oneCharacterRem = '';
@@ -78,28 +83,39 @@ export class NewPostComponent implements OnInit, OnDestroy {
             userFirstName: this.userFirstName,
             userLastName: this.userLastName,
             userImageURL: this.userImageURL ?? '',
-            userIsTeacher: this.userIsTeacher
+            userIsTeacher: this.userIsTeacher,
+            fileName: this.uploadedFileName,
+            fileURL: this.postFileDlURL
         });
         this.newPostForm.reset();
-        this.uploadedFile = null;
+        this.uploadedImage = null;
         this.uploadedImageName = undefined;
         this.postImageURL = '';
+        this.postImageDlURL = '';
+        this.uploadedFile = null;
+        this.uploadedFileName = '';
+        this.postFileURL = '';
         this.charactersLeft = this.charactersLimit;
+
+        const fileName = document.getElementById('file-upload');
+        if (fileName) {
+            fileName.style.display = 'none';
+        }
     }
 
     isFormValid(): boolean {
         const postContent = this.newPostForm.get('newPostText')?.value;
-        return !!(postContent && postContent.trim() || this.uploadedFile);
+        return !!(postContent && postContent.trim() || this.uploadedImage || this.uploadedFile);
     }
 
     previewImage(event: any): void {
         this.uploadedImageName = event.target.files[0].name;
-        this.uploadedFile = event.target.files[0];
+        this.uploadedImage = event.target.files[0];
         const reader = new FileReader();
         reader.onload = () => {
             this.postImageURL = reader.result as string;
         };
-        reader.readAsDataURL(this.uploadedFile);
+        reader.readAsDataURL(this.uploadedImage);
     }
 
     onNewPost(): void {
@@ -107,33 +123,67 @@ export class NewPostComponent implements OnInit, OnDestroy {
             this.uploadedImageName = '';
         }
         if (this.isFormValid()) {
-            const selectedFileName = this.uploadedImageName;
-            const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
-                + new Date().getTime() + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
-            const filePath = `${this.basePath}/${selectedFileForUpload}`;
-            const fileRef = this.storage.ref(filePath);
-            const metadata = {
-                cacheControl: 'public, max-age=3600'
-            };
-            const upload = this.storage.upload(filePath, this.uploadedFile, metadata);
+            if (this.uploadedImageName) {
+                const selectedImageName = this.uploadedImageName;
+                const selectedImageForUpload = selectedImageName.substring(0, selectedImageName.lastIndexOf('.'))
+                    + new Date().getTime() + selectedImageName.substring(selectedImageName.lastIndexOf('.'));
+                const imagePath = `${this.imagePath}/${selectedImageForUpload}`;
+                const imageRef = this.storage.ref(imagePath);
+                const metadata = {
+                    cacheControl: 'public, max-age=3600'
+                };
+                const imageUpload = this.storage.upload(imagePath, this.uploadedImage, metadata);
 
-            upload.snapshotChanges().pipe(finalize(() => {
-                fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
-                    if (selectedFileName === '') {
-                        url = '';
-                    }
-                    this.postImageDlURL = url;
-                    this.saveNewPost();
-                });
-            })).pipe(takeUntil(this.destroy$)).subscribe();
+                imageUpload.snapshotChanges().pipe(finalize(() => {
+                    imageRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
+                        if (selectedImageName === '') {
+                            url = '';
+                        }
+                        this.postImageDlURL = url;
+                        this.saveNewPost();
+                    });
+                })).pipe(takeUntil(this.destroy$)).subscribe();
+            } else if (this.uploadedFileName) {
+                const selectedFileName = this.uploadedFileName;
+                if (selectedFileName) {
+                    const selectedFileForUpload = selectedFileName.substring(0, selectedFileName.lastIndexOf('.'))
+                        + new Date().getTime() + selectedFileName.substring(selectedFileName.lastIndexOf('.'));
+                    const filePath = `${this.filePath}/${selectedFileForUpload}`;
+                    const fileRef = this.storage.ref(filePath);
+                    const fileUpload = this.storage.upload(filePath, this.uploadedFile);
+
+                    fileUpload.snapshotChanges().pipe(finalize(() => {
+                        fileRef.getDownloadURL().pipe(takeUntil(this.destroy$)).subscribe(url => {
+                            if (selectedFileName === '') {
+                                url = '';
+                            }
+                            this.postFileDlURL = url;
+                            this.saveNewPost();
+                        });
+                    })).pipe(takeUntil(this.destroy$)).subscribe();
+                }
+            } else {
+                this.saveNewPost();
+            }
             this.showSnackbar();
         }
     }
 
+
     onResetImgPreview(): void {
-        this.uploadedFile = null;
+        this.uploadedImage = null;
         this.uploadedImageName = undefined;
         this.postImageURL = '';
+    }
+
+    onFileUpload(event: any): void {
+        this.uploadedFileName = event.target.files[0]?.name;
+        this.uploadedFile = event.target.files[0];
+        console.log(event.target.files[0].name);
+        const fileName = document.getElementById('file-upload');
+        if (fileName) {
+            fileName.style.display = 'inline';
+        }
     }
 
     showSnackbar(): void {

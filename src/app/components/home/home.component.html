@@ -36,6 +36,7 @@
                     {{post.content}}
                 </div>
                 <img class="post-image" *ngIf="post.imageURL" [src]="post.imageURL">
+                <a class="post-file" *ngIf="post.fileURL" [href]="post.fileURL" target="_blank" download>{{post.fileName}}</a>
                 <div class="reactions-comments-wrapper">
                     <div class="reactions-wrapper">
                         <div class="likes-section">
