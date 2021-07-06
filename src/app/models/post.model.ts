@@ -9,6 +9,8 @@ export interface Post {
     content: string;
     created: any;
     imageURL?: string | undefined;
+    fileName?: string | undefined;
+    fileURL?: string | undefined;
     uid: string | undefined;
     userFirstName: string | undefined;
     userLastName: string | undefined;
