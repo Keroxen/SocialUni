@@ -12,6 +12,7 @@ import * as appConfig from '@config/app.config.json';
 @Injectable()
 export class AuthService {
     currentUid: string | undefined;
+    currentUniversity: string | undefined;
     user: any;
     private authMode: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
     public authMode$: Observable<string | null> = this.authMode.asObservable();

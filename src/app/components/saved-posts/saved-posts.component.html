@@ -1,117 +1,112 @@
 <div class="saved">
-    <h2 *ngIf="savedPostsArray.length == 0; else hasPosts">
-        {{"emptySaved" | translate}}
-    </h2>
-    <ng-template #hasPosts>
-        <h2>{{"savedPosts" | translate}}</h2>
-        <ng-container *ngFor="let post of savedPostsArray; let i = index">
-            <div class="post-card-item" *ngIf="post?.userImageURL">
-                <div class="image-and-details-wrapper space">
-                    <div class="image-and-details">
+    <h2>{{"savedPosts" | translate}}</h2>
+    <ng-container *ngFor="let post of savedPostsArray; let i = index">
+        <div class="post-card-item" *ngIf="post?.userImageURL">
+            <div class="image-and-details-wrapper space">
+                <div class="image-and-details">
+                    <div class="profile-img-wrapper">
+                        <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
+                    </div>
+                    <div class="post-details">
+                        <div class="post-author">{{post.userFirstName}} {{post.userLastName}}
+                            <div class="teacher-badge" *ngIf="post.userIsTeacher">{{"teacher" | translate}}</div>
+                        </div>
+                        <div class="post-datetime">
+                            {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                        </div>
+                    </div>
+                </div>
+                <div class="post-menu">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="onRemoveSavedPost(post.id, i)">
+                            <mat-icon>bookmark</mat-icon>
+                            <span>{{"removeSaved" | translate}}</span>
+                        </button>
+                        <button mat-menu-item (click)="onDeletePost(post.id, i)" *ngIf="post.uid === currentUid">
+                            <mat-icon class="delete-icon">delete</mat-icon>
+                            <span>{{"delete" | translate}}</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-content-text" *ngIf="post.content">
+                    {{post.content}}
+                </div>
+                <img class="post-image" *ngIf="post.imageURL" [src]="post.imageURL">
+                <div class="reactions-comments-wrapper">
+                    <div class="reactions-wrapper">
+                        <div class="likes-section">
+                            <div class="number-of-likes">
+                                {{post.numberOfLikes === 0 ? '' : post.numberOfLikes}}
+                            </div>
+                            <mat-icon class="like-btn" (click)="onReactionClick(post.id, 'like', i)">thumb_up
+                            </mat-icon>
+                        </div>
+                        <div class="dislikes-section">
+                            <div class="number-of-dislikes">
+                                {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
+                            </div>
+                            <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislike', i)">
+                                thumb_down
+                            </mat-icon>
+                        </div>
+                    </div>
+                    <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
+                        <mat-icon>comment</mat-icon>
+                        {{"comments" | translate}}
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="post.areCommentsVisible" class="post-comments">
+                <div class="new-comment-container">
+                    <div class="image-and-details-wrapper">
                         <div class="profile-img-wrapper">
-                            <img class="profile-img" [src]="post.userImageURL" alt="Profile Image">
+                            <img class="profile-img" [src]="userImageURL" alt="Profile Image">
+                        </div>
+                    </div>
+                    <form [formGroup]="newCommentForm" class="new-post-form full-width"
+                          (keyup.enter)="onSubmitComment(post.id)">
+                        <mat-form-field class="new-comment-field" appearance="fill">
+                            <mat-label>{{"saySomething" | translate}}</mat-label>
+                            <textarea cdkTextareaAutosize
+                                      cdkAutosizeMinRows="1"
+                                      cdkAutosizeMaxRows="30"
+                                      [maxLength]="3000"
+                                      matInput
+                                      rows="3"
+                                      formControlName="newComment">
+                            </textarea>
+                            <button mat-raised-button
+                                    [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
+                                    class="btn-primary new-comment-btn"
+                                    (click)="onSubmitComment(post.id)">{{"reply" | translate}}
+                            </button>
+                        </mat-form-field>
+                    </form>
+                </div>
+                <div class="comment-container" *ngFor="let comment of post.comments">
+                    <div class="image-and-details-wrapper">
+                        <div class="profile-img-wrapper">
+                            <img class="profile-img" [src]="comment.userImageURL" alt="Profile Image">
                         </div>
                         <div class="post-details">
-                            <div class="post-author">{{post.userFirstName}} {{post.userLastName}}
-                                <div class="teacher-badge" *ngIf="post.userIsTeacher">{{"teacher" | translate}}</div>
+                            <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}
+                                <div class="teacher-badge" *ngIf="comment.userIsTeacher">{{"teacher" | translate}}</div>
                             </div>
                             <div class="post-datetime">
-                                {{post.created?.toDate() | date: 'dd MMM y, H:mm'}}
+                                {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}
                             </div>
                         </div>
                     </div>
-                    <div class="post-menu">
-                        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menu">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #menu="matMenu">
-                            <button mat-menu-item (click)="onRemoveSavedPost(post.id, i)">
-                                <mat-icon>bookmark</mat-icon>
-                                <span>{{"removeSaved" | translate}}</span>
-                            </button>
-                            <button mat-menu-item (click)="onDeletePost(post.id, i)" *ngIf="post.uid === currentUid">
-                                <mat-icon class="delete-icon">delete</mat-icon>
-                                <span>{{"delete" | translate}}</span>
-                            </button>
-                        </mat-menu>
-                    </div>
-                </div>
-                <div class="post-content">
-                    <div class="post-content-text" *ngIf="post.content">
-                        {{post.content}}
-                    </div>
-                    <img class="post-image" *ngIf="post.imageURL" [src]="post.imageURL">
-                    <div class="reactions-comments-wrapper">
-                        <div class="reactions-wrapper">
-                            <div class="likes-section">
-                                <div class="number-of-likes">
-                                    {{post.numberOfLikes === 0 ? '' : post.numberOfLikes}}
-                                </div>
-                                <mat-icon class="like-btn" (click)="onReactionClick(post.id, 'like', i)">thumb_up
-                                </mat-icon>
-                            </div>
-                            <div class="dislikes-section">
-                                <div class="number-of-dislikes">
-                                    {{post.numberOfDislikes === 0 ? '' : post.numberOfDislikes}}
-                                </div>
-                                <mat-icon class="dislike-btn" (click)="onReactionClick(post.id, 'dislike', i)">
-                                    thumb_down
-                                </mat-icon>
-                            </div>
-                        </div>
-                        <button mat-raised-button class="comments-btn" (click)="showHideComments(post)">
-                            <mat-icon>comment</mat-icon>
-                            {{"comments" | translate}}
-                        </button>
-                    </div>
-                </div>
-                <div *ngIf="post.areCommentsVisible" class="post-comments">
-                    <div class="new-comment-container">
-                        <div class="image-and-details-wrapper">
-                            <div class="profile-img-wrapper">
-                                <img class="profile-img" [src]="userImageURL" alt="Profile Image">
-                            </div>
-                        </div>
-                        <form [formGroup]="newCommentForm" class="new-post-form full-width"
-                              (keyup.enter)="onSubmitComment(post.id)">
-                            <mat-form-field class="new-comment-field" appearance="fill">
-                                <mat-label>{{"saySomething" | translate}}</mat-label>
-                                <textarea cdkTextareaAutosize
-                                          cdkAutosizeMinRows="1"
-                                          cdkAutosizeMaxRows="30"
-                                          [maxLength]="3000"
-                                          matInput
-                                          rows="3"
-                                          formControlName="newComment">
-                            </textarea>
-                                <button mat-raised-button
-                                        [ngClass]="{'disabled-btn' : !newCommentForm.get('newComment')?.value?.trim().length}"
-                                        class="btn-primary new-comment-btn"
-                                        (click)="onSubmitComment(post.id)">{{"reply" | translate}}
-                                </button>
-                            </mat-form-field>
-                        </form>
-                    </div>
-                    <div class="comment-container" *ngFor="let comment of post.comments">
-                        <div class="image-and-details-wrapper">
-                            <div class="profile-img-wrapper">
-                                <img class="profile-img" [src]="comment.userImageURL" alt="Profile Image">
-                            </div>
-                            <div class="post-details">
-                                <div class="post-author">{{comment.userFirstName}} {{comment.userLastName}}
-                                    <div class="teacher-badge" *ngIf="comment.userIsTeacher">{{"teacher" | translate}}</div>
-                                </div>
-                                <div class="post-datetime">
-                                    {{comment.created?.toDate() | date: 'dd MMM y, H:mm'}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment-text">
-                            {{comment.content}}
-                        </div>
+                    <div class="comment-text">
+                        {{comment.content}}
                     </div>
                 </div>
             </div>
-        </ng-container>
-    </ng-template>
+        </div>
+    </ng-container>
 </div>

@@ -1,9 +1,11 @@
 <div class="profile">
     <div class="profile-left">
-        <button *ngIf="!isEditingMode" mat-raised-button class="profile-btn btn-primary" (click)="toggleProfileEditing()">
+        <button *ngIf="!isEditingMode" mat-raised-button class="profile-btn btn-primary"
+                (click)="toggleProfileEditing()">
             {{"editProfile" | translate}}
         </button>
-        <button *ngIf="isEditingMode" mat-raised-button class="profile-btn btn-primary green-btn" (click)="savePersonalDetails()">
+        <button *ngIf="isEditingMode" mat-raised-button class="profile-btn btn-primary green-btn"
+                (click)="savePersonalDetails()">
             {{"saveProfile" | translate}}
         </button>
         <form class="profile-form" [formGroup]="profileForm" [ngClass]="{'no-events' : !isEditingMode}">
@@ -19,6 +21,13 @@
                 <mat-label>{{"email" | translate}}</mat-label>
                 <input matInput placeholder="Email" formControlName="email" type="email" email autocomplete="email">
             </mat-form-field>
+            <div class="your-university-container">
+                {{"yourUniversity" | translate}}
+                <div class="university">
+                    {{userUniversity}}
+                </div>
+            </div>
+
         </form>
         <div class="lang-message">{{"langMessage" | translate}}</div>
         <div class="translate-icons">

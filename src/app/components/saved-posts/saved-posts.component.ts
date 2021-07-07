@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -31,7 +31,7 @@ export class SavedPostsComponent implements OnInit {
     });
 
     constructor(private dataService: DataService, private afs: AngularFirestore, private authService: AuthService,
-                private snackBar: MatSnackBar, private cd: ChangeDetectorRef) {
+                private snackBar: MatSnackBar) {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then(doc => {
             const userData = doc.data();
@@ -75,11 +75,9 @@ export class SavedPostsComponent implements OnInit {
     onReactionClick(postID: string, type: string, i: number): void {
         this.dataService.reactionClick(postID, type, this.userFirstName, this.userLastName, this.userImageURL);
         this.afs.collection<Post>('posts').doc(postID).ref.get().then(value => {
-            // TODO not updating...
             const docData = value.data();
             this.savedPostsArray[i].numberOfLikes = docData?.numberOfLikes;
             this.savedPostsArray[i].numberOfDislikes = docData?.numberOfDislikes;
-            // this.cd.detectChanges();
         });
     }
 

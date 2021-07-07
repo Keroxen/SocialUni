@@ -76,7 +76,6 @@ export class MainNavComponent implements OnInit {
     }
 
     toastrGoToPost(postId: string): void {
-        console.log(postId);
         this.router.navigate([this.navigationPathEnum.ViewPost, postId]);
     }
 

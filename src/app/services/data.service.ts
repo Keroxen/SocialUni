@@ -26,9 +26,9 @@ export class DataService {
     constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth, private authService: AuthService) {
     }
 
-    getPosts(): Observable<Post[]> {
+    getPosts(university: string | undefined): Observable<Post[]> {
         this.postsCollection = this.afs.collection<Post>('posts',
-            posts => posts.orderBy('created', 'desc'));
+            posts => posts.orderBy('created', 'desc').where('userUniversity', '==', university));
         return this.postsCollection.valueChanges({idField: 'id'});
     }
 

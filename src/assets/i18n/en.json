@@ -27,7 +27,7 @@
     "teacher": "Teacher",
     "find": "Find someone...",
     "noNotif": "You have no notifications!",
-    "addedComm": "added a comment to your post",
+    "addedComm": "added a new comment to your post",
     "save": "Save post",
     "delete": "Delete post",
     "comments": "Comments",
@@ -45,5 +45,6 @@
     "newPostSnackbar": "New post added!",
     "imageSnackbarText": "Photo changed successfully!",
     "personalDetailsSnackbarText": "Personal details saved!",
+    "yourUniversity": "Your university is",
     "langMessage": "Change app's language"
 }

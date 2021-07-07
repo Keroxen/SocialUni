@@ -24,10 +24,6 @@ export class SearchComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        // this.dataService.getUsers().subscribe(users => {
-        //     console.log(users);
-        // });
-
         combineLatest([this.startAtObs, this.endAtObs]).subscribe(value => {
             console.log(value);
             this.dataService.getUsers(value[0], value[1]).subscribe(data => {

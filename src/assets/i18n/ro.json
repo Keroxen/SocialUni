@@ -27,7 +27,7 @@
     "teacher": "Profesor",
     "find": "Caută pe cineva...",
     "noNotif": "Nu aveți nicio notificare!",
-    "addedComm": "a adăugat un comentariu la postarea ta",
+    "addedComm": "a adăugat un nou comentariu la postarea ta",
     "save": "Salvează postarea",
     "delete": "Șterge postarea",
     "comments": "Comentarii",
@@ -45,5 +45,6 @@
     "newPostSnackbar": "Postare adăugată!",
     "imageSnackbarText": "Imagine salvată cu succes!",
     "personalDetailsSnackbarText": "Date personale salvate!",
+    "yourUniversity": "Universitatea ta este",
     "langMessage": "Schimbă limba aplicației"
 }
