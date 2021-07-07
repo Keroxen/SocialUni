@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userUniversity: string | undefined;
     userIsTeacher: boolean | undefined;
     deleteSnackbarText = '';
     commentSnackbarText = '';
@@ -50,62 +51,25 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.currentUid = this.authService.currentUid;
         this.dataService.getUserData(this.currentUid).ref.get().then((doc: any) => {
             const userData = doc.data();
-            this.userFirstName = userData.firstName;
-            this.userLastName = userData.lastName;
-            this.userImageURL = userData.imageURL;
-            this.userIsTeacher = userData.isTeacher;
+            this.userFirstName = userData?.firstName;
+            this.userLastName = userData?.lastName;
+            this.userImageURL = userData?.imageURL;
+            this.userIsTeacher = userData?.isTeacher;
+            this.userUniversity = userData?.university;
+
+            this.dataService.getPosts(this.userUniversity).pipe(takeUntil(this.destroy$))
+                .subscribe(posts => {
+                    this.latestPosts = posts;
+                });
         });
     }
 
     ngOnInit(): void {
-        this.dataService.getPosts().pipe(takeUntil(this.destroy$))
-            .subscribe(posts => {
-                this.latestPosts = posts;
-            });
+
         this.deleteSnackbarText = this.translate.instant('deleteSnackbarText');
         this.commentSnackbarText = this.translate.instant('commentSnackbarText');
         this.saveSnackbarText = this.translate.instant('saveSnackbarText');
     }
-
-    // );
-
-
-    //
-    // this.latestPosts = this.dataService.getPosts().pipe(
-    //     map(actions => actions.map(a => {
-    //         const data = a.payload.doc.data() as Post;
-    //         const id = a.payload.doc.id;
-    //         return {id, ...data};
-    //     }))
-    // );
-
-    // this.latestPosts = this.postsCollection.stateChanges().pipe(
-    //     map(actions => actions.map(a => {
-    //         const data = a.payload.doc.data() as Post;
-    //         const id = a.payload.doc.id;
-    //         return {id, ...data};
-    //     }))
-    // );
-
-
-    // requestPermission(): void {
-    //     this.afMessaging.requestToken
-    //         .subscribe(
-    //             (token) => {
-    //                 console.log('Permission granted! Save to the server!', token);
-    //             },
-    //             (error) => {
-    //                 console.error(error);
-    //             },
-    //         );
-    // }
-    //
-    // listen(): void {
-    //     this.afMessaging.messages
-    //         .subscribe((message) => {
-    //             console.log(message);
-    //         });
-    // }
 
     ngOnDestroy(): void {
         this.destroy$.next(true);
@@ -113,31 +77,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     showHideComments(post: Post): void {
-        // TODO
-        const postRef = this.postsCollection.doc(post.id);
-
-        // postRef.get().subscribe()
-
-        // if (!post.areCommentsVisible) {
         post.areCommentsVisible = !post.areCommentsVisible;
         this.dataService.getPostComments(post.id).subscribe(comments => {
             post.comments = comments;
-            //     console.log('here');
-            //     console.log(post.areCommentsVisible);
-            //     if (post.areCommentsVisible) {
-            //     } else {
-            //         postRef.update({
-            //             areCommentsVisible: true
-            //         });
-            //     }
         });
-        // this.updateShowHideCommentsField(post);
-        // postRef.update({
-        //     areCommentsVisible: post.areCommentsVisible
-        // });
-        // } else {
-        //     post.areCommentsVisible = false;
-        // }
     }
 
     updateShowHideCommentsField(post: Post): void {
@@ -182,8 +125,6 @@ export class HomeComponent implements OnInit, OnDestroy {
             },
             height: 'fit-content',
             maxHeight: '90vh',
-            // minHeight: 'auto !important',
-            // width: 'auto'
         });
     }
 

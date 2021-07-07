@@ -26,7 +26,6 @@ export class ProfileComponent implements OnInit {
     userImageURL: string | undefined;
     userEmail: string | undefined;
     userUniversity: string | undefined;
-    userAccessCode: string | undefined;
 
     today: Date | undefined;
     filteredUniversities: Observable<University[]> | undefined;
@@ -37,8 +36,6 @@ export class ProfileComponent implements OnInit {
         firstName: new FormControl('', Validators.required),
         lastName: new FormControl('', Validators.required),
         email: new FormControl('', Validators.required),
-        university: new FormControl('', Validators.required),
-        accessCode: new FormControl('', Validators.required),
     });
 
     basePath = '/profileImages';
@@ -63,11 +60,9 @@ export class ProfileComponent implements OnInit {
             this.userImageURL = doc.data()?.imageURL;
             this.userEmail = doc.data()?.email;
             this.userUniversity = doc.data()?.university;
-            this.userAccessCode = doc.data()?.accessCode;
             this.populatePersonalDetails();
             this.checkDefaultImage();
         });
-        this.populateUniversityDropdown();
         this.today = new Date();
         this.saveProfile = this.translate.instant('saveProfile');
         this.editProfile = this.translate.instant('editProfile');
@@ -80,33 +75,11 @@ export class ProfileComponent implements OnInit {
             firstName: this.userFirstName,
             lastName: this.userLastName,
             email: this.userEmail,
-            university: this.userUniversity,
-            accessCode: this.userAccessCode
         });
     }
 
     toggleProfileEditing(): void {
         this.isEditingMode = !this.isEditingMode;
-    }
-
-    populateUniversityDropdown(): void {
-        this.authService.getUniversities().pipe(takeUntil(this.destroy$)).subscribe(data => {
-            this.universities = data;
-            this.filteredUniversities = this.profileForm.get('university')?.valueChanges
-                .pipe(
-                    startWith(''),
-                    map(value => this._filter(value))
-                );
-        });
-    }
-
-    private _filter(value: string): University[] {
-        if (this.universities) {
-            const filterValue = value?.toLowerCase();
-            return this.universities.filter(option => option.name.toLowerCase().includes(filterValue));
-        } else {
-            return [];
-        }
     }
 
     savePersonalDetails(): void {
@@ -199,7 +172,6 @@ export class ProfileComponent implements OnInit {
                     this.afs.collection('users').doc(this.authService.currentUid).set({
                         imageURL: url,
                     }, {merge: true});
-                    console.log(url);
                     this.afs.collection('posts', posts => posts.where('uid', '==', this.authService.currentUid))
                         .get().toPromise().then(response => {
                         response.docs.forEach(doc => {
@@ -229,9 +201,6 @@ export class ProfileComponent implements OnInit {
 
     checkDefaultImage(): void {
         this.isDefaultImage = this.userImageURL === appConfig.defaultUserImageURl;
-        console.log(this.isDefaultImage);
-        console.log(this.userImageURL);
-        console.log(appConfig.defaultUserImageURl);
     }
 
     onResetImgPreview(): void {

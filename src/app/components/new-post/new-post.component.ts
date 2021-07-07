@@ -33,6 +33,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userUniversity: string | undefined;
     userIsTeacher: boolean | undefined;
     imagePath = '/postsImages';
     filePath = '/postsFiles';
@@ -58,6 +59,7 @@ export class NewPostComponent implements OnInit, OnDestroy {
                 this.userLastName = doc.data()?.lastName;
                 this.userImageURL = doc.data()?.imageURL;
                 this.userIsTeacher = doc.data()?.isTeacher;
+                this.userUniversity = doc.data()?.university;
             });
         });
     }
@@ -85,7 +87,8 @@ export class NewPostComponent implements OnInit, OnDestroy {
             userImageURL: this.userImageURL ?? '',
             userIsTeacher: this.userIsTeacher,
             fileName: this.uploadedFileName,
-            fileURL: this.postFileDlURL
+            fileURL: this.postFileDlURL,
+            userUniversity: this.userUniversity
         });
         this.newPostForm.reset();
         this.uploadedImage = null;

@@ -15,6 +15,7 @@ export interface Post {
     userFirstName: string | undefined;
     userLastName: string | undefined;
     userImageURL: string | undefined;
+    userUniversity: string | undefined;
     userIsTeacher: boolean | undefined;
     areCommentsVisible?: boolean;
     comments?: Comment[];

@@ -2,8 +2,8 @@
 
 .profile {
     height: 100vh;
-    max-width: 770px;
-    padding: 60px;
+    max-width: 51vw;
+    padding: 60px 0 60px 60px;
     display: grid;
     grid-template-columns: 1fr 0.8fr;
 
@@ -33,6 +33,16 @@
                 }
             }
         }
+
+        .your-university-container {
+            margin-bottom: 1rem;
+
+            .university {
+                font-size: 16px;
+                margin-top: 2px;
+            }
+        }
+
     }
 
     &-right {

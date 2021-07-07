@@ -6,6 +6,4 @@ export interface Comment {
     userLastName: string | undefined;
     userImageURL: string | undefined;
     userIsTeacher: boolean | undefined;
-    // numberOfLikes: number;
-    // numberOfDislikes: number;
 }
