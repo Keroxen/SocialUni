@@ -50,6 +50,10 @@ Development Methodology:
 
     The development process followed the Agile methodology and Jira was used for project management, facilitating efficient task tracking.
 
+Deployment:
+
+    Firebase Hosting was used for the application deployment and CI/CD was put in place using GitHub Actions.
+
 ## Development server
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.2.
 
